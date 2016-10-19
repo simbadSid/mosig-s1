@@ -1,0 +1,163 @@
+
+\documentclass[a4paper,10pt]{article}
+% This line indicates the type of the document betwin {}: here it is a scientific article.
+% Options betwin [] are not mandatory, but precise here:
+% - a4paper: printing paper format
+% - 10pt: size of the characters
+
+\usepackage{graphicx}
+% This package allows to include images
+\usepackage{titling}
+% This package allows to have a subtitle 
+\usepackage{listings}
+% this package is used to write code samples.
+\lstset{%
+  basicstyle=\scriptsize\sffamily,%
+  commentstyle=\footnotesize\ttfamily,%
+  frameround=trBL,
+  frame=single,
+  breaklines=true,
+  showstringspaces=false,
+  numbers=left,
+  numberstyle=\tiny,
+  numbersep=10pt,
+  keywordstyle=\bf
+}
+\newcommand{\subtitle}[1]{%
+  \posttitle{%
+    \par\end{center}
+    \begin{center}\large#1\end{center}
+    \vskip0.5em}%
+}
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Raport Headers:
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\title{Mathematics for computer science}
+\subtitle{Homework 1}
+\author{SID-LAKHDAR Riyane}
+\date{15/10/2015}
+
+\begin{document}
+% Beginning serious stuff.
+
+
+\maketitle
+% Actually prints title / subtitle / authors and dat into the document
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Abstract
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+I understand what plagiarism entails and I declare that this report is my own, original work
+SID-LAKHDAR
+Riyane
+october the 15 th, 2015
+\begin{figure}[ht!]
+  \center
+  \includegraphics[width=0.8\linewidth]{signature.png}
+\end{figure}
+
+
+
+
+\begin{abstract}
+    This report sumarise, explains and refers to the answers we have designed for the first \"Mathematics for computer science\" homework.\newline 
+    In this report, we will use the following notations:\newline
+    \begin{itemize}
+      \item N and K are two finite sets of size n and k.
+      \item N will be represented as
+	\begin{equation} N = \{n_{i}| \mbox{i bellongs to [0, n-1]}\}\end{equation}
+      \item The set of expected f function will include the partial functions: a function f bellonging to this set may be undefined on a specific point of its input set N.\newline
+	If a function f is undefined on a point x bellonging to N, we will always write \begin{equation} f(x) = \epsilon \end{equation}
+    \end{itemize}
+\end{abstract}
+
+
+\section{Question 1}
+    A function \begin{equation} f: N \rightarrow K \end{equation} is an application which associates to each element n, bellonging to N, at most one element k bellonging to K.\newline
+    Thus, building such a function f is equivalent to build a word \begin{equation} w = k_{0}...k_{n-1} \mbox{  where  } \forall i \in [0, n-1] \space k_{i} \in K \cup \left \{ {\epsilon} \right \} \end{equation}
+    As we have no restriction on f, we have k+1 different choices to choose any one of the ki.   This choice is independant from the choice of any kj where j is different from i.
+    Thus, the number of different word
+    \begin{equation} w = k_{0}...k_{n-1} \end{equation}
+    is
+    \begin{equation} \prod_{i=0}^{n-1} (k+1) = (k+1)^n\end{equation}
+    Thus, the number of different functions \begin{equation} f : K \rightarrow N \end{equation} with no restriction on f is \begin{equation} (k+1)^n\end{equation}
+    This result would be \begin{equation} k^n \end{equation} if we only consider the non partial functions.
+
+\section{Question 2}
+    Using the same arguments as previously, we can say that our problem is equivalent to find all the different words
+    \begin{equation} w = k_{0}...k_{n-1} \mbox{  where  } \forall i \in [0, n-1] \space k_{i} \in K \cup \left \{ {\epsilon} \right \}\end{equation}
+    Let w0 such a word, and fw0 the corresponding injective function.   We have:
+    \begin{equation}
+      \forall i, j \in [0, n-1] \mbox{ with } i \ne j, f_{\omega 0}(n_{i}) = f_{\omega 0}(n_{j}) \Longrightarrow n_{i} = n_{j}
+    \end{equation}
+    which is absurde by definition of ni and nj.  So 
+    \begin{equation}
+      \forall i, j \in [0, n-1], i \not= j \Longrightarrow f_{\omega0}(n_{i}) \not= f_{\omega0}(n_{j})
+    \end{equation}
+    Using this condition we can conclude that
+    \begin{itemize}
+     \item To chose the character k0 of w0 among K union epsilon, we have (k+1) choices.
+     \item To chose the character k1 of w0 among K union epsilon excluding {K0}, we have (k+1 -1) choices for each k0.
+     \item To chose the character k2 of w0 among K union epsilon excluding {K0, K1}, we have (k+1 -2) choices for each k0, k1.
+     \item To chose the character ki of w0 among K union epsilon excluding {K0, K1, ...ki-1}, we have (k+1 - i) choices for each k0, k1, ...ki-1.
+    \end{itemize}
+    Thus, the number of different words w = k0....kn-1 which respect the condition (12), and the number of injective function is:
+    \begin{equation}
+      \prod_{i=0}^{n-1} {k+1-i} = \frac{(k+1)!}{(k-n+1)!} \mbox{ (as k }  \geq \mbox{ n by definition of an injective function)}
+    \end{equation}
+    This result would be \begin{equation} \frac{k!}{(k-n)!} \end{equation} if we only consider the non partial functions.
+
+\section{Question 3}
+    Let's f a surjection between N and K.  So:
+    \begin{itemize}
+     \item Each element form K is mapped to at least 1 element from N
+     \item Each element from N is mapped to at most 1 element from K
+    \end{itemize}
+    Thus, according to pigeonhole principle, n and k must to respect the rule:
+    \begin{equation}
+	n \geq k
+    \end{equation}
+    Let f such a surjective function, and w its corresponding world:\newline
+    w = w0, ...., wn-1 where wi = f(ni).\newline
+    According to the definition of a surjective function, the word w should contain, at least, once every ki bellonging to K.
+    Thus, a word w must be a combination of
+    \begin{equation}
+	k_{0}, ..., k_{k-1} \mbox{ \space  } c_{0}, ..., c_{n-k-1} \mbox{\space where } c_{i} \in K \cup \left \{ \epsilon \right \}
+    \end{equation}
+    But we know that the number of different
+    \begin{equation}
+	k_{0}, ..., k_{k-1} \mbox{ \space  is} k!
+    \end{equation}
+    and the number of different
+    \begin{equation}
+	c_{0}, ..., c_{n-k-1} \mbox{\space where } c_{i} \in K \cup \left \{ \epsilon \right \} \mbox{ \space is } (k+1)^{n-k}
+    \end{equation}
+
+    Thus, the number of different word w, and the number of surjective functions is
+    \begin{equation}
+	(k+1)^{(n-k)} k! \mbox{  with } n \geq k
+    \end{equation}
+
+
+
+\section{Question 4}
+    By definition of an bijection, the input and output sets must have the same cardinals.  Thus, in the following answer, we will consider the condition k = n respected.\newline
+    Building a bijection between N and K is equivalent to build a word
+    \begin{equation} \omega = k_{0}, k_{1}, ... , k_{n-1} \mbox{ where } \forall i, j \in [0, n-1] k_{i} \ne k_{j}\end{equation}
+    Thus,
+    \begin{itemize}
+     \item To chose the character k0 among K, we have k choices.
+     \item To chose the character k1 among K excluding {K0}, we have (k - 1) choices for each k0.
+     \item To chose the character k2 among K excluding {K0, K1}, we have (k - 2) choices for each k0, k1.
+     \item To chose the character ki among K excluding {K0, K1, ...ki-1}, we have (k - i) choices for each k0, k1, ..., ki-1.
+    \end{itemize}
+
+    Thus, the number of different bijective function from N to K is
+    \begin{equation} \prod_{i=0}^{n-1} {k - i} = \prod_{i=0}^{n-1} {n - i} = n!\end{equation}
+
+
+\end{document}

@@ -1,0 +1,151 @@
+
+\documentclass[a4paper,10pt]{article}
+% This line indicates the type of the document betwin {}: here it is a scientific article.
+% Options betwin [] are not mandatory, but precise here:
+% - a4paper: printing paper format
+% - 10pt: size of the characters
+
+\usepackage{graphicx}
+% This package allows to include images
+\usepackage{titling}
+% This package allows to have a subtitle 
+\usepackage{listings}
+% this package is used to write code samples.
+\usepackage{pseudocode}
+\usepackage[T1]{fontenc}
+\usepackage[french]{babel}
+\usepackage{array,multirow,makecell}
+\setcellgapes{1pt}
+\makegapedcells
+\newcolumntype{R}[1]{>{\raggedleft\arraybackslash }b{#1}}
+\newcolumntype{L}[1]{>{\raggedright\arraybackslash }b{#1}}
+\newcolumntype{C}[1]{>{\centering\arraybackslash }b{#1}}
+
+
+\lstset{%
+  basicstyle=\scriptsize\sffamily,%
+  commentstyle=\footnotesize\ttfamily,%
+  frameround=trBL,
+  frame=single,
+  breaklines=true,
+  showstringspaces=false,
+  numbers=left,
+  numberstyle=\tiny,
+  numbersep=10pt,
+  keywordstyle=\bf
+}
+\newcommand{\subtitle}[1]{%
+  \posttitle{%
+    \par\end{center}
+    \begin{center}\large#1\end{center}
+    \vskip0.5em}%
+}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Raport Headers:
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\title{Mathematics for computer science}
+\subtitle{Homework 1}
+\author{SID-LAKHDAR Riyane}
+\date{15/10/2015}
+
+\begin{document}
+% Beginning serious stuff.
+
+
+\maketitle
+% Actually prints title / subtitle / authors and dat into the document
+
+\begin{abstract}
+  blablbalaba
+  lmds
+  
+\end{abstract}
+
+
+\section{Greedy algorithme}
+    To solve the problem, we have first tried to consider it using a greedy point of view:\newline
+    Let's consider that solving the problem is equivalent to find, at each step of the game, the best card to pick, regarding only the actual state of the game.
+    This greedy method does not consider the possible evolutions of the game after this step.\newline
+    In the following greedy algorithm description and analyze, we will first assume that the sister can use any strategy.   In a second time, we will determine the complexity and the failure cases of the algorithme when the sister is choosing the biggest card at any step.
+    \subsection{Algorithme descritpion}
+    \begin{lstlisting}
+    boolean winIsPossible(cards       : array of size N containing cards
+                                        guiven by them values
+                          sisterStart : boolean)
+    {
+	int min         = 0;   // Lowest index of the deck in the input array
+	int max         = N-1; // Highest index of the deck
+	int sisterScore = 0;
+	int myScore     = 0;
+
+	// The variables used with "&" may be modified by the function
+	if (sisterStarts) playSister(cards, &min, &max, &sisterScore);
+	for (i=0; i< N/2; i++)
+	{
+	    d0 = cards[min] - Math.max(cards[min+1], cards[max]);
+	    d1 = cards[max] - Math.max(cards[min]  , cards[max-1]);
+	    if (|d0| < |d1|) {myScore += cards[min]; min++;}
+	    else             {myScore += cards[max]; max--;}
+	    if (min != max) playSister(cards, &min, &max, &sisterScore);
+	}
+    }
+    \end{lstlisting}
+    The function \" playSister \" will play according to the choosen sister's strategy.  It will also update all the game parameters.\newline
+    Assuming that it is our turn to pick a card, we can pick one card belonging to \{cards[0], cards[N-1]\}.
+    Given one card of this set, we can compute the points we will earn, and the points the sister can earn.
+    The aim of our algorithm is to chose, at each, step the card that will make the difference between our gain and the sister's gain as big as possible.\newline
+
+    This algorithm has many obvious advantages.  First of all, it is very easy to implement and to understand.  No specific data structure or algorithm are required.
+    Secondly, as we will prove in the next paragraph, this algorithm seems to have an interesting time complexity.
+    However, as we do not consider the whole aspects of the problem, we can wonder if this algorithm will always give an optimal (or at least a working) solution?
+
+    \subsection{Time and space complexity of this greedy resolution}
+    The algorithm realises in a N/2 length loop, 3 instruction with an O(1) complexity.
+    Our algorithm complexity can be written as:
+    \begin{equation}C(N) = \frac{N}{2} * 3*O(1) = O(N) \end{equation}
+    Thus, the time complexity of our algorithm is linear.\newline
+    For all the game steps, our algorithm uses the same set of 4 integers (in addition to the N cards array).\newline
+    Thus, the space complexity of our algorithm is O(N + 4) = O(N)\newline
+    \newline
+    You may have noticed that in our complexity analyze, we do not consider the complexity of the sister's decision algorithm.  
+    This is done on purpose, as the problem we deal with is to find an algorithm which determines our decision.  
+    However, the next algorithms we have designed have to compute the sister's decision to evaluate our decisions.   
+    Thus, to make the comparison between all our algorithm more faire, we will include the complexity of the sister's algorithm in the computation of the time complexity of our greedy algorithm:\newline
+    Assuming that at each step the sister pick up the biggest card, we can rewrite our time complexity as follows:
+    \begin{equation}C(N) = \frac{N}{2} * (3*O(1) + O(1)) = O(N) \end{equation}
+    
+    
+    
+    \subsection{Failure cases}
+    Despite its easy implementation and its interesting complexity, the greedy algorithm we designed is not an acceptable way to solve the given problem.\newline
+    An easy way to get convinced of this fact is to consider the following counterexample:\newline
+    \begin{tabular}{| L{2cm} || C{1cm} | C{1cm} | C{1cm} | C{1cm} | C{1cm} | C{1cm} |}
+      \hline Index & 0 & 1 & 2 & 3 & 4 & 5 \\
+      \hline Cards & 4 & 4 & 6 & 6 & 12 & 9 \\
+      \hline
+    \end{tabular}
+    \newline
+    \newline
+    Running our algorithm on this input deck would make us loose the game by choosing the following cards:\newline
+    \begin{tabular}{| L{2cm} || C{2cm} | C{2cm} | C{2cm} | C{2cm} | C{2cm} | C{2cm} |}
+      \hline Index & 0 & 1 & 2 & 3 & 4 & 5 \\
+      \hline Cards & 4 & 4 & 6 & 6 & 12 & 9 \\
+      \hline Player ID & Sister 3  & You 3 & Sister 2 & You 2 & Sister 1 & You 1\\
+      \hline
+    \end{tabular}
+    \newline
+    \newline
+    However, a solution which could make us win exists (respecting the same player's order).\newline
+    \begin{tabular}{| L{2cm} || C{2cm} | C{2cm} | C{2cm} | C{2cm} | C{2cm} | C{2cm} |}
+      \hline Index & 0 & 1 & 2 & 3 & 4 & 5 \\
+      \hline Cards & 4 & 4 & 6 & 6 & 12 & 9 \\
+      \hline Player ID & You 1  & Sister 3 & You 3 & Sister 2 & You 2 & Sister 1\\
+      \hline
+    \end{tabular}
+    \newline
+    \newline
+    This counterexample shows the limits of our method: By considering only the current card we can choose at a given step, we may allow the sister to access to a card which is much butter at the next step.\newline
+    Thus, at a given step of the game, we should be able to consider the implications of the current choice on all stages of the game until the end.
+    And that is the purpose of the improvement made by the next algorithm.
+
+\end{document}

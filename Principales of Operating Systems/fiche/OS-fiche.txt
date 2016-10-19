@@ -1,0 +1,76 @@
+
+
+- Page replacement algorithm:
+	* LIFO algo: Keep double linked list: remove the oldest refereced page (head) and add at tail
+	 (PB: verry expensive)
+	* LRU (approximation of LRU): On each acces we scan the list looking for A bit = 0 to remove.
+	  During the scan if A = 1 set it to 0.
+		Can consider removing clean page before dirty (don't need to write it on disk)
+	* LFU (Least frequently used): uses the count of acces to page instead of the A bit (special
+	  treatement if the page hase recently been added).
+	* Page buffering: Have a pool of free pages.  When fetch a page, write the evicted page in
+	  the pool. Then start resuming without waiting for the
+		evicted page to be written on disk
+
+- Global allocation doesn't consider page ownership. works well if p1 needs 10% and p2 needs 70%.
+	Doesn't protect from memory pigs (when p1 makes regular access on the hole physical memory )
+- Local allocation isolates each processes then uses replacement algorithm to determine which
+	page to evict within each process.
+
+- Thrashing: happens whenprocesses need more memory than the physical memory.  The system spends
+	more time fixing page faults than executing processes.
+	Reasons:
+	* Process doesn't reuse memory so caching doesn't work.
+	* Process reuse memory but this memory doesn't fit.
+	* Individually processes fit but there are too many processes.
+
+- Process implementation (OS view) One data structure for each process: PCB: Process Control Block.  Contains:
+	* State: ready, blocked, running, ...
+	* Memory:
+		- Saved context (registers, ...)
+		- Virtual memory info: memory regions, pointer to page table, open files and memory mapped file
+	* Other data like pid, gid, signal mask
+	* When fork the parent, only copy memory region descriptors and page tables.
+	* Then use copy on write to track and support changes between parent and child.
+
+
+
+
+- Preemptive Thread:
+	* The schedular may replace a thread at anny time by any other (in the process or not).
+	* Relay on time multiplexing thanks to hardware interrupts.
+	* Multiple threads within same process
+	PB: synchro pb (concurrency bugs) as thread may run in many diff orders
+- Cooperative Thread:
+	* At most one thread in a process can run at a given time.
+	* Thread switch within a process can only happen if:
+		- The runing thread abendons the CPU (yield())
+		- The runing thread calls a blocking function or terminates.
+	PB:
+		- Doesn't use all the cpu present.
+		- May let a a “misbehaving” thread monopolize the CPU.
+
+- Kernel Thread: The kernal is aware of the threads in a process and manages this exec cotext
+	* Much slower than user level Thread: any function needs a syscall (create, join...)
+- User Thread:	The thread are managed by a library at user level within a process
+	* A blocking syscall(or page fault) blocks all the process (hence all the threads)
+
+
+
+
+- Critical section: part of the code that access a critical ressource(that can not be accessed by dif thread)
+	* Safety: only one thread at most in the section at a given time
+	* Liveness: If no thread is in CS and thread are trying to acces one should be allowed.
+		The waiting time of a thread to enter a cs is bounded
+
+- Data race: whene many thread access to a memory at same time and at least one is writing
+- Race condition: default in a code due to the timing or ordering of threads
+
+- Spinlock: lock where the test and the write are done using atomic opp provided by the process. Uses busy waiting.
+- Waitlock: struc containing:
+	* Boolean	locked;
+	* int		id_lockerThread;
+	* list		waitersList;
+	* lock		lowerLevelLock;
+
+

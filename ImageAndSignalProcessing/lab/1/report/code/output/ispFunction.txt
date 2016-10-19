@@ -1,0 +1,3 @@
+Mean of the experts prediction: 903
+Standard deviation of the experts prediction: 52.1666908704
+Accuracy of the experts prediction: 27.0

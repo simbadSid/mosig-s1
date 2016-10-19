@@ -1,0 +1,45 @@
+structure cell:
+    my_sum
+    opp_sum
+    best_turn
+
+n <- length(cards)
+table <- cell[n,n]
+// only table[l,r] with l <= r make sense
+// l is left position on the deck
+// r is right position on the deck
+
+function fill_cell(l, r, best_turn, my_sum, opp_sum):
+    table[l,r].best_turn <- best_turn
+    table[l,r].my_sum <- my_sum
+    table[l,r].opp_sum <- opp_sum
+
+function best_turn(l, r):
+    // assume that l and r are correct
+    if (table[l,r] <> 0) do
+        return table[l,r]
+    if (l = r) do
+        table[l,r].my_sum <- cards[l]
+        table[l,r].opp_sum <- 0
+        table[l,r].best_turn <- "left" // here "left" = "right"
+    else do
+        left <- best_turn(l-1,r)
+        right <- best_turn(l,r-1)
+        if (cards[l] + left.opp_sum > cards[r] + right.opp_sum) do
+            fill_cell(l, r, "left", cards[l] + left.opp_sum, left.my_sum)
+        else if (cards[l] + left.opp_sum < cards[r] + right.opp_sum) do
+            fill_cell(l, r, "right", cards[r] + right.opp_sum, right.my_sum)
+        else do
+            // sums are equal
+            // we don't really care which card to pick as optimal sums are the same
+            // for us. but in case our opponent will do not chose the optimal turn,
+            // we should pick the biggest card right now
+            if (cards[l] > cards[r]) do
+                fill_cell(l, r, "left", cards[l] + left.opp_sum, left.my_sum)
+            else do
+                fill_cell(l, r, "right", cards[r] + right.opp_sum, right.my_sum)
+    return table[l,r]
+
+
+
+

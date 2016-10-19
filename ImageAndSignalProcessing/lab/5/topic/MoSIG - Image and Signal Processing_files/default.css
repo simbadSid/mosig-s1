@@ -1,0 +1,712 @@
+/*
+Part of the design is from: The Grid, a free xhtml/css website template by Andreas Viklund.
+http://andreasviklund.com/templates/the-grid/
+Other parts are extracted from other css, see below
+*/
+
+
+body {
+    margin:0px;
+    padding:0px;
+    font-family:verdana, arial, helvetica, sans-serif;
+    /*color:#333;
+    background-color:white;*/
+    background:#fff url(background.jpg) top center no-repeat; 
+    color:#303030; 
+   /* font:84% Helvetica,Tahoma,sans-serif; 
+    line-height:1.4em;
+    */
+}
+
+.row {width:960px; margin:0 auto; overflow:hidden;}
+
+h1 {
+    margin:0px 0px 15px 0px;
+    padding:0px;
+    font-size:28px;
+    line-height:28px;
+    font-weight:900;
+    color:#888;
+}
+
+h2 {
+    color:#888;
+}
+
+p {
+    font:11px/20px verdana, arial, helvetica, sans-serif;
+    margin:0px 0px 5px 0px;
+    padding:5px;
+    text-align: justify;
+    color:#000;
+}
+
+
+a {
+    color:#09c;
+    font-size:11px;
+    text-decoration:none;
+    font-weight:600;
+    font-family:verdana, arial, helvetica, sans-serif;
+}
+a:link {color:#09c;}
+a:visited {color:#07a;}
+a:hover {background-color:#ccc;}
+
+/*li {
+    margin: 0px 0px 10px 0px;
+    font:11px/20px verdana, arial, helvetica, sans-serif;
+}
+*/
+
+#content {
+    /*margin:0px 50px 50px 200px;*/
+      width: 90% ;
+  margin-left: auto ;
+  margin-right: auto ;
+    padding:10px;
+    font:11px/20px verdana, arial, helvetica, sans-serif;
+        color:#000;
+}
+
+/*
+#content>p {
+    margin:0px;
+    padding:5px;
+}
+
+#content>p+p {
+    text-indent:30px;
+    padding:5px;
+}
+*/
+
+img {
+  margin-left: auto;
+  margin-right: auto;
+  display: block;
+}
+
+/*table {         
+    width: 95%;
+    display: block;
+    margin-bottom: 5px;
+    padding: 5px;
+    border-collapse: collapse;
+    margin-left: auto;
+    margin-right: auto;
+    text-align: center;
+}*/
+
+table.center {
+        margin-left:auto; 
+        margin-right:auto;
+}
+
+
+/*
+#content td {
+  color:#678197;
+  border:1px solid black;
+  padding:5px;
+}
+
+
+#content tr.odd td {
+	background:#f7fbff
+  border:1px solid black;
+  padding:5px;
+}
+*/
+
+tr.odd td {
+	background:#f7fbff
+}
+
+td {
+	color:#678197;
+	border:1px solid black;
+	padding:.3em 1em;
+	text-align:center;
+}				
+
+#contentPrinterFriendly {
+    font:11px/20px verdana, arial, helvetica, sans-serif;
+ padding:10px;
+}
+
+.exercise {
+  background: #F0F0FF;
+  color: black;
+/*  font-weight: bold;*/
+    width: 100%;
+    margin-bottom: 40px;
+   padding: 0px 0px 5px 0px;  /* top right bottom left  */
+}
+.exercise p {
+  padding: 5px;
+}
+
+.exercise .title {
+  background: #369;
+  color: white;
+  font-weight: bold;
+}
+
+.exercise .subtitle {    
+    font-weight: bold;
+    font-style: italic;
+    font-variant: small-caps;
+}
+
+.exercise li {
+ background-repeat: no-repeat;
+ background-position: left center;
+ /*list-style-type: disc;*/
+ list-style-position: inside;
+ padding-left: 12px;
+}
+
+
+.codeSample {
+/*  background: #FFF;
+  color: black;
+  font-family: "Courier New", Courier, monospace;
+    */
+/*  font-size: 110%;*/
+  /* width: 80%; */
+    border-style: solid;
+  border-color: black;
+  border-width: 1px;
+  /*margin-bottom: 50px;
+  margin-top: 50px;  */
+  margin-left: 10px;
+  margin-right: auto;
+  padding-top: 10px;
+  padding-bottom: 10px;
+}
+
+/*
+.warning, .note, .tip {
+border: 1px solid;
+margin: 10px 0px;
+padding:15px 10px 15px 50px;
+background-repeat: no-repeat;
+background-position: 10px center;
+  width: 92%;
+  margin-left: auto;
+  margin-right: auto;
+}
+*/
+
+/* Tentative: integrates the note, tip and warning in the question without
+   changing the XSD ! */
+.warning, .note, .tip  {
+  border: 1px solid #AAA;
+  width: 90%;
+  margin-right: auto;
+  margin-left: auto;
+  margin-bottom: 0px;
+  padding-top:10px;
+  padding-left:60px;
+  padding-right:10px;
+  padding-bottom:10px;
+  background-repeat: no-repeat;
+  background-position: 10px center;
+}
+.warning {
+  color: #9F6000;
+  background-color: #FEEFB3;
+  background-image: url('small-warning.png');     
+}
+
+.note {
+  color: #00529B;
+  background-image: url('small-note.png'); 
+  background-color: #BDE5F8;
+}
+
+.tip {
+  color: #4F8A10;
+  background-color: #DFF2BF;
+  background-image: url('small-tip.png'); 
+}
+
+.explanation {
+ padding-bottom: 5px;          
+}
+
+.question {
+  border: 1px solid #AAA;
+  /*margin-bottom: 5px;*/
+  margin-top: 10px;
+  width: 95%;
+  margin-left: auto;
+  margin-right: auto;
+  background: #eee;
+  padding-bottom: 10px;
+  color:#000;
+}
+
+.question .questionHeader {
+  font-weight: bold;
+  font-style: italic;
+  color:#000;
+}
+
+.question .questionHeaderMoodle {
+/*  color: #9F6000;
+  background-color: #FEEFB3;
+  border: 1px solid #AAA;
+  width: 90%;
+    */
+  margin-right: auto;
+  margin-left: auto;
+  margin-bottom: 0px;
+  padding-top:10px;
+  padding-left:60px;
+  padding-right:10px;
+  padding-bottom:10px;
+  background-repeat: no-repeat;
+  background-position: 10px center;          
+  font-weight: bold;
+  font-style: italic;   
+  color: #D97702;
+  background-image: url('small-moodle-logo.png');     
+}
+
+.question .questionTextMoodle {
+  margin-left: 30px;
+  border-left-style: solid;
+  border-left-width: 3px;
+  border-spacing: 100px;
+  padding:0px 0px 10px 10px;
+  border-color: #D97702;
+}
+
+.question .questionText {
+  margin-left: 30px;
+  font-weight: normal ;
+  border-left-style: solid;
+  border-left-width: 1px;
+  border-spacing: 100px;
+  padding:0px 0px 10px 10px;
+  color:#000;
+}
+
+#header {
+    /*margin:10px 0px 10px 0px;
+    padding:0px 0px 0px 0px;  / * top right bottom left  * /
+    height:60px; 
+    border-style:solid;
+    border-color:black;
+    border-width:1px 0px; / * top and bottom borders: 1px; left and right borders: 0px * /
+    line-height:11px;
+    background-color:#eee;
+    */
+    /* Pour mettre une image de fond :
+    background-image: url(xml-mini.png);
+    background-repeat: no-repeat;
+    background-position: left center;
+    background-attachment: fixed
+    */
+    /*padding-top:     .5em;
+    padding-right:    6px;
+    padding-left:     15px;*/
+    /*padding-bottom:  30px;*/
+    /*margin-top:       0.5em;;*/
+    /*border-style:     solid;
+    border-color:black;
+    border-width:1px 0px;*/ /* top and bottom borders: 1px; left and right borders: 0px */
+    /*background-color: #eee;*/
+    clear:            left;  
+    overflow:hidden;
+    width:960px;
+    /*float:left; */
+/*    display:inline;*/
+    border-bottom:2px solid #eee;
+}
+
+#header h1 { 
+        font:30px/1.5 trebuchet ms, verdana, bitstream vera sans, sans-serif;
+        color:#2a5a7a; 
+        text-transform:none; 
+        font-size:30px;   
+        text-align: center; 
+        margin-bottom:0px; 
+        padding-bottom:0px;
+        margin-top:20px;
+} /**/
+#header h2 { font-size:16px; color:#666; font-style:italic; text-align: center;}
+#header img { margin-top:20px; float: left; vertical-align: middle; width: 120px;}
+
+#menu {
+    position:absolute;
+    top:100px;
+    left:20px;
+    width:125px;
+    padding:0px;
+    /*background-color:#eee;*/
+    border:1px dashed #999;
+    line-height:17px;
+}
+
+#menu ul {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    border: none;
+}
+
+#menu li {
+    margin: 0;
+    padding: 0.5em 0em 0.5em 0em;
+    border-top: 1px dashed #999;
+    width: 100%;
+    display: block;
+    text-align: center;
+}
+
+html>body #menu li {
+    width: auto;
+}
+
+#menu li:first-child {
+border: none
+}
+
+#footer {
+        width:960px;
+            clear:            left;  
+/*  padding-top:     .5em;
+  padding-right:    1em;
+  padding-left:     1em;
+  padding-bottom:  .5em;
+            */
+  margin-top:       1em;;
+            
+  border-top:       2px solid #eee;
+  /*background-color: #eee;*/
+  clear:            right;  
+}
+
+#footer img {
+  float: right;
+  width: 88px;
+}
+
+.caption {
+  font-size:  15px;
+  font-style: italic;
+} 
+
+
+
+/*
+ * ------------------------------------------------------------------------------
+ * "THE BEER-WARE LICENSE" (Revision 42):
+ * <choan@alice.0z0ne.com> wrote this file. As long as you retain this notice you
+ * can do whatever you want with this stuff. If we meet some day, and you think
+ * this stuff is worth it, you can buy me a beer in return 
+ * ------------------------------------------------------------------------------
+ */
+
+/* define css style only for calendar div */
+#calendar {       
+	color: #222;
+        width: 95%;
+ }
+
+#calendar table {
+	border-collapse: collapse;
+}
+
+#calendar #caption {
+    font: 13px/1.5 trebuchet ms, verdana, bitstream vera sans, sans-serif;
+	font-size: 2em; 
+	color: #444;
+}
+
+#calendar td {
+	text-align: left;
+	padding: .6em .4em;
+	vertical-align: top;
+        visibility:visible;
+    font: 8px/1.5 trebuchet ms, verdana, bitstream vera sans, sans-serif;
+}
+
+#calendar th {
+	text-align: left;
+	padding: .6em .4em;
+	vertical-align: top;
+        visibility:visible;
+                        
+}
+
+#calendar thead th, #calendar tfoot th, #calendar tfoot td, #calendar tbody tr.holidays {
+	border: 1px solid #361;
+	border-width: 1px 0 ;
+	background: #eee;
+	color: #444;
+	font-weight: bold;
+  border-right-style: solid;
+  border-right-width: 1px;
+  border-right-color: black;
+  border-left-style: solid;
+  border-left-width: 1px;
+}
+
+#calendar tbody tr {
+	background: #fcfcff;
+        
+  border-left-style: solid;
+  border-left-width: 1px;
+  border-left-color: black;
+}
+
+#calendar tbody tr.odd {
+	background: #fffcfc;
+}
+
+#calendar tbody tr:hover {
+	background: #f0f0fe url(shadow.png) bottom left repeat-x;
+}
+
+#calendar tbody tr.odd:hover {
+	background-color: #fef0f0;
+}
+
+#calendar tbody td, #calendar tbody th {
+	border-bottom: 1px solid #779;
+}
+
+#calendar tbody tr.odd td, #calendar tbody tr.odd th {
+	border-color: #977;
+}
+
+/*
+#calendar tbody tr:last-child td, #calendar tbody tr:last-child th {
+	border: none;
+}
+*/
+
+#calendar tbody tr a {
+	color: #449;
+	text-decoration: none;
+}
+
+#calendar tbody tr.odd a {
+	color: #944;
+}
+
+
+/*
+#calendar tbody tr.holidays {
+    text-align:center;
+    border:1px solid #999;
+    background: #e0e5cf;
+    width:100%;
+}
+*/
+
+/*
+tbody a:visited {
+	text-decoration: line-through;
+}*/
+
+#calendar tbody tr a:hover {
+	border-bottom: 1px dotted;
+	text-decoration: none;
+	color: #009;
+}
+
+#calendar tbody tr.odd a:hover {
+	color: #900;
+}
+
+tt {
+  font-family: "Consolas", "Bitstream Vera Sans Mono", "Courier New", Courier, monospace !important;
+  font-weight: normal !important;
+  font-style: normal !important;
+  font-size: 1.3em !important;
+}
+/*
+tbody td + td + td + td a {
+	background: url(down.png) 0 50% no-repeat;
+}
+
+tbody tr.odd td + td + td + td a {
+	background-image: url(down2.png);
+}
+
+
+tbody td + td + td + td a {
+	display: block;
+	width: 12px;
+	height: 0;
+	padding-top: 12px;
+	overflow: hidden;
+	margin: 0 auto;
+}
+
+tbody td + td + td + td a:hover {
+	border: none;
+}
+*/
+
+
+ 
+/* rounded
+.menucontainer {
+        width: 500px;
+        padding: 15px;
+        border: 1px solid #ccc;
+        background: #eee;
+      margin:0px 0px 0px 200px;
+    font:11px/20px verdana, arial, helvetica, sans-serif;
+
+}
+
+#menunav {
+        margin: 0;
+        padding: 0 0 20px 10px;
+        border-bottom: 1px solid #9FB1BC;
+}
+
+#menunav li {
+        margin: 0;
+        padding: 0;
+        display: inline;
+        list-style-type: none;
+}
+
+#menunav a:link, #menunav a:visited {
+        float: left;
+        font-size: 10px;
+        line-height: 14px;
+        font-weight: bold;
+        padding: 0 12px 6px 12px;
+        text-decoration: none;
+        color: #708491;
+}
+
+#menunav a:link.active, #menunav a:visited.active, #menunav a:hover {
+        color: #000;
+        background: url(underline_menu.png) no-repeat bottom center;
+}
+*/
+
+  /*  #menunav {
+      float:left;
+      width:100%;
+          background: #eee; 
+      font-size:93%; 
+      line-height:normal;
+        width: 250px;
+        padding: 15px;
+        border: 1px solid #ccc;
+        background: #eee;
+      margin:0px 0px 0px 200px;
+    font:11px/20px verdana, arial, helvetica, sans-serif;
+
+      }
+*/
+
+
+    #menunav {
+      /*float:left;*/
+      /*width:100%;*/
+        /*width: 500px;*/
+        padding: 27px;        
+      font-size:93%;
+              /*background: #eee;*/
+      /*line-height:normal;*/
+          /* border-bottom:1px solid #BCD2E6; */
+      width: 90% ;
+  margin-left: auto ;
+  margin-right: auto ;
+/*      margin:0px 0px 0px 200px;      */
+        }
+      
+    #menunav ul {
+          margin:0;
+          padding:10px 10px 0 50px;
+          list-style:none;
+      }
+    #menunav li {
+      display:inline;
+      margin:0;
+      padding:0;
+    }
+    #menunav a {
+      float:left;
+      background:url("tableft1.png") no-repeat left top;
+      margin:0;
+      padding:0 0 0 4px;
+      text-decoration:none;
+      }
+    #menunav a span {
+      float:left;
+      display:block;
+      background:url("tabright1.png") no-repeat right top;
+      padding:5px 15px 4px 6px;
+      color:#627EB7;
+           font:12px/1.5 trebuchet ms, verdana, bitstream vera sans, sans-serif;
+
+      }
+    /* Commented Backslash Hack hides rule from IE5-Mac \*/
+    #menunav a span {float:none;}
+    /* End IE5-Mac hack */
+    #tabs a:hover span {
+      color:#627EB7;
+      }
+    #menunav a:hover {
+      background-position:0% -42px;
+      }
+    #menunav a:hover span {
+      background-position:100% -42px;
+      }
+
+      #menunav #active a {
+              background-position:0% -42px;
+      }
+      #menunav #active a span {
+              background-position:100% -42px;
+      }
+      
+/* This part of the CSS is for show/hide content */
+      
+   #wrap {
+      font: 1.3em/1.3 Arial, Helvetica, sans-serif;
+      width: 30em;
+      margin: 0 auto;
+      padding: 1em;
+      background-color: #fff; }
+   h1 {
+      font-size: 200%; }
+            
+   /* This CSS is used for the Show/Hide functionality. */
+   .more {
+      display: none;
+      border-top: 1px solid #666;
+      border-bottom: 1px solid #666; 
+      width: 95%;
+   }
+   a.showLink {
+      text-decoration: none;
+     /* color: #ff6; */
+  color: white;
+  font-weight: bold;
+           padding-left: 10px;
+      /* background: transparent url(down.png) no-repeat left;  */
+  }
+   a.hideLink {
+      text-decoration: none;
+  color: white;
+  font-weight: bold;
+           padding-left: 10px;
+      /*background: transparent url(up.gif) no-repeat left; */
+       }
+    a.showLink:hover, a.hideLink:hover {
+      border-bottom: 1px dotted #36f; 
+        }

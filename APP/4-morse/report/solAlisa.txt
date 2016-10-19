@@ -1,0 +1,38 @@
+	Data structure:
+
+Let us first encode each word of the given dictionary into a Morse sequence by applying the provided encryption table. Each character cat be encoded using at most 4 Morse characters (. and -). Therefore, each encoded word's length is bounded by 4 * M. Let us put those words in a hashmap data structure W. Keys in this hashmap would be Morse-encoded dictionary words, and values would be numbers of each sequence's occurences among the keywords. For instance, let's suppose a sequence "-....--.-" encodes the following words: "BAC", "BANN", and "DUC". Then W["-....--.-"] = 3. We can build ths data structure in O(N * M) time, more precisely in a linear time on the sum size of all the keywords. Simply iterate over all the keywords and insert those to the hashmap by adding 1 into the corresponding entry.
+
+	Analysis:
+
+Let S be the Morse sequence of length L that we are trying to decode. Suppose there is some partition P = [s_1, s_2, ..., s_p] of the string S into substrings (partition means that a concatenations of all s_i equals to S). Then the number of ways to decode S in respect to this partition equals to a product of W[s_i] for all s_i of P, i.e. C(P) = W[s_1] * W[s_2] * ... * W[s_p]. We implicitly let W[s_i] = 0, if the Morse string s_i is not present in the hashmap W. It is easy to show, that the total number of ways to decode the string S equals to the sum of C(P) across all possible partitions P.
+
+Notice, that we are interested in only those partitions, which don't contain any substring absent from the hashmap W. Those are the only partitions P with C(P) > 0. Let us consider the last substring of any partition P. It should be present in W. In particular, that means there should be a suffix of length t (1 <= t <= 4 * M), that is present in W. Notice, there are no suffixes of length > 4 * M, that might be present in W, and thus we are not interested in partitions that have the last substring of this length.
+
+Let us calculate F(S) - a number of possible partitions of S, such that it's each substring is in W. We can use dynamic programming approach for that.
+F(S) = sum{ F(S') * W[s] | for all prefixes s of S, i.e. S = concat(S', s)}. Since we don't have any keywords longer that 4 * M, we can only consider sufixes s of of length <= 4 * M (all the rest summands will be equal to zero). This formula can be easily prooved by induction on length(S), taking F(0) = 1 as a basis for induction.
+
+	Algorithm:
+	
+1. Build a hashmap W.
+2. Allocate an array F[0..L] to store values of the F function.
+3. Set F[0] = 1, a basis for the induction.
+4. for i = 1 to L do
+     F[i] = 0
+     for suffix_len = 1 to min(i, 4 * M) do
+       factor = W[S.substring(i - suffix_len + 1 .. i)]
+       if factor > 0 then
+         F[i] += F[i - suffix_len] * factor
+       end
+     end
+   end
+   
+5. Output F[L] as the total number of partitions.
+
+  Optimality:
+
+Optimality can be proved by induction, as stated above.
+
+  Complexity:
+
+1. Building a hashmap. Time: O(N * M). Space: O(N * M).
+2. Computing F function. Time: O(N * (4 * M)) * W_lookup_complexity = O(N * M^2). Space: O(N).

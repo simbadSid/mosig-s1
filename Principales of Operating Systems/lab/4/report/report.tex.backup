@@ -1,0 +1,145 @@
+
+\documentclass[a4paper,10pt]{article}
+% This line indicates the type of the document betwin {}: here it is a scientific article.
+% Options betwin [] are not mandatory, but precise here:
+% - a4paper: printing paper format
+% - 10pt: size of the characters
+
+\usepackage{graphicx}
+% This package allows to include images
+\usepackage{titling}
+% This package allows to have a subtitle 
+\usepackage{listings}
+% this package is used to write code samples.
+\lstset{%
+  basicstyle=\scriptsize\sffamily,%
+  commentstyle=\footnotesize\ttfamily,%
+  frameround=trBL,
+  frame=single,
+  breaklines=true,
+  showstringspaces=false,
+  numbers=left,
+  numberstyle=\tiny,
+  numbersep=10pt,
+  keywordstyle=\bf
+}
+\newcommand{\subtitle}[1]{%
+  \posttitle{%
+    \par\end{center}
+    \begin{center}\large#1\end{center}
+    \vskip0.5em}%
+}
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Raport Headers:
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\title{Multithreading with Posix Threads}
+\subtitle{Laboratory number 4}
+\author{SID-LAKHDAR Riyane}
+\date{11/04/2015}
+
+\begin{document}
+% Beginning serious stuff.
+
+
+\maketitle
+% Actually prints title / subtitle / authors and dat into the document
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Abstract
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+
+
+\begin{abstract}
+\end{abstract}
+
+
+\section{A first program...}
+    \subsection{Question.1}
+    In the main function, we create sevral threads in a same process to execute separated tasks.  
+    To be able to identify each thread, the system needs to label each thread with a unique identifier among the process threads.  This unique identifier is called the TID: Thread ID.\newline
+    The \textbf{tids} variable is an array that stores the identifier of each created thread.\newline
+
+    In this program, the global variables (shared by all the threads) are allocated and freed by the main thread (the one which creates all the others).  
+    This global variables are also initialized by the main thread.\newline
+
+    But each thread has its local variables which are not accesible to other threads as there are declared in them specific function of the thread. This variables are declared initialized and managed by this specific threads in the local environement of the specific function of each thread.
+    
+    \subsection{Question.2}
+    A thread is the smallest sequence of programmed instructions executed independantly.  Thus to create a thread we first need to gather the sequenceof instructions to be executed by the thread in a signle function.\newline
+    
+    The creation of the thread and the association between the new thread and its specific funtion is done by the function \textbf{pthread create}.   
+    This function also run the thread and retrieves him its parameters.
+
+    In an other hand, a thread needs to be identified amoung the other threads of the same process.  Thus the function \textbf{pthread create} will generate this id and returne it in the first parameter(ouput parameter).\newline
+    
+    
+    \subsection{Question.3}
+    When a runing thread call the function \textbf{usleep} the schedular removes the CPU access from the thread.  Thus the thread can not carry on his execution for a given time (input of the function).  This thread state is called \textbf{blocked} or \textbf{waiting}.
+
+    \subsection{Question.4}
+    In the match program, each created thread (excluding the main thread) terminates once it has printed its text.  Once it terminates, it enters in a dead \textbf{state}.\newline
+    At the end of the match program, the main thread waits for all its subthread to terminate.  At the end of each subthread, the main thread removes it (function pthread\_join).   The main thread terminates when all its sub threads have been removed.\newline
+    If the main thread did not remove all its created subthread, the process would have done it once the main thread ends.  Indeed, when the main thread terminates, the hole process is removed by the system including the memory space allocated by the subthreads.
+
+
+\section{Parameter Passing}
+    The expected program has been written in the file \textbf{match\_parameters.c}.  It can be:
+    \begin{itemize}
+     \item Compiled by running the command \textbf{make match\_parameter}
+     \item tested by running the command \textbf{./match\_parameters team1 team2 nbr\_song\_team1 nbr\_song\_team2}
+    \end{itemize}
+
+    
+
+\section{Return Value}
+    \subsection{Question .5.}
+    The expected program has been written in the file \textbf{sumArray.c}.  It can be:
+    \begin{itemize}
+     \item Compiled by running the command \textbf{make\ sumArray\_sequential}
+     \item tested by running the command \textbf{./sumArray\_sequential}
+    \end{itemize}
+
+    \subsection{Question .6.}
+    The expected program has been written in the file \textbf{sumArray.c}.  It can be:
+    \begin{itemize}
+     \item Compiled by running the command \textbf{make sumArray\_multiThread}
+     \item tested by running the command \textbf{./sumArray\_multiThread}
+    \end{itemize}
+
+    \subsection{Question .7.}
+    Using the previous programs we have computed the execution time of our program on the same input array size.  The results are :
+    \begin{itemize}
+     \item \textbf{Sequential: } 107 ms
+     \item \textbf{1 thread:   } 345 ms
+     \item \textbf{2 thread:   } 426 ms
+     \item \textbf{4 thread:   } 608 ms
+     \item \textbf{6 thread:   } 731 ms
+     \item \textbf{8 thread:   } 11251 ms
+    \end{itemize}
+    
+
+\section{Variable Sharing between Threads}
+    The expected program has been written in the file \textbf{sumArray\_sharedVariable.c}.  It can be:
+    \begin{itemize}
+     \item Compiled by running the command \textbf{make sumArray\_sharedVariable}
+     \item tested by running the command \textbf{./sumArray\_sharedVariable}
+    \end{itemize}
+    This program allowed us to compute the following time results:
+    \begin{itemize}
+     \item \textbf{1 thread:   } 391 ms
+     \item \textbf{2 thread:   } 468 ms
+     \item \textbf{4 thread:   } 554 ms
+     \item \textbf{6 thread:   } 895 ms
+     \item \textbf{8 thread:   } 1191 ms
+    \end{itemize}
+
+     This results are verry close to the time result computed without synchronization.  This similarity may be explained by the fact that all the threads are executing the same task in the same time (roughly).\newline
+     However, using this synchronization would be verry useful in the case where the threads would have verry diffrent time execution as the main thread would not loose time waiting for the first threads while other threads may have already returned them results.
+
+\end{document}

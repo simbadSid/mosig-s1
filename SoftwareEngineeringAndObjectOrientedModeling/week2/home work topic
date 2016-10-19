@@ -1,0 +1,29 @@
+
+Week2.java.lists:
+
+    Look at how object-oriented programming has been used to code different list implementations.
+
+    Look at tests and how JUnit testing is written (we discussed it in the classroom).
+
+    Look at perfs and how the different performance numbers are collected.
+    Try to understand the two performance evaluation tests
+
+        package edu.ujf.perfs.utils
+        -> class TestA and TestB.
+
+    You can run the performance tests via run.sh
+    Try to make sense of the performance number you see.
+    You can compare these numbers with the numbers obtained with Week1.c.lists
+
+Week2.Echo:
+
+    Step1 Folder:
+         The code is about several steps (1 to 6) reading from a character stream and printing.
+         The different versions of the code show you different bugs.
+         The last version (6) is the correct one.
+
+    Step2 Folder:
+        Read and understand the various classes.
+        This is about introducing modularity and object-oriented programming.
+        THIS IS REALLY IMPORTANT AS WE WILL BUILD ON THIS NEXT WEEK.
+

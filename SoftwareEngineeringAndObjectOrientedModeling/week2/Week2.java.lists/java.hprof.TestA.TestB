@@ -1,0 +1,476 @@
+JAVA PROFILE 1.0.1, created Sat Sep 12 07:38:32 2015
+
+Copyright (c) 2003, 2005, Oracle and/or its affiliates. All rights reserved.
+
+Redistribution and use in source and binary forms, with or without
+modification, are permitted provided that the following conditions
+are met:
+
+  - Redistributions of source code must retain the above copyright
+    notice, this list of conditions and the following disclaimer.
+
+  - Redistributions in binary form must reproduce the above copyright
+    notice, this list of conditions and the following disclaimer in the
+    documentation and/or other materials provided with the distribution.
+
+  - Neither the name of Oracle nor the names of its
+    contributors may be used to endorse or promote products derived
+    from this software without specific prior written permission.
+
+THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS
+IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO,
+THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR
+PURPOSE ARE DISCLAIMED.  IN NO EVENT SHALL THE COPYRIGHT OWNER OR
+CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL,
+EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO,
+PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR
+PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF
+LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
+NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
+SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+
+
+Header for -agentlib:hprof (or -Xrunhprof) ASCII Output (JDK 5.0 JVMTI based)
+
+WARNING!  This file format is under development, and is subject to
+change without notice.
+
+This file contains the following types of records:
+
+THREAD START
+THREAD END      mark the lifetime of Java threads
+
+TRACE           represents a Java stack trace.  Each trace consists
+                of a series of stack frames.  Other records refer to
+                TRACEs to identify (1) where object allocations have
+                taken place, (2) the frames in which GC roots were
+                found, and (3) frequently executed methods.
+
+HEAP DUMP       is a complete snapshot of all live objects in the Java
+                heap.  Following distinctions are made:
+
+                ROOT    root set as determined by GC
+                CLS     classes 
+                OBJ     instances
+                ARR     arrays
+
+SITES           is a sorted list of allocation sites.  This identifies
+                the most heavily allocated object types, and the TRACE
+                at which those allocations occurred.
+
+CPU SAMPLES     is a statistical profile of program execution.  The VM
+                periodically samples all running threads, and assigns
+                a quantum to active TRACEs in those threads.  Entries
+                in this record are TRACEs ranked by the percentage of
+                total quanta they consumed; top-ranked TRACEs are
+                typically hot spots in the program.
+
+CPU TIME        is a profile of program execution obtained by measuring
+                the time spent in individual methods (excluding the time
+                spent in callees), as well as by counting the number of
+                times each method is called. Entries in this record are
+                TRACEs ranked by the percentage of total CPU time. The
+                "count" field indicates the number of times each TRACE 
+                is invoked.
+
+MONITOR TIME    is a profile of monitor contention obtained by measuring
+                the time spent by a thread waiting to enter a monitor.
+                Entries in this record are TRACEs ranked by the percentage
+                of total monitor contention time and a brief description
+                of the monitor.  The "count" field indicates the number of 
+                times the monitor was contended at that TRACE.
+
+MONITOR DUMP    is a complete snapshot of all the monitors and threads in 
+                the System.
+
+HEAP DUMP, SITES, CPU SAMPLES|TIME and MONITOR DUMP|TIME records are generated 
+at program exit.  They can also be obtained during program execution by typing 
+Ctrl-\ (on Solaris) or by typing Ctrl-Break (on Win32).
+
+--------
+
+THREAD START (obj=5000017a, id = 200002, name="HPROF gc_finish watcher", group="system")
+THREAD START (obj=5000017a, id = 200001, name="main", group="main")
+THREAD START (obj=5000017a, id = 200006, name="SIGINT handler", group="system")
+THREAD END (id = 200006)
+TRACE 301720:
+	java.lang.Character.digit(Character.java:Unknown line)
+	java.lang.Character.digit(Character.java:Unknown line)
+	java.lang.Integer.parseInt(Integer.java:Unknown line)
+	java.lang.Integer.valueOf(Integer.java:Unknown line)
+TRACE 301719:
+	java.lang.CharacterDataLatin1.digit(CharacterDataLatin1.java:Unknown line)
+	java.lang.Character.digit(Character.java:Unknown line)
+	java.lang.Character.digit(Character.java:Unknown line)
+	java.lang.Integer.parseInt(Integer.java:Unknown line)
+TRACE 301721:
+	java.lang.Character.digit(Character.java:Unknown line)
+	java.lang.Integer.parseInt(Integer.java:Unknown line)
+	java.lang.Integer.valueOf(Integer.java:Unknown line)
+	edu.ujf.perfs.utils.TestA.randomInsert(TestA.java:Unknown line)
+TRACE 301722:
+	java.lang.Integer.parseInt(Integer.java:Unknown line)
+	java.lang.Integer.valueOf(Integer.java:Unknown line)
+	edu.ujf.perfs.utils.TestA.randomInsert(TestA.java:Unknown line)
+	edu.ujf.perfs.utils.TestA.test1(TestA.java:Unknown line)
+TRACE 301768:
+	java.lang.Integer.parseInt(Integer.java:Unknown line)
+	java.lang.Integer.valueOf(Integer.java:Unknown line)
+	edu.ujf.perfs.utils.TestA.randomInsert(TestA.java:Unknown line)
+	edu.ujf.perfs.utils.TestA.test2(TestA.java:Unknown line)
+TRACE 301716:
+	java.lang.String.charAt(String.java:Unknown line)
+	java.lang.Integer.parseInt(Integer.java:Unknown line)
+	java.lang.Integer.valueOf(Integer.java:Unknown line)
+	edu.ujf.perfs.utils.TestA.randomInsert(TestA.java:Unknown line)
+TRACE 301717:
+	java.lang.CharacterData.of(CharacterData.java:Unknown line)
+	java.lang.Character.digit(Character.java:Unknown line)
+	java.lang.Character.digit(Character.java:Unknown line)
+	java.lang.Integer.parseInt(Integer.java:Unknown line)
+TRACE 301718:
+	java.lang.CharacterDataLatin1.getProperties(CharacterDataLatin1.java:Unknown line)
+	java.lang.CharacterDataLatin1.digit(CharacterDataLatin1.java:Unknown line)
+	java.lang.Character.digit(Character.java:Unknown line)
+	java.lang.Character.digit(Character.java:Unknown line)
+TRACE 301802:
+	java.lang.Integer.parseInt(Integer.java:Unknown line)
+	java.lang.Integer.valueOf(Integer.java:Unknown line)
+	edu.ujf.perfs.utils.TestA.randomInsert(TestA.java:Unknown line)
+	edu.ujf.perfs.utils.TestA.test3(TestA.java:Unknown line)
+TRACE 301724:
+	java.lang.Integer.<init>(Integer.java:Unknown line)
+	java.lang.Integer.valueOf(Integer.java:Unknown line)
+	java.lang.Integer.valueOf(Integer.java:Unknown line)
+	edu.ujf.perfs.utils.TestA.randomInsert(TestA.java:Unknown line)
+TRACE 301801:
+	java.lang.Character.digit(Character.java:Unknown line)
+	java.lang.Integer.parseInt(Integer.java:Unknown line)
+	java.lang.Integer.valueOf(Integer.java:Unknown line)
+	edu.ujf.perfs.utils.TestA.randomInsert(TestA.java:Unknown line)
+TRACE 301734:
+	edu.ujf.perfs.utils.TestA.randomInsert(TestA.java:Unknown line)
+	edu.ujf.perfs.utils.TestA.test1(TestA.java:Unknown line)
+	edu.ujf.perfs.utils.TestA.warmup(TestA.java:Unknown line)
+	edu.ujf.perfs.utils.Harness.run(Harness.java:Unknown line)
+TRACE 301715:
+	java.lang.String.length(String.java:Unknown line)
+	java.lang.Integer.parseInt(Integer.java:Unknown line)
+	java.lang.Integer.valueOf(Integer.java:Unknown line)
+	edu.ujf.perfs.utils.TestA.randomInsert(TestA.java:Unknown line)
+TRACE 302494:
+	edu.ujf.perfs.utils.TestA.randomInsert(TestA.java:Unknown line)
+	edu.ujf.perfs.utils.TestA.test2(TestA.java:Unknown line)
+	edu.ujf.perfs.utils.TestA.runAllTests(TestA.java:Unknown line)
+	edu.ujf.perfs.utils.Harness.run(Harness.java:Unknown line)
+TRACE 302436:
+	edu.ujf.perfs.utils.TestA.randomInsert(TestA.java:Unknown line)
+	edu.ujf.perfs.utils.TestA.test1(TestA.java:Unknown line)
+	edu.ujf.perfs.utils.TestA.runAllTests(TestA.java:Unknown line)
+	edu.ujf.perfs.utils.Harness.run(Harness.java:Unknown line)
+TRACE 301774:
+	edu.ujf.perfs.utils.TestA.randomInsert(TestA.java:Unknown line)
+	edu.ujf.perfs.utils.TestA.test2(TestA.java:Unknown line)
+	edu.ujf.perfs.utils.TestA.warmup(TestA.java:Unknown line)
+	edu.ujf.perfs.utils.Harness.run(Harness.java:Unknown line)
+TRACE 301725:
+	java.lang.Integer.valueOf(Integer.java:Unknown line)
+	java.lang.Integer.valueOf(Integer.java:Unknown line)
+	edu.ujf.perfs.utils.TestA.randomInsert(TestA.java:Unknown line)
+	edu.ujf.perfs.utils.TestA.test1(TestA.java:Unknown line)
+TRACE 301476:
+	java.io.FileInputStream.read(FileInputStream.java:Unknown line)
+	java.io.BufferedInputStream.fill(BufferedInputStream.java:Unknown line)
+	java.io.BufferedInputStream.read(BufferedInputStream.java:Unknown line)
+	edu.ujf.perfs.utils.Harness.main(Harness.java:Unknown line)
+TRACE 301770:
+	java.lang.Integer.valueOf(Integer.java:Unknown line)
+	edu.ujf.perfs.utils.TestA.randomInsert(TestA.java:Unknown line)
+	edu.ujf.perfs.utils.TestA.test2(TestA.java:Unknown line)
+	edu.ujf.perfs.utils.TestA.warmup(TestA.java:Unknown line)
+TRACE 301726:
+	java.lang.Integer.valueOf(Integer.java:Unknown line)
+	edu.ujf.perfs.utils.TestA.randomInsert(TestA.java:Unknown line)
+	edu.ujf.perfs.utils.TestA.test1(TestA.java:Unknown line)
+	edu.ujf.perfs.utils.TestA.warmup(TestA.java:Unknown line)
+TRACE 301723:
+	java.lang.Number.<init>(Number.java:Unknown line)
+	java.lang.Integer.<init>(Integer.java:Unknown line)
+	java.lang.Integer.valueOf(Integer.java:Unknown line)
+	java.lang.Integer.valueOf(Integer.java:Unknown line)
+TRACE 302491:
+	java.lang.Integer.valueOf(Integer.java:Unknown line)
+	edu.ujf.perfs.utils.TestA.randomInsert(TestA.java:Unknown line)
+	edu.ujf.perfs.utils.TestA.test2(TestA.java:Unknown line)
+	edu.ujf.perfs.utils.TestA.runAllTests(TestA.java:Unknown line)
+TRACE 301714:
+	edu.ujf.samples.utils.LinkedList.elementAt(LinkedList.java:Unknown line)
+	edu.ujf.perfs.utils.TestA.randomInsert(TestA.java:Unknown line)
+	edu.ujf.perfs.utils.TestA.test1(TestA.java:Unknown line)
+	edu.ujf.perfs.utils.TestA.warmup(TestA.java:Unknown line)
+TRACE 301769:
+	java.lang.Integer.valueOf(Integer.java:Unknown line)
+	java.lang.Integer.valueOf(Integer.java:Unknown line)
+	edu.ujf.perfs.utils.TestA.randomInsert(TestA.java:Unknown line)
+	edu.ujf.perfs.utils.TestA.test2(TestA.java:Unknown line)
+TRACE 302432:
+	edu.ujf.samples.utils.LinkedList.elementAt(LinkedList.java:Unknown line)
+	edu.ujf.perfs.utils.TestA.randomInsert(TestA.java:Unknown line)
+	edu.ujf.perfs.utils.TestA.test1(TestA.java:Unknown line)
+	edu.ujf.perfs.utils.TestA.runAllTests(TestA.java:Unknown line)
+TRACE 302433:
+	java.lang.Integer.valueOf(Integer.java:Unknown line)
+	edu.ujf.perfs.utils.TestA.randomInsert(TestA.java:Unknown line)
+	edu.ujf.perfs.utils.TestA.test1(TestA.java:Unknown line)
+	edu.ujf.perfs.utils.TestA.runAllTests(TestA.java:Unknown line)
+TRACE 301800:
+	java.lang.String.charAt(String.java:Unknown line)
+	java.lang.Integer.parseInt(Integer.java:Unknown line)
+	java.lang.Integer.valueOf(Integer.java:Unknown line)
+	edu.ujf.perfs.utils.TestA.randomInsert(TestA.java:Unknown line)
+TRACE 301746:
+	edu.ujf.samples.utils.LinkedList.elementAt(LinkedList.java:Unknown line)
+	edu.ujf.perfs.utils.TestA.randomStructInsert(TestA.java:Unknown line)
+	edu.ujf.perfs.utils.TestA.test1Bis(TestA.java:Unknown line)
+	edu.ujf.perfs.utils.TestA.warmup(TestA.java:Unknown line)
+TRACE 302472:
+	edu.ujf.samples.utils.LinkedList.elementAt(LinkedList.java:Unknown line)
+	edu.ujf.perfs.utils.TestA.randomStructInsert(TestA.java:Unknown line)
+	edu.ujf.perfs.utils.TestA.test1Bis(TestA.java:Unknown line)
+	edu.ujf.perfs.utils.TestA.runAllTests(TestA.java:Unknown line)
+TRACE 301713:
+	edu.ujf.samples.utils.LinkedList.check(LinkedList.java:Unknown line)
+	edu.ujf.samples.utils.LinkedList.elementAt(LinkedList.java:Unknown line)
+	edu.ujf.perfs.utils.TestA.randomInsert(TestA.java:Unknown line)
+	edu.ujf.perfs.utils.TestA.test1(TestA.java:Unknown line)
+TRACE 301813:
+	edu.ujf.perfs.utils.TestA.randomInsert(TestA.java:Unknown line)
+	edu.ujf.perfs.utils.TestA.test3(TestA.java:Unknown line)
+	edu.ujf.perfs.utils.TestA.warmup(TestA.java:Unknown line)
+	edu.ujf.perfs.utils.Harness.run(Harness.java:Unknown line)
+TRACE 301745:
+	edu.ujf.samples.utils.LinkedList.check(LinkedList.java:Unknown line)
+	edu.ujf.samples.utils.LinkedList.elementAt(LinkedList.java:Unknown line)
+	edu.ujf.perfs.utils.TestA.randomStructInsert(TestA.java:Unknown line)
+	edu.ujf.perfs.utils.TestA.test1Bis(TestA.java:Unknown line)
+TRACE 302515:
+	edu.ujf.perfs.utils.TestA.randomInsert(TestA.java:Unknown line)
+	edu.ujf.perfs.utils.TestA.test3(TestA.java:Unknown line)
+	edu.ujf.perfs.utils.TestA.runAllTests(TestA.java:Unknown line)
+	edu.ujf.perfs.utils.Harness.run(Harness.java:Unknown line)
+TRACE 301803:
+	java.lang.Integer.<init>(Integer.java:Unknown line)
+	java.lang.Integer.valueOf(Integer.java:Unknown line)
+	java.lang.Integer.valueOf(Integer.java:Unknown line)
+	edu.ujf.perfs.utils.TestA.randomInsert(TestA.java:Unknown line)
+TRACE 301804:
+	java.lang.Integer.valueOf(Integer.java:Unknown line)
+	java.lang.Integer.valueOf(Integer.java:Unknown line)
+	edu.ujf.perfs.utils.TestA.randomInsert(TestA.java:Unknown line)
+	edu.ujf.perfs.utils.TestA.test3(TestA.java:Unknown line)
+TRACE 301753:
+	edu.ujf.perfs.utils.TestA.randomStructInsert(TestA.java:Unknown line)
+	edu.ujf.perfs.utils.TestA.test1Bis(TestA.java:Unknown line)
+	edu.ujf.perfs.utils.TestA.warmup(TestA.java:Unknown line)
+	edu.ujf.perfs.utils.Harness.run(Harness.java:Unknown line)
+TRACE 302512:
+	java.lang.Integer.valueOf(Integer.java:Unknown line)
+	edu.ujf.perfs.utils.TestA.randomInsert(TestA.java:Unknown line)
+	edu.ujf.perfs.utils.TestA.test3(TestA.java:Unknown line)
+	edu.ujf.perfs.utils.TestA.runAllTests(TestA.java:Unknown line)
+TRACE 301805:
+	java.lang.Integer.valueOf(Integer.java:Unknown line)
+	edu.ujf.perfs.utils.TestA.randomInsert(TestA.java:Unknown line)
+	edu.ujf.perfs.utils.TestA.test3(TestA.java:Unknown line)
+	edu.ujf.perfs.utils.TestA.warmup(TestA.java:Unknown line)
+TRACE 302474:
+	edu.ujf.perfs.utils.TestA.randomStructInsert(TestA.java:Unknown line)
+	edu.ujf.perfs.utils.TestA.test1Bis(TestA.java:Unknown line)
+	edu.ujf.perfs.utils.TestA.runAllTests(TestA.java:Unknown line)
+	edu.ujf.perfs.utils.Harness.run(Harness.java:Unknown line)
+TRACE 301727:
+	java.lang.Integer.intValue(Integer.java:Unknown line)
+	edu.ujf.perfs.utils.TestA.randomInsert(TestA.java:Unknown line)
+	edu.ujf.perfs.utils.TestA.test1(TestA.java:Unknown line)
+	edu.ujf.perfs.utils.TestA.warmup(TestA.java:Unknown line)
+TRACE 301767:
+	edu.ujf.samples.utils.ArrayList.elementAt(ArrayList.java:Unknown line)
+	edu.ujf.perfs.utils.TestA.randomInsert(TestA.java:Unknown line)
+	edu.ujf.perfs.utils.TestA.test2(TestA.java:Unknown line)
+	edu.ujf.perfs.utils.TestA.warmup(TestA.java:Unknown line)
+TRACE 301771:
+	java.lang.Integer.intValue(Integer.java:Unknown line)
+	edu.ujf.perfs.utils.TestA.randomInsert(TestA.java:Unknown line)
+	edu.ujf.perfs.utils.TestA.test2(TestA.java:Unknown line)
+	edu.ujf.perfs.utils.TestA.warmup(TestA.java:Unknown line)
+TRACE 302434:
+	java.lang.Integer.intValue(Integer.java:Unknown line)
+	edu.ujf.perfs.utils.TestA.randomInsert(TestA.java:Unknown line)
+	edu.ujf.perfs.utils.TestA.test1(TestA.java:Unknown line)
+	edu.ujf.perfs.utils.TestA.runAllTests(TestA.java:Unknown line)
+TRACE 302490:
+	edu.ujf.samples.utils.ArrayList.elementAt(ArrayList.java:Unknown line)
+	edu.ujf.perfs.utils.TestA.randomInsert(TestA.java:Unknown line)
+	edu.ujf.perfs.utils.TestA.test2(TestA.java:Unknown line)
+	edu.ujf.perfs.utils.TestA.runAllTests(TestA.java:Unknown line)
+TRACE 302492:
+	java.lang.Integer.intValue(Integer.java:Unknown line)
+	edu.ujf.perfs.utils.TestA.randomInsert(TestA.java:Unknown line)
+	edu.ujf.perfs.utils.TestA.test2(TestA.java:Unknown line)
+	edu.ujf.perfs.utils.TestA.runAllTests(TestA.java:Unknown line)
+TRACE 301799:
+	java.lang.String.length(String.java:Unknown line)
+	java.lang.Integer.parseInt(Integer.java:Unknown line)
+	java.lang.Integer.valueOf(Integer.java:Unknown line)
+	edu.ujf.perfs.utils.TestA.randomInsert(TestA.java:Unknown line)
+TRACE 302408:
+	java.util.Formatter$FormatSpecifier.print(Formatter.java:Unknown line)
+	java.util.Formatter$FormatSpecifier.print(Formatter.java:Unknown line)
+	java.util.Formatter$FormatSpecifier.printFloat(Formatter.java:Unknown line)
+	java.util.Formatter$FormatSpecifier.print(Formatter.java:Unknown line)
+TRACE 302510:
+	edu.ujf.samples.utils.DoubleLinkedList.elementAt(DoubleLinkedList.java:Unknown line)
+	edu.ujf.perfs.utils.TestA.randomInsert(TestA.java:Unknown line)
+	edu.ujf.perfs.utils.TestA.test3(TestA.java:Unknown line)
+	edu.ujf.perfs.utils.TestA.runAllTests(TestA.java:Unknown line)
+TRACE 301797:
+	edu.ujf.samples.utils.DoubleLinkedList.elementAt(DoubleLinkedList.java:Unknown line)
+	edu.ujf.perfs.utils.TestA.randomInsert(TestA.java:Unknown line)
+	edu.ujf.perfs.utils.TestA.test3(TestA.java:Unknown line)
+	edu.ujf.perfs.utils.TestA.warmup(TestA.java:Unknown line)
+TRACE 301806:
+	java.lang.Integer.intValue(Integer.java:Unknown line)
+	edu.ujf.perfs.utils.TestA.randomInsert(TestA.java:Unknown line)
+	edu.ujf.perfs.utils.TestA.test3(TestA.java:Unknown line)
+	edu.ujf.perfs.utils.TestA.warmup(TestA.java:Unknown line)
+TRACE 302513:
+	java.lang.Integer.intValue(Integer.java:Unknown line)
+	edu.ujf.perfs.utils.TestA.randomInsert(TestA.java:Unknown line)
+	edu.ujf.perfs.utils.TestA.test3(TestA.java:Unknown line)
+	edu.ujf.perfs.utils.TestA.runAllTests(TestA.java:Unknown line)
+TRACE 302511:
+	edu.ujf.samples.utils.DoubleLinkedList$Entry.get(DoubleLinkedList.java:Unknown line)
+	edu.ujf.perfs.utils.TestA.randomInsert(TestA.java:Unknown line)
+	edu.ujf.perfs.utils.TestA.test3(TestA.java:Unknown line)
+	edu.ujf.perfs.utils.TestA.runAllTests(TestA.java:Unknown line)
+TRACE 301798:
+	edu.ujf.samples.utils.DoubleLinkedList$Entry.get(DoubleLinkedList.java:Unknown line)
+	edu.ujf.perfs.utils.TestA.randomInsert(TestA.java:Unknown line)
+	edu.ujf.perfs.utils.TestA.test3(TestA.java:Unknown line)
+	edu.ujf.perfs.utils.TestA.warmup(TestA.java:Unknown line)
+TRACE 302580:
+	java.util.Random.next(Random.java:Unknown line)
+	java.util.Random.nextInt(Random.java:Unknown line)
+	edu.ujf.perfs.utils.TestB.randomInsert2(TestB.java:Unknown line)
+	edu.ujf.perfs.utils.TestB.test2(TestB.java:Unknown line)
+TRACE 302359:
+	sun.misc.FDBigInteger.mult(FDBigInteger.java:Unknown line)
+	sun.misc.FDBigInteger.<clinit>(FDBigInteger.java:Unknown line)
+	sun.misc.FloatingDecimal$BinaryToASCIIBuffer.dtoa(FloatingDecimal.java:Unknown line)
+	sun.misc.FloatingDecimal$BinaryToASCIIBuffer.access$100(FloatingDecimal.java:Unknown line)
+TRACE 302581:
+	java.util.Random.nextInt(Random.java:Unknown line)
+	edu.ujf.perfs.utils.TestB.randomInsert2(TestB.java:Unknown line)
+	edu.ujf.perfs.utils.TestB.test2(TestB.java:Unknown line)
+	edu.ujf.perfs.utils.TestB.warmup(TestB.java:Unknown line)
+TRACE 302594:
+	edu.ujf.perfs.utils.TestB.randomInsert2(TestB.java:Unknown line)
+	edu.ujf.perfs.utils.TestB.test2(TestB.java:Unknown line)
+	edu.ujf.perfs.utils.TestB.warmup(TestB.java:Unknown line)
+	edu.ujf.perfs.utils.Harness.run(Harness.java:Unknown line)
+TRACE 302637:
+	java.util.Random.nextInt(Random.java:Unknown line)
+	edu.ujf.perfs.utils.TestB.randomInsert2(TestB.java:Unknown line)
+	edu.ujf.perfs.utils.TestB.test2(TestB.java:Unknown line)
+	edu.ujf.perfs.utils.TestB.runAllTests(TestB.java:Unknown line)
+TRACE 302568:
+	edu.ujf.perfs.utils.TestB.randomInsert2(TestB.java:Unknown line)
+	edu.ujf.perfs.utils.TestB.test1(TestB.java:Unknown line)
+	edu.ujf.perfs.utils.TestB.warmup(TestB.java:Unknown line)
+	edu.ujf.perfs.utils.Harness.run(Harness.java:Unknown line)
+TRACE 302579:
+	java.util.concurrent.atomic.AtomicLong.compareAndSet(AtomicLong.java:Unknown line)
+	java.util.Random.next(Random.java:Unknown line)
+	java.util.Random.nextInt(Random.java:Unknown line)
+	edu.ujf.perfs.utils.TestB.randomInsert2(TestB.java:Unknown line)
+TRACE 301764:
+	java.lang.Integer.toString(Integer.java:Unknown line)
+	edu.ujf.perfs.utils.TestA.randomInsert(TestA.java:Unknown line)
+	edu.ujf.perfs.utils.TestA.test2(TestA.java:Unknown line)
+	edu.ujf.perfs.utils.TestA.warmup(TestA.java:Unknown line)
+TRACE 302578:
+	java.util.concurrent.atomic.AtomicLong.get(AtomicLong.java:Unknown line)
+	java.util.Random.next(Random.java:Unknown line)
+	java.util.Random.nextInt(Random.java:Unknown line)
+	edu.ujf.perfs.utils.TestB.randomInsert2(TestB.java:Unknown line)
+TRACE 302638:
+	java.lang.Integer.toString(Integer.java:Unknown line)
+	edu.ujf.perfs.utils.TestB.randomInsert2(TestB.java:Unknown line)
+	edu.ujf.perfs.utils.TestB.test2(TestB.java:Unknown line)
+	edu.ujf.perfs.utils.TestB.runAllTests(TestB.java:Unknown line)
+CPU TIME (ms) BEGIN (total = 93029) Sat Sep 12 07:40:15 2015
+rank   self  accum   count trace method
+   1 15,77% 15,77% 3434906 301720 java.lang.Character.digit
+   2 10,13% 25,90% 3434912 301719 java.lang.CharacterDataLatin1.digit
+   3  8,42% 34,32% 2876880 301721 java.lang.Character.digit
+   4  7,29% 41,61%  516372 301722 java.lang.Integer.parseInt
+   5  7,20% 48,81%  516372 301768 java.lang.Integer.parseInt
+   6  4,80% 53,61% 3909624 301716 java.lang.String.charAt
+   7  4,36% 57,98% 3434912 301717 java.lang.CharacterData.of
+   8  4,32% 62,30% 3434912 301718 java.lang.CharacterDataLatin1.getProperties
+   9  2,76% 65,06%  186068 301802 java.lang.Integer.parseInt
+  10  2,29% 67,36%  760212 301724 java.lang.Integer.<init>
+  11  1,67% 69,02%  558026 301801 java.lang.Character.digit
+  12  1,40% 70,42%       1 301734 edu.ujf.perfs.utils.TestA.randomInsert
+  13  1,39% 71,80% 1032744 301715 java.lang.String.length
+  14  1,38% 73,19%       1 302494 edu.ujf.perfs.utils.TestA.randomInsert
+  15  1,38% 74,57%       1 302436 edu.ujf.perfs.utils.TestA.randomInsert
+  16  1,35% 75,91%       1 301774 edu.ujf.perfs.utils.TestA.randomInsert
+  17  1,30% 77,21%  516372 301725 java.lang.Integer.valueOf
+  18  1,28% 78,50%       1 301476 java.io.FileInputStream.read
+  19  1,28% 79,77%  258186 301770 java.lang.Integer.valueOf
+  20  1,22% 80,99%  258186 301726 java.lang.Integer.valueOf
+  21  1,22% 82,21%  946016 301723 java.lang.Number.<init>
+  22  1,21% 83,42%  258186 302491 java.lang.Integer.valueOf
+  23  1,20% 84,62%  258186 301714 edu.ujf.samples.utils.LinkedList.elementAt
+  24  1,18% 85,79%  516372 301769 java.lang.Integer.valueOf
+  25  1,17% 86,96%  258186 302432 edu.ujf.samples.utils.LinkedList.elementAt
+  26  1,15% 88,11%  258186 302433 java.lang.Integer.valueOf
+  27  0,90% 89,01%  744094 301800 java.lang.String.charAt
+  28  0,89% 89,91%  258186 301746 edu.ujf.samples.utils.LinkedList.elementAt
+  29  0,87% 90,78%  258186 302472 edu.ujf.samples.utils.LinkedList.elementAt
+  30  0,69% 91,47%  516372 301713 edu.ujf.samples.utils.LinkedList.check
+  31  0,67% 92,13%       1 301813 edu.ujf.perfs.utils.TestA.randomInsert
+  32  0,66% 92,80%  516372 301745 edu.ujf.samples.utils.LinkedList.check
+  33  0,62% 93,42%       1 302515 edu.ujf.perfs.utils.TestA.randomInsert
+  34  0,55% 93,97%  185804 301803 java.lang.Integer.<init>
+  35  0,51% 94,48%  186068 301804 java.lang.Integer.valueOf
+  36  0,43% 94,91%       1 301753 edu.ujf.perfs.utils.TestA.randomStructInsert
+  37  0,43% 95,34%   93034 302512 java.lang.Integer.valueOf
+  38  0,43% 95,77%   93034 301805 java.lang.Integer.valueOf
+  39  0,43% 96,20%       1 302474 edu.ujf.perfs.utils.TestA.randomStructInsert
+  40  0,35% 96,55%  258186 301727 java.lang.Integer.intValue
+  41  0,35% 96,90%  258186 301767 edu.ujf.samples.utils.ArrayList.elementAt
+  42  0,34% 97,24%  258186 301771 java.lang.Integer.intValue
+  43  0,33% 97,57%  258186 302434 java.lang.Integer.intValue
+  44  0,32% 97,89%  258186 302490 edu.ujf.samples.utils.ArrayList.elementAt
+  45  0,31% 98,20%  258186 302492 java.lang.Integer.intValue
+  46  0,25% 98,46%  186068 301799 java.lang.String.length
+  47  0,19% 98,64%       6 302408 java.util.Formatter$FormatSpecifier.print
+  48  0,18% 98,82%   93034 302510 edu.ujf.samples.utils.DoubleLinkedList.elementAt
+  49  0,16% 98,98%   93034 301797 edu.ujf.samples.utils.DoubleLinkedList.elementAt
+  50  0,12% 99,09%   93034 301806 java.lang.Integer.intValue
+  51  0,10% 99,20%   93034 302513 java.lang.Integer.intValue
+  52  0,10% 99,30%   93034 302511 edu.ujf.samples.utils.DoubleLinkedList$Entry.get
+  53  0,10% 99,39%   93034 301798 edu.ujf.samples.utils.DoubleLinkedList$Entry.get
+  54  0,05% 99,45%   12151 302580 java.util.Random.next
+  55  0,04% 99,49%     326 302359 sun.misc.FDBigInteger.mult
+  56  0,02% 99,51%    5937 302581 java.util.Random.nextInt
+  57  0,02% 99,53%       1 302594 edu.ujf.perfs.utils.TestB.randomInsert2
+  58  0,02% 99,54%    6214 302637 java.util.Random.nextInt
+  59  0,02% 99,56%       1 302568 edu.ujf.perfs.utils.TestB.randomInsert2
+  60  0,02% 99,58%   12151 302579 java.util.concurrent.atomic.AtomicLong.compareAndSet
+  61  0,01% 99,59%    1000 301764 java.lang.Integer.toString
+  62  0,01% 99,60%   12151 302578 java.util.concurrent.atomic.AtomicLong.get
+  63  0,01% 99,61%    1000 302638 java.lang.Integer.toString
+CPU TIME (ms) END

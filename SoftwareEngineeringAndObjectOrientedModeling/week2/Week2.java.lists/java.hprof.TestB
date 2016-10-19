@@ -1,0 +1,826 @@
+JAVA PROFILE 1.0.1, created Sat Sep 12 07:43:31 2015
+
+Copyright (c) 2003, 2005, Oracle and/or its affiliates. All rights reserved.
+
+Redistribution and use in source and binary forms, with or without
+modification, are permitted provided that the following conditions
+are met:
+
+  - Redistributions of source code must retain the above copyright
+    notice, this list of conditions and the following disclaimer.
+
+  - Redistributions in binary form must reproduce the above copyright
+    notice, this list of conditions and the following disclaimer in the
+    documentation and/or other materials provided with the distribution.
+
+  - Neither the name of Oracle nor the names of its
+    contributors may be used to endorse or promote products derived
+    from this software without specific prior written permission.
+
+THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS
+IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO,
+THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR
+PURPOSE ARE DISCLAIMED.  IN NO EVENT SHALL THE COPYRIGHT OWNER OR
+CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL,
+EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO,
+PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR
+PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF
+LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
+NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
+SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+
+
+Header for -agentlib:hprof (or -Xrunhprof) ASCII Output (JDK 5.0 JVMTI based)
+
+WARNING!  This file format is under development, and is subject to
+change without notice.
+
+This file contains the following types of records:
+
+THREAD START
+THREAD END      mark the lifetime of Java threads
+
+TRACE           represents a Java stack trace.  Each trace consists
+                of a series of stack frames.  Other records refer to
+                TRACEs to identify (1) where object allocations have
+                taken place, (2) the frames in which GC roots were
+                found, and (3) frequently executed methods.
+
+HEAP DUMP       is a complete snapshot of all live objects in the Java
+                heap.  Following distinctions are made:
+
+                ROOT    root set as determined by GC
+                CLS     classes 
+                OBJ     instances
+                ARR     arrays
+
+SITES           is a sorted list of allocation sites.  This identifies
+                the most heavily allocated object types, and the TRACE
+                at which those allocations occurred.
+
+CPU SAMPLES     is a statistical profile of program execution.  The VM
+                periodically samples all running threads, and assigns
+                a quantum to active TRACEs in those threads.  Entries
+                in this record are TRACEs ranked by the percentage of
+                total quanta they consumed; top-ranked TRACEs are
+                typically hot spots in the program.
+
+CPU TIME        is a profile of program execution obtained by measuring
+                the time spent in individual methods (excluding the time
+                spent in callees), as well as by counting the number of
+                times each method is called. Entries in this record are
+                TRACEs ranked by the percentage of total CPU time. The
+                "count" field indicates the number of times each TRACE 
+                is invoked.
+
+MONITOR TIME    is a profile of monitor contention obtained by measuring
+                the time spent by a thread waiting to enter a monitor.
+                Entries in this record are TRACEs ranked by the percentage
+                of total monitor contention time and a brief description
+                of the monitor.  The "count" field indicates the number of 
+                times the monitor was contended at that TRACE.
+
+MONITOR DUMP    is a complete snapshot of all the monitors and threads in 
+                the System.
+
+HEAP DUMP, SITES, CPU SAMPLES|TIME and MONITOR DUMP|TIME records are generated 
+at program exit.  They can also be obtained during program execution by typing 
+Ctrl-\ (on Solaris) or by typing Ctrl-Break (on Win32).
+
+--------
+
+THREAD START (obj=5000017a, id = 200002, name="HPROF gc_finish watcher", group="system")
+THREAD START (obj=5000017a, id = 200001, name="main", group="main")
+THREAD START (obj=5000017a, id = 200006, name="SIGINT handler", group="system")
+THREAD END (id = 200006)
+TRACE 301476:
+	java.io.FileInputStream.read(FileInputStream.java:Unknown line)
+	java.io.BufferedInputStream.fill(BufferedInputStream.java:Unknown line)
+	java.io.BufferedInputStream.read(BufferedInputStream.java:Unknown line)
+	edu.ujf.perfs.utils.Harness.main(Harness.java:Unknown line)
+TRACE 301744:
+	java.util.Random.next(Random.java:Unknown line)
+	java.util.Random.nextInt(Random.java:Unknown line)
+	edu.ujf.perfs.utils.TestB.randomInsert2(TestB.java:Unknown line)
+	edu.ujf.perfs.utils.TestB.test2(TestB.java:Unknown line)
+TRACE 301745:
+	java.util.Random.nextInt(Random.java:Unknown line)
+	edu.ujf.perfs.utils.TestB.randomInsert2(TestB.java:Unknown line)
+	edu.ujf.perfs.utils.TestB.test2(TestB.java:Unknown line)
+	edu.ujf.perfs.utils.TestB.warmup(TestB.java:Unknown line)
+TRACE 301763:
+	edu.ujf.perfs.utils.TestB.randomInsert2(TestB.java:Unknown line)
+	edu.ujf.perfs.utils.TestB.test2(TestB.java:Unknown line)
+	edu.ujf.perfs.utils.TestB.warmup(TestB.java:Unknown line)
+	edu.ujf.perfs.utils.Harness.run(Harness.java:Unknown line)
+TRACE 301742:
+	java.util.concurrent.atomic.AtomicLong.get(AtomicLong.java:Unknown line)
+	java.util.Random.next(Random.java:Unknown line)
+	java.util.Random.nextInt(Random.java:Unknown line)
+	edu.ujf.perfs.utils.TestB.randomInsert2(TestB.java:Unknown line)
+TRACE 301743:
+	java.util.concurrent.atomic.AtomicLong.compareAndSet(AtomicLong.java:Unknown line)
+	java.util.Random.next(Random.java:Unknown line)
+	java.util.Random.nextInt(Random.java:Unknown line)
+	edu.ujf.perfs.utils.TestB.randomInsert2(TestB.java:Unknown line)
+TRACE 301796:
+	java.lang.Integer.toString(Integer.java:Unknown line)
+	edu.ujf.perfs.utils.TestB.randomInsert2(TestB.java:Unknown line)
+	edu.ujf.perfs.utils.TestB.test1(TestB.java:Unknown line)
+	edu.ujf.perfs.utils.TestB.runAllTests(TestB.java:Unknown line)
+TRACE 301799:
+	edu.ujf.samples.utils.LinkedList.insertBefore(LinkedList.java:Unknown line)
+	edu.ujf.perfs.utils.TestB.randomInsert2(TestB.java:Unknown line)
+	edu.ujf.perfs.utils.TestB.test1(TestB.java:Unknown line)
+	edu.ujf.perfs.utils.TestB.runAllTests(TestB.java:Unknown line)
+TRACE 301712:
+	java.lang.Integer.toString(Integer.java:Unknown line)
+	edu.ujf.perfs.utils.TestB.randomInsert2(TestB.java:Unknown line)
+	edu.ujf.perfs.utils.TestB.test1(TestB.java:Unknown line)
+	edu.ujf.perfs.utils.TestB.warmup(TestB.java:Unknown line)
+TRACE 301749:
+	java.lang.Integer.toString(Integer.java:Unknown line)
+	edu.ujf.perfs.utils.TestB.randomInsert2(TestB.java:Unknown line)
+	edu.ujf.perfs.utils.TestB.test2(TestB.java:Unknown line)
+	edu.ujf.perfs.utils.TestB.warmup(TestB.java:Unknown line)
+TRACE 301834:
+	java.lang.Integer.toString(Integer.java:Unknown line)
+	edu.ujf.perfs.utils.TestB.randomInsert2(TestB.java:Unknown line)
+	edu.ujf.perfs.utils.TestB.test2(TestB.java:Unknown line)
+	edu.ujf.perfs.utils.TestB.runAllTests(TestB.java:Unknown line)
+TRACE 301836:
+	edu.ujf.samples.utils.DoubleLinkedList.insertBefore(DoubleLinkedList.java:Unknown line)
+	edu.ujf.perfs.utils.TestB.randomInsert2(TestB.java:Unknown line)
+	edu.ujf.perfs.utils.TestB.test2(TestB.java:Unknown line)
+	edu.ujf.perfs.utils.TestB.runAllTests(TestB.java:Unknown line)
+TRACE 301837:
+	edu.ujf.perfs.utils.TestB.randomInsert2(TestB.java:Unknown line)
+	edu.ujf.perfs.utils.TestB.test2(TestB.java:Unknown line)
+	edu.ujf.perfs.utils.TestB.runAllTests(TestB.java:Unknown line)
+	edu.ujf.perfs.utils.Harness.run(Harness.java:Unknown line)
+TRACE 301800:
+	edu.ujf.perfs.utils.TestB.randomInsert2(TestB.java:Unknown line)
+	edu.ujf.perfs.utils.TestB.test1(TestB.java:Unknown line)
+	edu.ujf.perfs.utils.TestB.runAllTests(TestB.java:Unknown line)
+	edu.ujf.perfs.utils.Harness.run(Harness.java:Unknown line)
+TRACE 301833:
+	java.util.Random.nextInt(Random.java:Unknown line)
+	edu.ujf.perfs.utils.TestB.randomInsert2(TestB.java:Unknown line)
+	edu.ujf.perfs.utils.TestB.test2(TestB.java:Unknown line)
+	edu.ujf.perfs.utils.TestB.runAllTests(TestB.java:Unknown line)
+TRACE 301676:
+	java.util.Random.next(Random.java:Unknown line)
+	java.util.Random.nextInt(Random.java:Unknown line)
+	edu.ujf.perfs.utils.TestB.<init>(TestB.java:Unknown line)
+	sun.reflect.NativeConstructorAccessorImpl.newInstance(NativeConstructorAccessorImpl.java:Unknown line)
+TRACE 301727:
+	edu.ujf.perfs.utils.TestB.randomInsert2(TestB.java:Unknown line)
+	edu.ujf.perfs.utils.TestB.test1(TestB.java:Unknown line)
+	edu.ujf.perfs.utils.TestB.warmup(TestB.java:Unknown line)
+	edu.ujf.perfs.utils.Harness.run(Harness.java:Unknown line)
+TRACE 301761:
+	edu.ujf.samples.utils.DoubleLinkedList$Entry.access$1(DoubleLinkedList.java:Unknown line)
+	edu.ujf.samples.utils.DoubleLinkedList.insertBefore(DoubleLinkedList.java:Unknown line)
+	edu.ujf.perfs.utils.TestB.randomInsert2(TestB.java:Unknown line)
+	edu.ujf.perfs.utils.TestB.test2(TestB.java:Unknown line)
+TRACE 301762:
+	edu.ujf.samples.utils.DoubleLinkedList.insertBefore(DoubleLinkedList.java:Unknown line)
+	edu.ujf.perfs.utils.TestB.randomInsert2(TestB.java:Unknown line)
+	edu.ujf.perfs.utils.TestB.test2(TestB.java:Unknown line)
+	edu.ujf.perfs.utils.TestB.warmup(TestB.java:Unknown line)
+TRACE 301853:
+	java.lang.System.gc(System.java:Unknown line)
+	edu.ujf.perfs.utils.Harness.main(Harness.java:Unknown line)
+TRACE 301504:
+	java.util.concurrent.ConcurrentHashMap.transfer(ConcurrentHashMap.java:Unknown line)
+	java.util.concurrent.ConcurrentHashMap.addCount(ConcurrentHashMap.java:Unknown line)
+	java.util.concurrent.ConcurrentHashMap.putVal(ConcurrentHashMap.java:Unknown line)
+	java.util.concurrent.ConcurrentHashMap.putIfAbsent(ConcurrentHashMap.java:Unknown line)
+TRACE 301677:
+	java.util.Random.nextInt(Random.java:Unknown line)
+	edu.ujf.perfs.utils.TestB.<init>(TestB.java:Unknown line)
+	sun.reflect.NativeConstructorAccessorImpl.newInstance(NativeConstructorAccessorImpl.java:Unknown line)
+	sun.reflect.DelegatingConstructorAccessorImpl.newInstance(DelegatingConstructorAccessorImpl.java:Unknown line)
+TRACE 301709:
+	java.lang.Integer.stringSize(Integer.java:Unknown line)
+	java.lang.Integer.toString(Integer.java:Unknown line)
+	edu.ujf.perfs.utils.TestB.randomInsert2(TestB.java:Unknown line)
+	edu.ujf.perfs.utils.TestB.test1(TestB.java:Unknown line)
+TRACE 301710:
+	java.lang.Integer.getChars(Integer.java:Unknown line)
+	java.lang.Integer.toString(Integer.java:Unknown line)
+	edu.ujf.perfs.utils.TestB.randomInsert2(TestB.java:Unknown line)
+	edu.ujf.perfs.utils.TestB.test1(TestB.java:Unknown line)
+TRACE 301711:
+	java.lang.String.<init>(String.java:Unknown line)
+	java.lang.Integer.toString(Integer.java:Unknown line)
+	edu.ujf.perfs.utils.TestB.randomInsert2(TestB.java:Unknown line)
+	edu.ujf.perfs.utils.TestB.test1(TestB.java:Unknown line)
+TRACE 301723:
+	edu.ujf.samples.utils.LinkedList.indexOf(LinkedList.java:Unknown line)
+	edu.ujf.perfs.utils.TestB.randomInsert2(TestB.java:Unknown line)
+	edu.ujf.perfs.utils.TestB.test1(TestB.java:Unknown line)
+	edu.ujf.perfs.utils.TestB.warmup(TestB.java:Unknown line)
+TRACE 301726:
+	edu.ujf.samples.utils.LinkedList.insertBefore(LinkedList.java:Unknown line)
+	edu.ujf.perfs.utils.TestB.randomInsert2(TestB.java:Unknown line)
+	edu.ujf.perfs.utils.TestB.test1(TestB.java:Unknown line)
+	edu.ujf.perfs.utils.TestB.warmup(TestB.java:Unknown line)
+TRACE 301724:
+	edu.ujf.samples.utils.LinkedList.check(LinkedList.java:Unknown line)
+	edu.ujf.samples.utils.LinkedList.insertBefore(LinkedList.java:Unknown line)
+	edu.ujf.perfs.utils.TestB.randomInsert2(TestB.java:Unknown line)
+	edu.ujf.perfs.utils.TestB.test1(TestB.java:Unknown line)
+TRACE 301725:
+	edu.ujf.samples.utils.LinkedList$Entry.<init>(LinkedList.java:Unknown line)
+	edu.ujf.samples.utils.LinkedList.insertBefore(LinkedList.java:Unknown line)
+	edu.ujf.perfs.utils.TestB.randomInsert2(TestB.java:Unknown line)
+	edu.ujf.perfs.utils.TestB.test1(TestB.java:Unknown line)
+TRACE 301746:
+	java.lang.Integer.stringSize(Integer.java:Unknown line)
+	java.lang.Integer.toString(Integer.java:Unknown line)
+	edu.ujf.perfs.utils.TestB.randomInsert2(TestB.java:Unknown line)
+	edu.ujf.perfs.utils.TestB.test2(TestB.java:Unknown line)
+TRACE 301760:
+	edu.ujf.samples.utils.DoubleLinkedList$Entry.insertBefore(DoubleLinkedList.java:Unknown line)
+	edu.ujf.samples.utils.DoubleLinkedList$Entry.access$1(DoubleLinkedList.java:Unknown line)
+	edu.ujf.samples.utils.DoubleLinkedList.insertBefore(DoubleLinkedList.java:Unknown line)
+	edu.ujf.perfs.utils.TestB.randomInsert2(TestB.java:Unknown line)
+TRACE 300299:
+	java.lang.StringCoding$StringEncoder.encode(StringCoding.java:Unknown line)
+	java.lang.StringCoding.encode(StringCoding.java:Unknown line)
+	java.lang.String.getBytes(String.java:Unknown line)
+	java.io.UnixFileSystem.getBooleanAttributes(UnixFileSystem.java:Unknown line)
+TRACE 300378:
+	java.util.concurrent.ConcurrentHashMap.putVal(ConcurrentHashMap.java:Unknown line)
+	java.util.concurrent.ConcurrentHashMap.putIfAbsent(ConcurrentHashMap.java:Unknown line)
+	java.lang.ClassLoader.getClassLoadingLock(ClassLoader.java:Unknown line)
+	java.lang.ClassLoader.loadClass(ClassLoader.java:Unknown line)
+TRACE 300406:
+	java.lang.String.replace(String.java:Unknown line)
+	java.net.URLClassLoader$1.run(URLClassLoader.java:Unknown line)
+	java.net.URLClassLoader$1.run(URLClassLoader.java:Unknown line)
+	java.net.URLClassLoader.findClass(URLClassLoader.java:Unknown line)
+TRACE 300607:
+	sun.misc.URLClassPath.getLoader(URLClassPath.java:Unknown line)
+	sun.misc.URLClassPath.getResource(URLClassPath.java:Unknown line)
+	java.net.URLClassLoader$1.run(URLClassLoader.java:Unknown line)
+	java.net.URLClassLoader$1.run(URLClassLoader.java:Unknown line)
+TRACE 300772:
+	java.net.URLStreamHandler.parseURL(URLStreamHandler.java:Unknown line)
+	sun.net.www.protocol.file.Handler.parseURL(Handler.java:Unknown line)
+	java.net.URL.<init>(URL.java:Unknown line)
+	java.net.URL.<init>(URL.java:Unknown line)
+TRACE 301296:
+	java.lang.ClassLoader.defineClass(ClassLoader.java:Unknown line)
+	java.security.SecureClassLoader.defineClass(SecureClassLoader.java:Unknown line)
+	java.net.URLClassLoader.defineClass(URLClassLoader.java:Unknown line)
+	java.net.URLClassLoader.access$100(URLClassLoader.java:Unknown line)
+TRACE 301445:
+	sun.nio.cs.StreamEncoder.writeBytes(StreamEncoder.java:Unknown line)
+	sun.nio.cs.StreamEncoder.implFlushBuffer(StreamEncoder.java:Unknown line)
+	sun.nio.cs.StreamEncoder.flushBuffer(StreamEncoder.java:Unknown line)
+	java.io.OutputStreamWriter.flushBuffer(OutputStreamWriter.java:Unknown line)
+TRACE 301446:
+	sun.nio.cs.StreamEncoder.implFlushBuffer(StreamEncoder.java:Unknown line)
+	sun.nio.cs.StreamEncoder.flushBuffer(StreamEncoder.java:Unknown line)
+	java.io.OutputStreamWriter.flushBuffer(OutputStreamWriter.java:Unknown line)
+	java.io.PrintStream.write(PrintStream.java:Unknown line)
+TRACE 301674:
+	java.util.concurrent.atomic.AtomicLong.get(AtomicLong.java:Unknown line)
+	java.util.Random.next(Random.java:Unknown line)
+	java.util.Random.nextInt(Random.java:Unknown line)
+	edu.ujf.perfs.utils.TestB.<init>(TestB.java:Unknown line)
+TRACE 301675:
+	java.util.concurrent.atomic.AtomicLong.compareAndSet(AtomicLong.java:Unknown line)
+	java.util.Random.next(Random.java:Unknown line)
+	java.util.Random.nextInt(Random.java:Unknown line)
+	edu.ujf.perfs.utils.TestB.<init>(TestB.java:Unknown line)
+TRACE 301748:
+	java.lang.String.<init>(String.java:Unknown line)
+	java.lang.Integer.toString(Integer.java:Unknown line)
+	edu.ujf.perfs.utils.TestB.randomInsert2(TestB.java:Unknown line)
+	edu.ujf.perfs.utils.TestB.test2(TestB.java:Unknown line)
+TRACE 301759:
+	edu.ujf.samples.utils.DoubleLinkedList$Entry.<init>(DoubleLinkedList.java:Unknown line)
+	edu.ujf.samples.utils.DoubleLinkedList.insertBefore(DoubleLinkedList.java:Unknown line)
+	edu.ujf.perfs.utils.TestB.randomInsert2(TestB.java:Unknown line)
+	edu.ujf.perfs.utils.TestB.test2(TestB.java:Unknown line)
+TRACE 300034:
+	java.lang.invoke.MethodHandleImpl.initStatics(MethodHandleImpl.java:Unknown line)
+	java.lang.invoke.MethodHandle.<clinit>(MethodHandle.java:Unknown line)
+TRACE 300081:
+	java.lang.ref.Reference.<init>(Reference.java:Unknown line)
+	java.lang.ref.SoftReference.<init>(SoftReference.java:Unknown line)
+	java.lang.Class.newReflectionData(Class.java:Unknown line)
+	java.lang.Class.reflectionData(Class.java:Unknown line)
+TRACE 300092:
+	java.lang.Class.privateGetDeclaredFields(Class.java:Unknown line)
+	java.lang.Class.getDeclaredField(Class.java:Unknown line)
+	java.lang.invoke.MethodType.<clinit>(MethodType.java:Unknown line)
+	java.lang.invoke.LambdaForm$NamedFunction.<clinit>(LambdaForm.java:Unknown line)
+TRACE 300105:
+	java.lang.invoke.MethodType.<clinit>(MethodType.java:Unknown line)
+	java.lang.invoke.LambdaForm$NamedFunction.<clinit>(LambdaForm.java:Unknown line)
+	java.lang.invoke.MethodHandle.<clinit>(MethodHandle.java:Unknown line)
+TRACE 300124:
+	java.lang.invoke.MethodType.checkPtype(MethodType.java:Unknown line)
+	java.lang.invoke.MethodType.checkPtypes(MethodType.java:Unknown line)
+	java.lang.invoke.MethodType.<init>(MethodType.java:Unknown line)
+	java.lang.invoke.MethodType.makeImpl(MethodType.java:Unknown line)
+TRACE 300193:
+	java.lang.Class.privateGetDeclaredMethods(Class.java:Unknown line)
+	java.lang.Class.getDeclaredMethod(Class.java:Unknown line)
+	java.lang.invoke.MethodHandle.<clinit>(MethodHandle.java:Unknown line)
+TRACE 300232:
+	java.lang.invoke.MethodHandle.<clinit>(MethodHandle.java:Unknown line)
+TRACE 300251:
+	java.lang.AbstractStringBuilder.expandCapacity(AbstractStringBuilder.java:Unknown line)
+	java.lang.AbstractStringBuilder.ensureCapacityInternal(AbstractStringBuilder.java:Unknown line)
+	java.lang.AbstractStringBuilder.append(AbstractStringBuilder.java:Unknown line)
+	java.lang.StringBuilder.append(StringBuilder.java:Unknown line)
+TRACE 300254:
+	java.lang.AbstractStringBuilder.append(AbstractStringBuilder.java:Unknown line)
+	java.lang.StringBuilder.append(StringBuilder.java:Unknown line)
+	sun.misc.PostVMInitHook.trackJavaUsage(PostVMInitHook.java:Unknown line)
+	sun.misc.PostVMInitHook.run(PostVMInitHook.java:Unknown line)
+TRACE 300287:
+	java.lang.StringCoding.deref(StringCoding.java:Unknown line)
+	java.lang.StringCoding.encode(StringCoding.java:Unknown line)
+	java.lang.String.getBytes(String.java:Unknown line)
+	java.io.UnixFileSystem.getBooleanAttributes(UnixFileSystem.java:Unknown line)
+TRACE 300292:
+	java.lang.StringCoding.access$000(StringCoding.java:Unknown line)
+	java.lang.StringCoding$StringEncoder.encode(StringCoding.java:Unknown line)
+	java.lang.StringCoding.encode(StringCoding.java:Unknown line)
+	java.lang.String.getBytes(String.java:Unknown line)
+TRACE 300303:
+	java.lang.String.lastIndexOf(String.java:Unknown line)
+	java.lang.String.lastIndexOf(String.java:Unknown line)
+	java.io.File.getName(File.java:Unknown line)
+	java.io.UnixFileSystem.getBooleanAttributes(UnixFileSystem.java:Unknown line)
+TRACE 300306:
+	java.util.Arrays.copyOfRange(Arrays.java:Unknown line)
+	java.lang.String.<init>(String.java:Unknown line)
+	java.lang.String.substring(String.java:Unknown line)
+	java.io.File.getName(File.java:Unknown line)
+TRACE 300364:
+	sun.launcher.LauncherHelper.makePlatformString(LauncherHelper.java:Unknown line)
+TRACE 300374:
+	java.util.concurrent.ConcurrentHashMap.tabAt(ConcurrentHashMap.java:Unknown line)
+	java.util.concurrent.ConcurrentHashMap.putVal(ConcurrentHashMap.java:Unknown line)
+	java.util.concurrent.ConcurrentHashMap.putIfAbsent(ConcurrentHashMap.java:Unknown line)
+	java.lang.ClassLoader.getClassLoadingLock(ClassLoader.java:Unknown line)
+TRACE 300392:
+	java.lang.String.length(String.java:Unknown line)
+	java.lang.ClassLoader.checkName(ClassLoader.java:Unknown line)
+	java.lang.ClassLoader.findBootstrapClassOrNull(ClassLoader.java:Unknown line)
+	java.lang.ClassLoader.loadClass(ClassLoader.java:Unknown line)
+TRACE 300397:
+	java.lang.ClassLoader.checkName(ClassLoader.java:Unknown line)
+	java.lang.ClassLoader.findBootstrapClassOrNull(ClassLoader.java:Unknown line)
+	java.lang.ClassLoader.loadClass(ClassLoader.java:Unknown line)
+	java.lang.ClassLoader.loadClass(ClassLoader.java:Unknown line)
+TRACE 300398:
+	java.lang.ClassLoader.findBootstrapClassOrNull(ClassLoader.java:Unknown line)
+	java.lang.ClassLoader.loadClass(ClassLoader.java:Unknown line)
+	java.lang.ClassLoader.loadClass(ClassLoader.java:Unknown line)
+	sun.misc.Launcher$AppClassLoader.loadClass(Launcher.java:Unknown line)
+TRACE 300421:
+	java.util.Stack.peek(Stack.java:Unknown line)
+	java.util.Stack.pop(Stack.java:Unknown line)
+	sun.misc.URLClassPath.getLoader(URLClassPath.java:Unknown line)
+	sun.misc.URLClassPath.getResource(URLClassPath.java:Unknown line)
+TRACE 300447:
+	java.lang.String.<init>(String.java:Unknown line)
+	java.lang.StringBuilder.toString(StringBuilder.java:Unknown line)
+	sun.net.util.URLUtil.urlNoFragString(URLUtil.java:Unknown line)
+	sun.misc.URLClassPath.getLoader(URLClassPath.java:Unknown line)
+TRACE 300473:
+	sun.misc.SharedSecrets.getJavaUtilZipFileAccess(SharedSecrets.java:Unknown line)
+	sun.misc.URLClassPath$JarLoader.<clinit>(URLClassPath.java:Unknown line)
+	sun.misc.URLClassPath$3.run(URLClassPath.java:Unknown line)
+	sun.misc.URLClassPath$3.run(URLClassPath.java:Unknown line)
+TRACE 300488:
+	java.lang.StringBuilder.append(StringBuilder.java:Unknown line)
+	java.io.ObjectStreamField.getClassSignature(ObjectStreamField.java:Unknown line)
+	java.io.ObjectStreamField.<init>(ObjectStreamField.java:Unknown line)
+	java.io.ObjectStreamField.<init>(ObjectStreamField.java:Unknown line)
+TRACE 300490:
+	java.util.Arrays.copyOfRange(Arrays.java:Unknown line)
+	java.lang.String.<init>(String.java:Unknown line)
+	java.lang.StringBuilder.toString(StringBuilder.java:Unknown line)
+	java.io.ObjectStreamField.getClassSignature(ObjectStreamField.java:Unknown line)
+TRACE 300508:
+	java.net.URLStreamHandler.toExternalForm(URLStreamHandler.java:Unknown line)
+	java.net.URL.toExternalForm(URL.java:Unknown line)
+	java.net.URL.toString(URL.java:Unknown line)
+	java.lang.String.valueOf(String.java:Unknown line)
+TRACE 300553:
+	java.lang.String.charAt(String.java:Unknown line)
+	java.io.UnixFileSystem.normalize(UnixFileSystem.java:Unknown line)
+	java.io.File.<init>(File.java:Unknown line)
+	sun.misc.URLClassPath$JarLoader.<init>(URLClassPath.java:Unknown line)
+TRACE 300579:
+	java.lang.String.length(String.java:Unknown line)
+	java.io.UnixFileSystem.getBooleanAttributes(UnixFileSystem.java:Unknown line)
+	java.io.File.exists(File.java:Unknown line)
+	sun.misc.URLClassPath$JarLoader.<init>(URLClassPath.java:Unknown line)
+TRACE 300584:
+	sun.misc.URLClassPath$3.run(URLClassPath.java:Unknown line)
+	sun.misc.URLClassPath$3.run(URLClassPath.java:Unknown line)
+	sun.misc.URLClassPath.getLoader(URLClassPath.java:Unknown line)
+	sun.misc.URLClassPath.getLoader(URLClassPath.java:Unknown line)
+TRACE 300606:
+	java.util.ArrayList.get(ArrayList.java:Unknown line)
+	sun.misc.URLClassPath.getLoader(URLClassPath.java:Unknown line)
+	sun.misc.URLClassPath.getResource(URLClassPath.java:Unknown line)
+	java.net.URLClassLoader$1.run(URLClassLoader.java:Unknown line)
+TRACE 300608:
+	java.lang.String.startsWith(String.java:Unknown line)
+	java.lang.String.startsWith(String.java:Unknown line)
+	sun.misc.MetaIndex.mayContain(MetaIndex.java:Unknown line)
+	sun.misc.URLClassPath$JarLoader.getResource(URLClassPath.java:Unknown line)
+TRACE 300609:
+	java.lang.String.startsWith(String.java:Unknown line)
+	sun.misc.MetaIndex.mayContain(MetaIndex.java:Unknown line)
+	sun.misc.URLClassPath$JarLoader.getResource(URLClassPath.java:Unknown line)
+	sun.misc.URLClassPath.getResource(URLClassPath.java:Unknown line)
+TRACE 300614:
+	sun.misc.URLClassPath.getResource(URLClassPath.java:Unknown line)
+	java.net.URLClassLoader$1.run(URLClassLoader.java:Unknown line)
+	java.net.URLClassLoader$1.run(URLClassLoader.java:Unknown line)
+	java.net.URLClassLoader.findClass(URLClassLoader.java:Unknown line)
+TRACE 300625:
+	java.net.URLClassLoader$1.run(URLClassLoader.java:Unknown line)
+	java.net.URLClassLoader$1.run(URLClassLoader.java:Unknown line)
+	java.net.URLClassLoader.findClass(URLClassLoader.java:Unknown line)
+	java.lang.ClassLoader.loadClass(ClassLoader.java:Unknown line)
+TRACE 300626:
+	java.net.URLClassLoader$1.run(URLClassLoader.java:Unknown line)
+	java.net.URLClassLoader.findClass(URLClassLoader.java:Unknown line)
+	java.lang.ClassLoader.loadClass(ClassLoader.java:Unknown line)
+	java.lang.ClassLoader.loadClass(ClassLoader.java:Unknown line)
+TRACE 300628:
+	java.net.URLClassLoader.findClass(URLClassLoader.java:Unknown line)
+	java.lang.ClassLoader.loadClass(ClassLoader.java:Unknown line)
+	java.lang.ClassLoader.loadClass(ClassLoader.java:Unknown line)
+	sun.misc.Launcher$AppClassLoader.loadClass(Launcher.java:Unknown line)
+TRACE 300644:
+	java.lang.String.length(String.java:Unknown line)
+	java.io.UnixFileSystem.normalize(UnixFileSystem.java:Unknown line)
+	java.io.UnixFileSystem.normalize(UnixFileSystem.java:Unknown line)
+	java.io.File.<init>(File.java:Unknown line)
+TRACE 300665:
+	java.io.File.<init>(File.java:Unknown line)
+	sun.misc.URLClassPath$FileLoader.<init>(URLClassPath.java:Unknown line)
+	sun.misc.URLClassPath$3.run(URLClassPath.java:Unknown line)
+	sun.misc.URLClassPath$3.run(URLClassPath.java:Unknown line)
+TRACE 300740:
+	java.lang.String.indexOf(String.java:Unknown line)
+	java.lang.String.indexOf(String.java:Unknown line)
+	java.net.URLStreamHandler.parseURL(URLStreamHandler.java:Unknown line)
+	sun.net.www.protocol.file.Handler.parseURL(Handler.java:Unknown line)
+TRACE 300753:
+	java.lang.AbstractStringBuilder.append(AbstractStringBuilder.java:Unknown line)
+	java.lang.StringBuilder.append(StringBuilder.java:Unknown line)
+	java.net.URLStreamHandler.parseURL(URLStreamHandler.java:Unknown line)
+	sun.net.www.protocol.file.Handler.parseURL(Handler.java:Unknown line)
+TRACE 300762:
+	java.lang.String.indexOf(String.java:Unknown line)
+	java.net.URLStreamHandler.parseURL(URLStreamHandler.java:Unknown line)
+	sun.net.www.protocol.file.Handler.parseURL(Handler.java:Unknown line)
+	java.net.URL.<init>(URL.java:Unknown line)
+TRACE 300775:
+	java.net.URL.<init>(URL.java:Unknown line)
+	sun.misc.URLClassPath$FileLoader.getResource(URLClassPath.java:Unknown line)
+	sun.misc.URLClassPath.getResource(URLClassPath.java:Unknown line)
+	java.net.URLClassLoader$1.run(URLClassLoader.java:Unknown line)
+TRACE 300829:
+	java.io.File.isInvalid(File.java:Unknown line)
+	java.io.File.exists(File.java:Unknown line)
+	sun.misc.URLClassPath$FileLoader.getResource(URLClassPath.java:Unknown line)
+	sun.misc.URLClassPath.getResource(URLClassPath.java:Unknown line)
+TRACE 300852:
+	java.util.HashMap.get(HashMap.java:Unknown line)
+	java.lang.ClassLoader.getPackage(ClassLoader.java:Unknown line)
+	java.net.URLClassLoader.getAndVerifyPackage(URLClassLoader.java:Unknown line)
+	java.net.URLClassLoader.defineClass(URLClassLoader.java:Unknown line)
+TRACE 300871:
+	java.util.Arrays.copyOf(Arrays.java:Unknown line)
+	java.lang.String.concat(String.java:Unknown line)
+	java.lang.Package.getSystemPackage(Package.java:Unknown line)
+	java.lang.ClassLoader.getPackage(ClassLoader.java:Unknown line)
+TRACE 300878:
+	java.net.URLClassLoader.getAndVerifyPackage(URLClassLoader.java:Unknown line)
+	java.net.URLClassLoader.defineClass(URLClassLoader.java:Unknown line)
+	java.net.URLClassLoader.access$100(URLClassLoader.java:Unknown line)
+	java.net.URLClassLoader$1.run(URLClassLoader.java:Unknown line)
+TRACE 300923:
+	java.lang.StringCoding$StringEncoder.encode(StringCoding.java:Unknown line)
+	java.lang.StringCoding.encode(StringCoding.java:Unknown line)
+	java.lang.String.getBytes(String.java:Unknown line)
+	java.io.File.length(File.java:Unknown line)
+TRACE 300937:
+	sun.misc.Resource.getBytes(Resource.java:Unknown line)
+	java.net.URLClassLoader.defineClass(URLClassLoader.java:Unknown line)
+	java.net.URLClassLoader.access$100(URLClassLoader.java:Unknown line)
+	java.net.URLClassLoader$1.run(URLClassLoader.java:Unknown line)
+TRACE 300950:
+	sun.misc.PerfCounter.<clinit>(PerfCounter.java:Unknown line)
+	java.net.URLClassLoader.defineClass(URLClassLoader.java:Unknown line)
+	java.net.URLClassLoader.access$100(URLClassLoader.java:Unknown line)
+	java.net.URLClassLoader$1.run(URLClassLoader.java:Unknown line)
+TRACE 300980:
+	java.nio.Buffer.position(Buffer.java:Unknown line)
+	java.nio.DirectByteBuffer.asLongBuffer(DirectByteBuffer.java:Unknown line)
+	sun.misc.PerfCounter.<init>(PerfCounter.java:Unknown line)
+	sun.misc.PerfCounter.newPerfCounter(PerfCounter.java:Unknown line)
+TRACE 300996:
+	sun.misc.PerfCounter.<init>(PerfCounter.java:Unknown line)
+	sun.misc.PerfCounter.newPerfCounter(PerfCounter.java:Unknown line)
+	sun.misc.PerfCounter$CoreCounters.<clinit>(PerfCounter.java:Unknown line)
+	sun.misc.PerfCounter.getReadClassBytesTime(PerfCounter.java:Unknown line)
+TRACE 301083:
+	sun.net.www.protocol.file.Handler.createFileURLConnection(Handler.java:Unknown line)
+	sun.net.www.protocol.file.Handler.openConnection(Handler.java:Unknown line)
+	sun.net.www.protocol.file.Handler.openConnection(Handler.java:Unknown line)
+	java.net.URL.openConnection(URL.java:Unknown line)
+TRACE 301102:
+	java.lang.String.length(String.java:Unknown line)
+	java.io.UnixFileSystem.normalize(UnixFileSystem.java:Unknown line)
+	java.io.File.<init>(File.java:Unknown line)
+	java.io.FilePermission$1.run(FilePermission.java:Unknown line)
+TRACE 301119:
+	java.io.UnixFileSystem.canonicalize(UnixFileSystem.java:Unknown line)
+	java.io.File.getCanonicalPath(File.java:Unknown line)
+	java.io.FilePermission$1.run(FilePermission.java:Unknown line)
+	java.io.FilePermission$1.run(FilePermission.java:Unknown line)
+TRACE 301214:
+	java.security.Permissions.getPermissionCollection(Permissions.java:Unknown line)
+	java.security.Permissions.add(Permissions.java:Unknown line)
+	sun.misc.Launcher$AppClassLoader.getPermissions(Launcher.java:Unknown line)
+	java.security.SecureClassLoader.getProtectionDomain(SecureClassLoader.java:Unknown line)
+TRACE 301273:
+	java.lang.String.lastIndexOf(String.java:Unknown line)
+	sun.misc.Launcher$AppClassLoader.loadClass(Launcher.java:Unknown line)
+	java.lang.ClassLoader.loadClass(ClassLoader.java:Unknown line)
+	java.lang.ClassLoader.defineClass(ClassLoader.java:Unknown line)
+TRACE 301291:
+	java.lang.ClassLoader.addClass(ClassLoader.java:Unknown line)
+	java.lang.ClassLoader.defineClass(ClassLoader.java:Unknown line)
+	java.security.SecureClassLoader.defineClass(SecureClassLoader.java:Unknown line)
+	java.net.URLClassLoader.defineClass(URLClassLoader.java:Unknown line)
+TRACE 301304:
+	java.nio.DirectLongBufferU.ix(DirectLongBufferU.java:Unknown line)
+	java.nio.DirectLongBufferU.put(DirectLongBufferU.java:Unknown line)
+	sun.misc.PerfCounter.add(PerfCounter.java:Unknown line)
+	sun.misc.PerfCounter.addTime(PerfCounter.java:Unknown line)
+TRACE 301311:
+	sun.misc.PerfCounter.add(PerfCounter.java:Unknown line)
+	sun.misc.PerfCounter.addElapsedTimeFrom(PerfCounter.java:Unknown line)
+	java.lang.ClassLoader.loadClass(ClassLoader.java:Unknown line)
+	java.lang.ClassLoader.loadClass(ClassLoader.java:Unknown line)
+TRACE 301319:
+	sun.misc.PerfCounter.add(PerfCounter.java:Unknown line)
+	sun.misc.PerfCounter.increment(PerfCounter.java:Unknown line)
+	java.lang.ClassLoader.loadClass(ClassLoader.java:Unknown line)
+	java.lang.ClassLoader.loadClass(ClassLoader.java:Unknown line)
+TRACE 301320:
+	sun.misc.PerfCounter.increment(PerfCounter.java:Unknown line)
+	java.lang.ClassLoader.loadClass(ClassLoader.java:Unknown line)
+	java.lang.ClassLoader.loadClass(ClassLoader.java:Unknown line)
+	sun.misc.Launcher$AppClassLoader.loadClass(Launcher.java:Unknown line)
+TRACE 301352:
+	java.lang.Class.privateGetDeclaredMethods(Class.java:Unknown line)
+	java.lang.Class.privateGetMethodRecursive(Class.java:Unknown line)
+	java.lang.Class.getMethod0(Class.java:Unknown line)
+	java.lang.Class.getMethod(Class.java:Unknown line)
+TRACE 301362:
+	java.lang.Class.getMethod0(Class.java:Unknown line)
+	java.lang.Class.getMethod(Class.java:Unknown line)
+	sun.launcher.LauncherHelper.validateMainClass(LauncherHelper.java:Unknown line)
+	sun.launcher.LauncherHelper.checkAndLoadMain(LauncherHelper.java:Unknown line)
+TRACE 301380:
+	java.lang.String.lastIndexOf(String.java:Unknown line)
+	sun.misc.Launcher$AppClassLoader.loadClass(Launcher.java:Unknown line)
+	java.lang.ClassLoader.loadClass(ClassLoader.java:Unknown line)
+	edu.ujf.perfs.utils.Harness.main(Harness.java:Unknown line)
+TRACE 301402:
+	java.nio.HeapCharBuffer.<init>(HeapCharBuffer.java:Unknown line)
+	java.nio.CharBuffer.wrap(CharBuffer.java:Unknown line)
+	sun.nio.cs.StreamEncoder.implWrite(StreamEncoder.java:Unknown line)
+	sun.nio.cs.StreamEncoder.write(StreamEncoder.java:Unknown line)
+TRACE 301408:
+	java.nio.CharBuffer.arrayOffset(CharBuffer.java:Unknown line)
+	sun.nio.cs.UTF_8$Encoder.encodeArrayLoop(UTF_8.java:Unknown line)
+	sun.nio.cs.UTF_8$Encoder.encodeLoop(UTF_8.java:Unknown line)
+	java.nio.charset.CharsetEncoder.encode(CharsetEncoder.java:Unknown line)
+TRACE 301415:
+	java.nio.Buffer.position(Buffer.java:Unknown line)
+	sun.nio.cs.UTF_8.updatePositions(UTF_8.java:Unknown line)
+	sun.nio.cs.UTF_8.access$200(UTF_8.java:Unknown line)
+	sun.nio.cs.UTF_8$Encoder.encodeArrayLoop(UTF_8.java:Unknown line)
+TRACE 301417:
+	sun.nio.cs.UTF_8.updatePositions(UTF_8.java:Unknown line)
+	sun.nio.cs.UTF_8.access$200(UTF_8.java:Unknown line)
+	sun.nio.cs.UTF_8$Encoder.encodeArrayLoop(UTF_8.java:Unknown line)
+	sun.nio.cs.UTF_8$Encoder.encodeLoop(UTF_8.java:Unknown line)
+TRACE 301443:
+	java.io.PrintStream.write(PrintStream.java:Unknown line)
+	sun.nio.cs.StreamEncoder.writeBytes(StreamEncoder.java:Unknown line)
+	sun.nio.cs.StreamEncoder.implFlushBuffer(StreamEncoder.java:Unknown line)
+	sun.nio.cs.StreamEncoder.flushBuffer(StreamEncoder.java:Unknown line)
+TRACE 301490:
+	java.io.PrintStream.println(PrintStream.java:Unknown line)
+	edu.ujf.perfs.utils.Harness.run(Harness.java:Unknown line)
+	edu.ujf.perfs.utils.Harness.main(Harness.java:Unknown line)
+TRACE 301507:
+	sun.misc.Launcher$AppClassLoader.loadClass(Launcher.java:Unknown line)
+	java.lang.ClassLoader.loadClass(ClassLoader.java:Unknown line)
+	edu.ujf.perfs.utils.Harness.run(Harness.java:Unknown line)
+	edu.ujf.perfs.utils.Harness.main(Harness.java:Unknown line)
+TRACE 301511:
+	java.util.Collections$SynchronizedCollection.add(Collections.java:Unknown line)
+	java.lang.ClassLoader.checkPackageAccess(ClassLoader.java:Unknown line)
+	edu.ujf.perfs.utils.Harness.run(Harness.java:Unknown line)
+	edu.ujf.perfs.utils.Harness.main(Harness.java:Unknown line)
+TRACE 301538:
+	java.lang.Package.isSealed(Package.java:Unknown line)
+	java.net.URLClassLoader.getAndVerifyPackage(URLClassLoader.java:Unknown line)
+	java.net.URLClassLoader.defineClass(URLClassLoader.java:Unknown line)
+	java.net.URLClassLoader.access$100(URLClassLoader.java:Unknown line)
+TRACE 301611:
+	sun.reflect.ReflectionFactory.newConstructorAccessor(ReflectionFactory.java:Unknown line)
+	java.lang.reflect.Constructor.acquireConstructorAccessor(Constructor.java:Unknown line)
+	java.lang.reflect.Constructor.newInstance(Constructor.java:Unknown line)
+	java.lang.Class.newInstance(Class.java:Unknown line)
+TRACE 301644:
+	java.lang.Class.getDeclaredField(Class.java:Unknown line)
+	java.util.concurrent.atomic.AtomicLong.<clinit>(AtomicLong.java:Unknown line)
+	java.util.Random.<clinit>(Random.java:Unknown line)
+	edu.ujf.perfs.utils.TestB.<init>(TestB.java:Unknown line)
+TRACE 301747:
+	java.lang.Integer.getChars(Integer.java:Unknown line)
+	java.lang.Integer.toString(Integer.java:Unknown line)
+	edu.ujf.perfs.utils.TestB.randomInsert2(TestB.java:Unknown line)
+	edu.ujf.perfs.utils.TestB.test2(TestB.java:Unknown line)
+TRACE 301783:
+	java.lang.StringBuilder.toString(StringBuilder.java:Unknown line)
+	edu.ujf.perfs.utils.Harness.echoElapsed(Harness.java:Unknown line)
+	edu.ujf.perfs.utils.Harness.run(Harness.java:Unknown line)
+	edu.ujf.perfs.utils.Harness.main(Harness.java:Unknown line)
+TRACE 301798:
+	edu.ujf.samples.utils.LinkedList.indexOf(LinkedList.java:Unknown line)
+	edu.ujf.perfs.utils.TestB.randomInsert2(TestB.java:Unknown line)
+	edu.ujf.perfs.utils.TestB.test1(TestB.java:Unknown line)
+	edu.ujf.perfs.utils.TestB.runAllTests(TestB.java:Unknown line)
+TRACE 301810:
+	java.lang.StringBuilder.append(StringBuilder.java:Unknown line)
+	edu.ujf.perfs.utils.Harness$Test.echoElapsed(Harness.java:Unknown line)
+	edu.ujf.perfs.utils.TestB.test1(TestB.java:Unknown line)
+	edu.ujf.perfs.utils.TestB.runAllTests(TestB.java:Unknown line)
+TRACE 301876:
+	java.lang.ref.Finalizer.runFinalizer(Finalizer.java:Unknown line)
+	java.lang.ref.Finalizer.access$100(Finalizer.java:Unknown line)
+	java.lang.ref.Finalizer$FinalizerThread.run(Finalizer.java:Unknown line)
+TRACE 301883:
+	java.lang.Integer.hashCode(Integer.java:Unknown line)
+	java.util.Hashtable.get(Hashtable.java:Unknown line)
+	sun.misc.Signal.dispatch(Signal.java:Unknown line)
+TRACE 301914:
+	java.lang.String.<init>(String.java:Unknown line)
+	java.lang.StringBuilder.toString(StringBuilder.java:Unknown line)
+	sun.misc.Signal.dispatch(Signal.java:Unknown line)
+TRACE 301933:
+	sun.misc.Signal.getNumber(Signal.java:Unknown line)
+	java.lang.Terminator$1.handle(Terminator.java:Unknown line)
+	sun.misc.Signal$1.run(Signal.java:Unknown line)
+	java.lang.Thread.run(Thread.java:Unknown line)
+CPU TIME (ms) BEGIN (total = 1495) Sat Sep 12 07:43:34 2015
+rank   self  accum   count trace method
+   1 73,71% 73,71%       1 301476 java.io.FileInputStream.read
+   2  4,15% 77,86%   11282 301744 java.util.Random.next
+   3  1,40% 79,26%    6148 301745 java.util.Random.nextInt
+   4  1,34% 80,60%       1 301763 edu.ujf.perfs.utils.TestB.randomInsert2
+   5  1,20% 81,81%   11282 301742 java.util.concurrent.atomic.AtomicLong.get
+   6  1,14% 82,94%   11282 301743 java.util.concurrent.atomic.AtomicLong.compareAndSet
+   7  0,94% 83,88%    1000 301796 java.lang.Integer.toString
+   8  0,87% 84,75%     992 301799 edu.ujf.samples.utils.LinkedList.insertBefore
+   9  0,74% 85,48%    1000 301712 java.lang.Integer.toString
+  10  0,60% 86,09%    1000 301749 java.lang.Integer.toString
+  11  0,54% 86,62%    1000 301834 java.lang.Integer.toString
+  12  0,54% 87,16%     993 301836 edu.ujf.samples.utils.DoubleLinkedList.insertBefore
+  13  0,54% 87,69%       1 301837 edu.ujf.perfs.utils.TestB.randomInsert2
+  14  0,47% 88,16%       1 301800 edu.ujf.perfs.utils.TestB.randomInsert2
+  15  0,47% 88,63%    5134 301833 java.util.Random.nextInt
+  16  0,33% 88,96%    1000 301676 java.util.Random.next
+  17  0,33% 89,30%       1 301727 edu.ujf.perfs.utils.TestB.randomInsert2
+  18  0,33% 89,63%    1983 301761 edu.ujf.samples.utils.DoubleLinkedList$Entry.access$1
+  19  0,33% 89,97%     990 301762 edu.ujf.samples.utils.DoubleLinkedList.insertBefore
+  20  0,33% 90,30%       1 301853 java.lang.System.gc
+  21  0,27% 90,57%       4 301504 java.util.concurrent.ConcurrentHashMap.transfer
+  22  0,27% 90,84%    1000 301677 java.util.Random.nextInt
+  23  0,27% 91,10%    2000 301709 java.lang.Integer.stringSize
+  24  0,27% 91,37%    2000 301710 java.lang.Integer.getChars
+  25  0,27% 91,64%    2000 301711 java.lang.String.<init>
+  26  0,27% 91,91%     992 301723 edu.ujf.samples.utils.LinkedList.indexOf
+  27  0,27% 92,17%     992 301726 edu.ujf.samples.utils.LinkedList.insertBefore
+  28  0,20% 92,37%    1984 301724 edu.ujf.samples.utils.LinkedList.check
+  29  0,20% 92,58%    1984 301725 edu.ujf.samples.utils.LinkedList$Entry.<init>
+  30  0,20% 92,78%    2000 301746 java.lang.Integer.stringSize
+  31  0,20% 92,98%    1983 301760 edu.ujf.samples.utils.DoubleLinkedList$Entry.insertBefore
+  32  0,13% 93,11%      20 300299 java.lang.StringCoding$StringEncoder.encode
+  33  0,13% 93,24%      56 300378 java.util.concurrent.ConcurrentHashMap.putVal
+  34  0,13% 93,38%      20 300406 java.lang.String.replace
+  35  0,13% 93,51%     110 300607 sun.misc.URLClassPath.getLoader
+  36  0,13% 93,65%      20 300772 java.net.URLStreamHandler.parseURL
+  37  0,13% 93,78%      10 301296 java.lang.ClassLoader.defineClass
+  38  0,13% 93,91%      24 301445 sun.nio.cs.StreamEncoder.writeBytes
+  39  0,13% 94,05%      12 301446 sun.nio.cs.StreamEncoder.implFlushBuffer
+  40  0,13% 94,18%    1000 301674 java.util.concurrent.atomic.AtomicLong.get
+  41  0,13% 94,31%    1000 301675 java.util.concurrent.atomic.AtomicLong.compareAndSet
+  42  0,13% 94,45%    2000 301748 java.lang.String.<init>
+  43  0,13% 94,58%    1983 301759 edu.ujf.samples.utils.DoubleLinkedList$Entry.<init>
+  44  0,07% 94,65%       1 300034 java.lang.invoke.MethodHandleImpl.initStatics
+  45  0,07% 94,72%       6 300081 java.lang.ref.Reference.<init>
+  46  0,07% 94,78%       2 300092 java.lang.Class.privateGetDeclaredFields
+  47  0,07% 94,85%       1 300105 java.lang.invoke.MethodType.<clinit>
+  48  0,07% 94,92%       4 300124 java.lang.invoke.MethodType.checkPtype
+  49  0,07% 94,98%       1 300193 java.lang.Class.privateGetDeclaredMethods
+  50  0,07% 95,05%       1 300232 java.lang.invoke.MethodHandle.<clinit>
+  51  0,07% 95,12%      98 300251 java.lang.AbstractStringBuilder.expandCapacity
+  52  0,07% 95,18%       7 300254 java.lang.AbstractStringBuilder.append
+  53  0,07% 95,25%      20 300287 java.lang.StringCoding.deref
+  54  0,07% 95,32%      42 300292 java.lang.StringCoding.access$000
+  55  0,07% 95,38%      20 300303 java.lang.String.lastIndexOf
+  56  0,07% 95,45%      20 300306 java.util.Arrays.copyOfRange
+  57  0,07% 95,52%       2 300364 sun.launcher.LauncherHelper.makePlatformString
+  58  0,07% 95,59%      80 300374 java.util.concurrent.ConcurrentHashMap.tabAt
+  59  0,07% 95,65%      28 300392 java.lang.String.length
+  60  0,07% 95,72%      28 300397 java.lang.ClassLoader.checkName
+  61  0,07% 95,79%      28 300398 java.lang.ClassLoader.findBootstrapClassOrNull
+  62  0,07% 95,85%      10 300421 java.util.Stack.peek
+  63  0,07% 95,92%      10 300447 java.lang.String.<init>
+  64  0,07% 95,99%       1 300473 sun.misc.SharedSecrets.getJavaUtilZipFileAccess
+  65  0,07% 96,05%      18 300488 java.lang.StringBuilder.append
+  66  0,07% 96,12%      17 300490 java.util.Arrays.copyOfRange
+  67  0,07% 96,19%       9 300508 java.net.URLStreamHandler.toExternalForm
+  68  0,07% 96,25%     420 300553 java.lang.String.charAt
+  69  0,07% 96,32%       9 300579 java.lang.String.length
+  70  0,07% 96,39%      10 300584 sun.misc.URLClassPath$3.run
+  71  0,07% 96,45%     100 300606 java.util.ArrayList.get
+  72  0,07% 96,52%     480 300608 java.lang.String.startsWith
+  73  0,07% 96,59%     480 300609 java.lang.String.startsWith
+  74  0,07% 96,66%      20 300614 sun.misc.URLClassPath.getResource
+  75  0,07% 96,72%      20 300625 java.net.URLClassLoader$1.run
+  76  0,07% 96,79%      20 300626 java.net.URLClassLoader$1.run
+  77  0,07% 96,86%      20 300628 java.net.URLClassLoader.findClass
+  78  0,07% 96,92%       3 300644 java.lang.String.length
+  79  0,07% 96,99%       1 300665 java.io.File.<init>
+  80  0,07% 97,06%      20 300740 java.lang.String.indexOf
+  81  0,07% 97,12%      60 300753 java.lang.AbstractStringBuilder.append
+  82  0,07% 97,19%      20 300762 java.lang.String.indexOf
+  83  0,07% 97,26%      20 300775 java.net.URL.<init>
+  84  0,07% 97,32%      10 300829 java.io.File.isInvalid
+  85  0,07% 97,39%      10 300852 java.util.HashMap.get
+  86  0,07% 97,46%       4 300871 java.util.Arrays.copyOf
+  87  0,07% 97,53%      10 300878 java.net.URLClassLoader.getAndVerifyPackage
+  88  0,07% 97,59%      10 300923 java.lang.StringCoding$StringEncoder.encode
+  89  0,07% 97,66%      10 300937 sun.misc.Resource.getBytes
+  90  0,07% 97,73%       1 300950 sun.misc.PerfCounter.<clinit>
+  91  0,07% 97,79%       6 300980 java.nio.Buffer.position
+  92  0,07% 97,86%       6 300996 sun.misc.PerfCounter.<init>
+  93  0,07% 97,93%       1 301083 sun.net.www.protocol.file.Handler.createFileURLConnection
+  94  0,07% 97,99%       2 301102 java.lang.String.length
+  95  0,07% 98,06%       2 301119 java.io.UnixFileSystem.canonicalize
+  96  0,07% 98,13%       1 301214 java.security.Permissions.getPermissionCollection
+  97  0,07% 98,19%       4 301273 java.lang.String.lastIndexOf
+  98  0,07% 98,26%      10 301291 java.lang.ClassLoader.addClass
+  99  0,07% 98,33%      10 301304 java.nio.DirectLongBufferU.ix
+ 100  0,07% 98,39%      10 301311 sun.misc.PerfCounter.add
+ 101  0,07% 98,46%      10 301319 sun.misc.PerfCounter.add
+ 102  0,07% 98,53%      10 301320 sun.misc.PerfCounter.increment
+ 103  0,07% 98,60%       1 301352 java.lang.Class.privateGetDeclaredMethods
+ 104  0,07% 98,66%       1 301362 java.lang.Class.getMethod0
+ 105  0,07% 98,73%       5 301380 java.lang.String.lastIndexOf
+ 106  0,07% 98,80%      24 301402 java.nio.HeapCharBuffer.<init>
+ 107  0,07% 98,86%      48 301408 java.nio.CharBuffer.arrayOffset
+ 108  0,07% 98,93%      48 301415 java.nio.Buffer.position
+ 109  0,07% 99,00%      24 301417 sun.nio.cs.UTF_8.updatePositions
+ 110  0,07% 99,06%      24 301443 java.io.PrintStream.write
+ 111  0,07% 99,13%       5 301490 java.io.PrintStream.println
+ 112  0,07% 99,20%       4 301507 sun.misc.Launcher$AppClassLoader.loadClass
+ 113  0,07% 99,26%       3 301511 java.util.Collections$SynchronizedCollection.add
+ 114  0,07% 99,33%       8 301538 java.lang.Package.isSealed
+ 115  0,07% 99,40%       1 301611 sun.reflect.ReflectionFactory.newConstructorAccessor
+ 116  0,07% 99,46%       1 301644 java.lang.Class.getDeclaredField
+ 117  0,07% 99,53%    2000 301747 java.lang.Integer.getChars
+ 118  0,07% 99,60%       2 301783 java.lang.StringBuilder.toString
+ 119  0,07% 99,67%     992 301798 edu.ujf.samples.utils.LinkedList.indexOf
+ 120  0,07% 99,73%       1 301810 java.lang.StringBuilder.append
+ 121  0,07% 99,80%      11 301876 java.lang.ref.Finalizer.runFinalizer
+ 122  0,07% 99,87%       1 301883 java.lang.Integer.hashCode
+ 123  0,07% 99,93%       1 301914 java.lang.String.<init>
+ 124  0,07% 100,00%       1 301933 sun.misc.Signal.getNumber
+CPU TIME (ms) END

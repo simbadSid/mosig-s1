@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<testsuite errors="0" failures="1" hostname="pingouin" name="edu.ujf.tests.utils.TestA" skipped="0" tests="1" time="0.061" timestamp="2015-09-22T07:54:45">
+  <properties>
+    <property name="java.vendor" value="Oracle Corporation" />
+    <property name="coverage.summaryxml.dir" value="reports/cobertura-summary-xml" />
+    <property name="sun.java.launcher" value="SUN_STANDARD" />
+    <property name="sun.management.compiler" value="HotSpot 64-Bit Tiered Compilers" />
+    <property name="os.name" value="Linux" />
+    <property name="sun.boot.class.path" value="/homex/opt/jdk1.8.0_31/jre/lib/resources.jar:/homex/opt/jdk1.8.0_31/jre/lib/rt.jar:/homex/opt/jdk1.8.0_31/jre/lib/sunrsasign.jar:/homex/opt/jdk1.8.0_31/jre/lib/jsse.jar:/homex/opt/jdk1.8.0_31/jre/lib/jce.jar:/homex/opt/jdk1.8.0_31/jre/lib/charsets.jar:/homex/opt/jdk1.8.0_31/jre/lib/jfr.jar:/homex/opt/jdk1.8.0_31/jre/classes" />
+    <property name="reports.html.dir" value="reports/junit-html" />
+    <property name="sun.desktop" value="gnome" />
+    <property name="java.vm.specification.vendor" value="Oracle Corporation" />
+    <property name="ant.home" value="/usr/share/ant" />
+    <property name="java.runtime.version" value="1.8.0_31-b13" />
+    <property name="cobertura.dir" value="/homex/opt/cobertura-2.1.1" />
+    <property name="user.name" value="ogruber" />
+    <property name="user.language" value="en" />
+    <property name="sun.boot.library.path" value="/homex/opt/jdk1.8.0_31/jre/lib/amd64" />
+    <property name="reports.dir" value="reports" />
+    <property name="ant.project.default-target" value="coverage" />
+    <property name="ant.project.name" value="cobertura.examples.basic" />
+    <property name="ant.file.cobertura.examples.basic" value="/homex/ogruber/UJF/MesCours/1516/Mosig/M1-SoftwareEngineering/Workspace/Week2.java.lists/cobertura/build.xml" />
+    <property name="java.version" value="1.8.0_31" />
+    <property name="coverage.html.dir" value="reports/cobertura-html" />
+    <property name="user.timezone" value="Europe/Paris" />
+    <property name="sun.arch.data.model" value="64" />
+    <property name="java.endorsed.dirs" value="/homex/opt/jdk1.8.0_31/jre/lib/endorsed" />
+    <property name="sun.cpu.isalist" value="" />
+    <property name="sun.jnu.encoding" value="UTF-8" />
+    <property name="file.encoding.pkg" value="sun.io" />
+    <property name="file.separator" value="/" />
+    <property name="java.specification.name" value="Java Platform API Specification" />
+    <property name="classes.dir" value="classes" />
+    <property name="java.class.version" value="52.0" />
+    <property name="user.country" value="US" />
+    <property name="java.home" value="/homex/opt/jdk1.8.0_31/jre" />
+    <property name="java.vm.info" value="mixed mode" />
+    <property name="ant.file.type.cobertura.examples.basic" value="file" />
+    <property name="ant.file" value="/homex/ogruber/UJF/MesCours/1516/Mosig/M1-SoftwareEngineering/Workspace/Week2.java.lists/cobertura/build.xml" />
+    <property name="os.version" value="3.13.0-62-generic" />
+    <property name="path.separator" value=":" />
+    <property name="java.vm.version" value="25.31-b07" />
+    <property name="ant.library.dir" value="/usr/share/ant/lib" />
+    <property name="java.awt.printerjob" value="sun.print.PSPrinterJob" />
+    <property name="sun.io.unicode.encoding" value="UnicodeLittle" />
+    <property name="awt.toolkit" value="sun.awt.X11.XToolkit" />
+    <property name="reports.xml.dir" value="reports/junit-xml" />
+    <property name="user.home" value="/home/ogruber" />
+    <property name="java.specification.vendor" value="Oracle Corporation" />
+    <property name="from.src" value="../src" />
+    <property name="coverage.xml.dir" value="reports/cobertura-xml" />
+    <property name="java.library.path" value="/usr/java/packages/lib/amd64:/usr/lib64:/lib64:/lib:/usr/lib" />
+    <property name="java.vendor.url" value="http://java.oracle.com/" />
+    <property name="java.vm.vendor" value="Oracle Corporation" />
+    <property name="java.runtime.name" value="Java(TM) SE Runtime Environment" />
+    <property name="sun.java.command" value="org.apache.tools.ant.taskdefs.optional.junit.JUnitTestRunner edu.ujf.tests.utils.TestA skipNonTests=false filtertrace=true haltOnError=false haltOnFailure=false showoutput=false outputtoformatters=true logfailedtests=true logtestlistenerevents=false formatter=org.apache.tools.ant.taskdefs.optional.junit.XMLJUnitResultFormatter,/homex/ogruber/UJF/MesCours/1516/Mosig/M1-SoftwareEngineering/Workspace/Week2.java.lists/cobertura/reports/junit-xml/TEST-edu.ujf.tests.utils.TestA.xml crashfile=/homex/ogruber/UJF/MesCours/1516/Mosig/M1-SoftwareEngineering/Workspace/Week2.java.lists/cobertura/junitvmwatcher5749378719482477809.properties propsfile=/homex/ogruber/UJF/MesCours/1516/Mosig/M1-SoftwareEngineering/Workspace/Week2.java.lists/cobertura/junit5631465715413371437.properties" />
+    <property name="java.class.path" value="/homex/ogruber/UJF/MesCours/1516/Mosig/M1-SoftwareEngineering/Workspace/Week2.java.lists/cobertura/instrumented:/homex/ogruber/UJF/MesCours/1516/Mosig/M1-SoftwareEngineering/Workspace/Week2.java.lists/cobertura/classes:/homex/opt/cobertura-2.1.1/cobertura-2.1.1-javadoc.jar:/homex/opt/cobertura-2.1.1/cobertura-2.1.1-sources.jar:/homex/opt/cobertura-2.1.1/cobertura-2.1.1.jar:/homex/opt/cobertura-2.1.1/lib/asm-5.0.1.jar:/homex/opt/cobertura-2.1.1/lib/asm-analysis-5.0.1.jar:/homex/opt/cobertura-2.1.1/lib/asm-commons-5.0.1.jar:/homex/opt/cobertura-2.1.1/lib/asm-tree-5.0.1.jar:/homex/opt/cobertura-2.1.1/lib/asm-util-5.0.1.jar:/homex/opt/cobertura-2.1.1/lib/commons-lang3-3.3.2.jar:/homex/opt/cobertura-2.1.1/lib/hamcrest-core-1.3.jar:/homex/opt/cobertura-2.1.1/lib/jaxen-1.1.4.jar:/homex/opt/cobertura-2.1.1/lib/jetty-6.1.14.jar:/homex/opt/cobertura-2.1.1/lib/jetty-util-6.1.14.jar:/homex/opt/cobertura-2.1.1/lib/junit-4.11.jar:/homex/opt/cobertura-2.1.1/lib/logback-classic-1.0.13.jar:/homex/opt/cobertura-2.1.1/lib/logback-core-1.0.13.jar:/homex/opt/cobertura-2.1.1/lib/oro-2.0.8.jar:/homex/opt/cobertura-2.1.1/lib/servlet-api-2.5-6.1.14.jar:/homex/opt/cobertura-2.1.1/lib/slf4j-api-1.7.5.jar:/usr/share/java/ant-launcher-1.9.3.jar:/usr/share/ant/lib/ant.jar:/usr/share/ant/lib/ant-junit.jar:/usr/share/ant/lib/ant-junit4.jar" />
+    <property name="ant.version" value="Apache Ant(TM) version 1.9.3 compiled on April 8 2014" />
+    <property name="from.tests" value="../tests" />
+    <property name="java.vm.specification.name" value="Java Virtual Machine Specification" />
+    <property name="ant.file.type" value="file" />
+    <property name="java.vm.specification.version" value="1.8" />
+    <property name="sun.cpu.endian" value="little" />
+    <property name="sun.os.patch.level" value="unknown" />
+    <property name="java.io.tmpdir" value="/tmp" />
+    <property name="java.vendor.url.bug" value="http://bugreport.sun.com/bugreport/" />
+    <property name="os.arch" value="amd64" />
+    <property name="java.awt.graphicsenv" value="sun.awt.X11GraphicsEnvironment" />
+    <property name="instrumented.dir" value="instrumented" />
+    <property name="java.ext.dirs" value="/homex/opt/jdk1.8.0_31/jre/lib/ext:/usr/java/packages/lib/ext" />
+    <property name="user.dir" value="/homex/ogruber/UJF/MesCours/1516/Mosig/M1-SoftwareEngineering/Workspace/Week2.java.lists/cobertura" />
+    <property name="line.separator" value="&#xa;" />
+    <property name="java.vm.name" value="Java HotSpot(TM) 64-Bit Server VM" />
+    <property name="basedir" value="/homex/ogruber/UJF/MesCours/1516/Mosig/M1-SoftwareEngineering/Workspace/Week2.java.lists/cobertura" />
+    <property name="ant.java.version" value="1.8" />
+    <property name="ant.core.lib" value="/usr/share/ant/lib/ant.jar" />
+    <property name="file.encoding" value="UTF-8" />
+    <property name="java.specification.version" value="1.8" />
+    <property name="src.dir" value="src" />
+    <property name="ant.project.invoked-targets" value="coverage" />
+  </properties>
+  <testcase classname="edu.ujf.tests.utils.TestA" name="test" time="0.007">
+    <failure message="Not yet implemented" type="junit.framework.AssertionFailedError">junit.framework.AssertionFailedError: Not yet implemented
+	at edu.ujf.tests.utils.TestA.test(TestA.java:14)
+</failure>
+  </testcase>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

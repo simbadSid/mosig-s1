@@ -1,0 +1,15 @@
+
+This is the readme for using corbertura to generate both test and coverage
+reports for our project. 
+
+Notice:
+
+1) that we drive cobertura through ant, 
+   mostly because we found it difficult to drive it directly from a shell script.
+
+2) we rely on JUnit tests for coverage.
+   the test classes must be name like "Testxyz", such as TestA and TestB for example.
+
+3) look in build.properties
+   notice the "from.xyz" properties that tell where your sources and your tests are.
+

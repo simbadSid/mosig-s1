@@ -1,0 +1,20 @@
+// return 1 means take the first card
+// return 2 means take the last card
+// return 0 means you don't have chances
+
+
+function win_is_possible(cards, mysum, sistersum):
+    n <- length(cards)
+
+    if (n = 0) do
+        return mysum > sistersum
+    if (n = 1) do
+        return mysum + cards[0] > sistersum
+
+    if (win_is_possible(cards[1:n-1], mysum + cards[0], sistersum + cards[n-1]) and
+        win_is_possible(cards[2:n], mysum + cards[0], sistersum + cards[1])) do
+        return 1
+    else if (win_is_possible(cards[1:n-1], mysum + cards[n-1], sistersum + cards[0]) and
+        win_is_possible(cards[0:n-2], mysum + cards[n-1], sistersum + cards[n-2])) do
+        return 2
+    return 0
