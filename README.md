@@ -3,7 +3,10 @@
 # Git tutorial (For my students)
 
 ## Create repo
-	### 1- Create new repo on github
+	### 1- Create new repo on github.   Or create a repo on server:
+	$ mkdir <repoName>.git
+	$ cd <repoName>.git
+	$ git --bare init
 
 	### 2- Create a directory with same name
 	mkdir <repoName>
@@ -17,7 +20,7 @@
 	git commit -m "Repo creation"
 
 	### 5- Link the local (on my machine) repo to the remote (github) repo
-	git remote add origin <remoteRepositoryURL>	# Link to the github URL
+	git remote add origin <remoteRepositoryURL>	# Link to the github or server URL
 	git remote -v					# Verifies the new remote URL
 
 	### 6- Push the changes fron my local repo to github
