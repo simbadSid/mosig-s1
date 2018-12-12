@@ -1,0 +1,2827 @@
+\documentclass[12pt,fleqn]{article}		% font size / float math equations left
+
+\usepackage[top=1in, bottom=1.25in, 
+left=1.25in, right=1.25in]{geometry} 		% adjust margins
+
+\renewcommand{\familydefault}{\sfdefault}	% use sans serif per default
+\usepackage{helvet}				% use helvetica per default
+
+\usepackage[utf8]{inputenc}			% for unicode input characters
+\usepackage[T1]{fontenc}			% for T1 (8-bit) font encoding
+
+\usepackage{hyperref}				% for hyperlinks
+
+\usepackage{qtree}				% for syntax trees
+\usepackage{enumitem}				% for customizing lists (special labelling etc)
+\usepackage{bussproofs}				% for proof trees
+\usepackage[makeroom]{cancel}			% for crossing out stuff in math mode
+\usepackage{amsmath}				% for advanced math formulas
+\setlength{\mathindent}{0pt}			% set mathindent to 0 to float equations left
+
+\usepackage{tikz}
+\usetikzlibrary{positioning,shapes.geometric}	% for CFGs
+
+\usepackage[normalem]{ulem}			% for strike-through in normal mode
+
+\usepackage{tabularx}				% for advanced tables
+\usepackage{algpseudocode} 			% for pseudo-code
+\algrenewcomment[1]{\(\triangleright\) #1}	% comments are directly after code
+
+% found this here: http://tex.stackexchange.com/questions/104554/how-to-scale-prooftree-environment-bussproofs-package
+% for scaling prooftrees
+\newenvironment{scprooftree}[1]
+  {\gdef\scalefactor{#1}\begin{center}\proofSkipAmount \leavevmode}
+  {\scalebox{\scalefactor}{\DisplayProof}\proofSkipAmount \end{center} }
+
+\makeatletter
+
+\makeatother
+
+\begin{document}
+
+\author{Matthias Kohl}
+\title{Programming language and compiler design - Exercise solutions}
+\maketitle
+
+\begin{center}
+\section*{Disclaimer}
+There is no warranty on the correctness, completeness, optimality of the provided solutions.
+\end{center}
+
+%\tableofcontents
+
+\section{Series 1}
+\subsection{Exercise 1 (C language)}
+\begin{enumerate}
+\item int 4 = @;
+\begin{enumerate}
+\item using characters not in language character set
+\item starting variable names with numbers...
+\end{enumerate}
+\item  int y = 5 *
+\begin{enumerate}
+\item not separating statements with semicolons
+\item not following the syntactic structure of statements
+\end{enumerate}
+\item a = 5;
+\begin{enumerate}
+\item use of undefined identifier
+\item calling function with wrong amount of arguments
+\item typing error (casting pointers to int, too)
+\end{enumerate}
+\item int a = 1 / 0;
+\begin{enumerate}
+\item dynamic typing errors (Java cast outside of hierarchy)
+\item pointer without memory (or null pointer)
+\item arithmetic errors (division by 0)
+\item memory overflow
+\item I/O errors (file not found...)
+\end{enumerate}
+\end{enumerate}
+
+\subsection{Exercise 2}
+\begin{enumerate}
+\item $ S \rightarrow A \cdot b \cdot C; A \rightarrow a \cdot A \mid \epsilon; C \rightarrow c \cdot C \mid \epsilon $
+\item $ S \rightarrow b \mid a \cdot S \cdot c $
+\item $ S \rightarrow a \cdot b \cdot c \cdot C \mid a \cdot S \cdot C; C \rightarrow c \cdot C \mid c $
+\item $ S \rightarrow a \cdot S \cdot a \mid b \cdot S \cdot b \mid c \cdot S \cdot c \mid a \mid b \mid c \mid \epsilon $
+\end{enumerate}
+
+\subsection{Exercise 3}
+\begin{enumerate}
+\item $ S \rightarrow AB \rightarrow aAB \rightarrow aaAB \rightarrow aaaAB \rightarrow aaaaAB \rightarrow aaaa\epsilon{}B \rightarrow aaaabB \rightarrow aaaabbB \rightarrow aaaabb\epsilon \rightarrow aaaabb $
+\item $ q_0 \rightarrow a \rightarrow q_0 \rightarrow a \rightarrow q_0 \rightarrow \epsilon \rightarrow q_1 \rightarrow b \rightarrow q_1 \rightarrow b \rightarrow q_1 \ [accepting\ state] $
+\item $ (q_0, aabb) \rightarrow (q_0, abb) \rightarrow (q_0, bb) \rightarrow (q_1, bb) \rightarrow (q_1, b) \rightarrow (q_1, \epsilon) $
+\end{enumerate}
+
+\subsection{Exercise 4}
+\begin{enumerate}
+\item $ S \rightarrow aSb \rightarrow aaSbb \rightarrow aa\epsilon{}bb \rightarrow aabb $
+\item $ (q_0, aabb, Z) \rightarrow (q_1, abb, ZA) \rightarrow (q_1, bb, ZAA) \rightarrow (q_2, b, ZA) \rightarrow (q_2, \epsilon, Z) \rightarrow (q_3, \epsilon, \epsilon) $
+\end{enumerate}
+
+\subsection{Exercise 5}
+\begin{enumerate}
+\item 
+\Tree 
+[.Z 
+  [.E 
+    [.E
+      [.E [.{10} ] ]
+      {-}
+      [.E [.{2} ] ]
+    ]
+    {-}
+    [.E [.{3} ] ]
+  ] 
+] 
+or 
+\Tree 
+[.Z 
+  [.E 
+    [.E [.{10} ] ]
+    {-}
+    [.E 
+      [.E [.{2} ] ]
+      {-}
+      [.E [.{3} ] ]
+    ]
+  ] 
+]
+\item
+\Tree
+[.Z
+  [.E
+    [.E 
+      [.E 
+        [.T [.{10} ] ]
+      ]
+      {-}
+      [.T [.{2} ] ]
+    ]
+    {-}
+    [.T [.{3} ] ]
+  ]
+]
+\item $ Z \rightarrow E;
+E \rightarrow E-T \mid T;
+T \rightarrow T*U \mid U;
+U \rightarrow e $
+\\\\
+10-2*3 :
+\Tree
+[.Z
+  [.E
+    [.E [.T [.U [.{10} ] ] ] ]
+    {-}
+    [.T 
+      [.T [.U [.{2} ] ] ]
+      {*}
+      [.U [.{3} ] ]
+    ]
+  ]
+]
+\\
+10*2-3 :
+\Tree
+[.Z
+  [.E
+    [.E 
+      [.T
+        [.T [.{10} ] ]
+        {*}
+        [.U [.{2} ] ]
+      ]
+    ]
+    {-}
+    [.T [.U [.{3} ] ] ]
+  ]
+]
+\item $ Z \rightarrow E;
+ E \rightarrow E-T \mid T;
+T \rightarrow T*U \mid U;
+U \rightarrow (E) \mid e $
+\\\\
+(10-2)*3 :
+\Tree
+[.Z
+  [.E
+    [.T
+      [.T 
+        [.U 
+          [.{(} ]
+          [.E
+            [.E [.T [.U [.{10} ] ] ] ]
+            {-}
+            [.T [.U [.{2} ] ] ]
+          ]
+          [.{)} ]
+        ] 
+      ]
+      {*}
+      [.U [.{3} ] ]
+    ]
+  ]
+]
+\\
+10*(2-3) :
+\Tree
+[.Z
+  [.E
+    [.T
+      [.T [.U [.{10} ] ] ] 
+      {*}
+      [.U 
+        [.{(} ]
+        [.E
+          [.E [.T [.U [.{2} ] ] ] ]
+          {-}
+          [.T [.U [.{3} ] ] ]
+        ]
+        [.{)} ]
+      ]
+    ]
+  ]
+]
+\item $ Z \rightarrow E;
+ E \rightarrow E-T \mid T;
+T \rightarrow T*U \mid U;
+U \rightarrow (E) \mid -E \mid e $
+\\\\
+10* -2 - -3 :
+\Tree
+[.Z
+  [.E
+    [.E 
+      [.T 
+        [.T [.U [.{10} ] ] ]
+        {*}
+        [.U [.{-E} [.{-T} [.{-U} [.{-2} ] ] ] ] ]
+      ] 
+    ]
+    {-}
+    [.T [.U [.{-E} [.{-T} [.{-U} [.{-3} ] ] ] ] ] ]
+  ]
+]
+\end{enumerate}
+
+\subsection{Exercise 6}
+Exercise was not done in class !
+\begin{enumerate}
+\item \textit{if e then if e then a else a}\\\\
+\Tree
+[.{\textbf{Z}}
+  [.{\textbf{I}}
+    {if e then}
+    [.{\textbf{I}}
+      {if e then}
+      [.{\textbf{I}} [.a ] ]
+      {else}
+      [.{\textbf{I}} [.a ] ]
+    ]
+  ]
+]
+or
+\Tree
+[.{\textbf{Z}}
+  [.{\textbf{I}}
+    {if e then}
+    [.{\textbf{I}}
+      {if e then}
+      [.{\textbf{I}} [.a ] ]
+    ]
+    {else}
+    [.{\textbf{I}} [.a ] ]
+  ]
+]
+\item $ Z \rightarrow I;
+I \rightarrow if e then I else I;
+I \rightarrow a;
+I \rightarrow skip; $
+\item No
+\end{enumerate}
+
+\subsection{Exercise 7}
+\begin{enumerate}
+\item
+(1)
+\Tree
+[.Z
+  [.A
+    [.i [.x ] ]
+    {:=}
+    [.E
+      [.E 
+        [.E [.T [.F [.c [.{5} ] ] ] ] ]
+        {+}
+        [.T 
+          [.T [.F [.i [.x ] ] ] ]
+          {*}
+          [.F [.c [.{2} ] ] ]
+        ]
+      ]
+      {+}
+      [.T [.F [.i [.y ] ] ] ]
+    ]
+  ]
+]
+\newpage
+(2)
+\Tree
+[.Z
+  [.A
+    [.i [.y ] ]
+    {:=}
+    [.E
+      [.E 
+        [.T
+          [.T 
+            {(}
+            [.E 
+              [.E [.T [.F [.c [.{5} ] ] ] ] ]
+              {+}
+              [.T [.F [.i [.x ] ] ] ]
+            ]
+            {)}
+          ]
+          {*}
+          [.F [.c [.{2} ] ] ]
+        ]
+      ]
+      {+}
+      [.T [.F [.i [.y ] ] ] ]
+    ]
+  ]
+]
+\item (1)
+\begin{enumerate}[label=\arabic*)]
+\item LD $ R_0 $, x
+\item MULT $ R_0 $, $ R_0 $, 2
+\item ADD $ R_0 $, $ R_0 $, 5
+\item LD $ R_1 $, y
+\item ADD $ R_0 $, $ R_0 $, $ R_1 $
+\item ST $ R_0 $, x
+\end{enumerate}
+
+(2)
+\begin{enumerate}[label=\arabic*)]
+\item LD $ R_0 $, x
+\item ADD $ R_0 $, $ R_0 $, 5
+\item MULT $ R_0 $, $ R_0 $, 2
+\item LD $ R_1 $, y
+\item ADD $ R_1 $, $ R_0 $, $ R_1 $
+\item ST $ R_1 $, y
+\end{enumerate}
+
+\item See decorated simplified trees below, instruction numbers are in parenthesis
+\item 
+(1)
+\Tree
+[.{:= (6)}
+  [.{x} ]
+  [.{+ (5)} 
+    [.{+ (3)} 
+      5
+      [.{* (2)} {x (1)} 2 ]
+    ]
+    {y (4)}
+  ]
+]
+\\\\
+(2)
+\Tree
+[.{:= (6)}
+  [.{y} ]
+  [.{+ (5)} 
+    [.{* (3)} 
+      [.{+ (2)} 5 {x (1)} ]
+      2
+    ]
+    {y (4)}
+  ]
+]
+\item $ S ::= x:= e \\ e ::= n \mid x \mid e_1 + e_2 \mid e_1 * e_2 $
+\end{enumerate}
+
+\subsection{Exercise 8}
+\begin{enumerate}
+\item d
+\item (Ada) F := for i in 1..n loop S end loop; \\
+(C) for (I; C; Inc) { S }
+\end{enumerate}
+
+\section{Series 2}
+\subsection{Exercise 15}
+\begin{enumerate}
+\item $ \Gamma = [x_1 \rightarrow Int, x_2 \rightarrow Int, x_3 \rightarrow Bool] $\\
+\begin{scprooftree}{0.6}
+\AxiomC{$ \Gamma(x_1) = Int $}
+\UnaryInfC{$ \Gamma \vdash x_1 : Int $}
+\AxiomC{$ \Gamma \vdash 3 : Int $}
+\BinaryInfC{$ \Gamma \vdash x_1:=3; $}
+\AxiomC{$ \Gamma(x_3) = Bool $}
+\UnaryInfC{$ \Gamma \vdash x_3 : Bool $}
+\UnaryInfC{$ \Gamma \vdash not\ x_3 : Bool $}
+\AxiomC{$ \Gamma(x_1) = Int $}
+\UnaryInfC{$ \Gamma \vdash x_1 : Int $}
+\AxiomC{$ \Gamma(x_2) = Int $}
+\UnaryInfC{$ \Gamma \vdash x_2 : Int $}
+\AxiomC{$ 1 : Int $}
+\BinaryInfC{$ \Gamma \vdash x_2+1 : Int $}
+\BinaryInfC{$ \Gamma \vdash x_1 := x_2+1 $}
+\AxiomC{$ \Gamma(x_3) = Bool $}
+\UnaryInfC{$ \Gamma \vdash x_3 : Bool $}
+\AxiomC{$ \Gamma(x_3) = Bool $}
+\UnaryInfC{$ \Gamma \vdash x_3 : Bool $}
+\AxiomC{$ true : Bool $}
+\BinaryInfC{$ \Gamma \vdash x_3\ and\ true : Bool $}
+\BinaryInfC{$ \Gamma \vdash x_3 := x_3\ and\ true $}
+\BinaryInfC{$ \Gamma \vdash x_1 := x_2+1;\ x_3 := x_3\ and\ true $}
+\BinaryInfC{$ \Gamma \vdash while\ not\ x_3\ do\ x_1 := x_2+1;\ x_3 := x_3\ and\ true\ od $}
+\BinaryInfC{$ \Gamma \vdash x_1:=3; while\ not\ x_3\ do\ x_1 := x_2+1;\ x_3 := x_3\ and\ true\ od $}
+\end{scprooftree}
+This expression is accepted by the type system.
+
+\item $ \Gamma = [x_1 \rightarrow Int, x_2 \rightarrow Int, x_3 \rightarrow Bool] $\\
+\begin{scprooftree}{0.6}
+\AxiomC{\ldots}
+\UnaryInfC{$ \Gamma \vdash x_1:=3*x_1+1 $}
+\AxiomC{$ {\xcancel{\Gamma(x_2)=Bool}} $}
+\UnaryInfC{$ \Gamma \vdash x_2 : Bool $}
+\AxiomC{$ \Gamma(x_3)=Bool $}
+\UnaryInfC{$ \Gamma \vdash x_3 : Bool $}
+\UnaryInfC{$ \Gamma \vdash \neg x_3 : Bool $}
+\BinaryInfC{$ \Gamma \vdash x_2\ and\ \neg x_3 : Bool $}
+\AxiomC{$ \Gamma(x_1) = Int $}
+\UnaryInfC{$ \Gamma \vdash x_1 : Int $}
+\AxiomC{$ \Gamma(x_2) = Int $}
+\UnaryInfC{$ \Gamma \vdash x_2 : Int $}
+\AxiomC{$ 1 : Int $}
+\BinaryInfC{$ \Gamma \vdash x_2+1 : Int $}
+\BinaryInfC{$ \Gamma \vdash x_1 := x_2+1; $}
+\AxiomC{$ \Gamma(x_1)=Int $}
+\UnaryInfC{$ \Gamma \vdash x_1 : Int $}
+\AxiomC{$ \Gamma(x_2)=Int $}
+\UnaryInfC{$ \Gamma \vdash x_2 : Int $}
+\BinaryInfC{$ \Gamma \vdash x_1 := x_2; $}
+\TrinaryInfC{$ \Gamma \vdash if\ x_2\ and\ \neg x_3\ then\ x_1 := x_2+1;\ else\ x_1 := x_2;\ fi $}
+\BinaryInfC{$ \Gamma \vdash x_1:=3*x_1+1; if\ x_2\ and\ \neg x_3\ then\ x_1 := x_2+1;\ else\ x_1 := x_2;\ fi $}
+\end{scprooftree}
+This expression is rejected by the type system.
+\end{enumerate}
+
+\subsection{Exercise 16}
+\begin{enumerate}
+\item $ \Gamma_V = [] $ \\
+\begin{scprooftree}{0.45}
+\AxiomC{$ \Gamma_V \vdash 3 : Int $}
+\AxiomC{$ \Gamma_V[x_1 \rightarrow Int] \vdash 2:Int $}
+\AxiomC{$ \Gamma_V[x_1 \rightarrow Int](x_1)=Int $} 
+\UnaryInfC{$ \Gamma_V[x_1 \rightarrow Int] \vdash x_1:Int $}  
+\BinaryInfC{$ \Gamma_V[x_1 \rightarrow Int] \vdash 2*x_1:Int $}
+\AxiomC{$ \Gamma_V[x_1 \rightarrow Int] \vdash 1:Int $} 
+\BinaryInfC{$ \Gamma_V[x_1 \rightarrow Int] \vdash 2*x_1+1:Int $}
+\AxiomC{$ \Gamma_V[x_1 \rightarrow Int][x_2 \rightarrow Int] \vdash true : Bool $}
+\AxiomC{$ \Gamma_V[x_1 \rightarrow Int][x_2 \rightarrow Int][x_3 \rightarrow Bool] \vdash \epsilon \mid \Gamma_I $}
+\BinaryInfC{$ \Gamma_V[x_1 \rightarrow Int][x_2 \rightarrow Int] \vdash x_3:=true \mid \Gamma_I $}
+\BinaryInfC{$ \Gamma_V[x_1 \rightarrow Int] \vdash x_2:=2*x_1+1;x_3:=true \mid \Gamma_I $}
+\BinaryInfC{$ \Gamma_V \vdash x_1 := 3; x_2 := 2*x_1+1; x_3:=true \mid \Gamma_I $}
+\end{scprooftree}
+We can conclude that sequential evaluation gives: $ \Gamma_I = [x_1 \rightarrow Int, x_2 \rightarrow Int, x_3 \rightarrow Bool] $\\\\
+\item $ \Gamma_V = [] $ \\
+\begin{prooftree}
+\AxiomC{$ \Gamma_V \vdash 3 : Int $}
+\AxiomC{$ \Gamma_V \vdash 2:Int $}
+\AxiomC{$ {\xcancel{\Gamma_V(x_1)=Int}} $} 
+\UnaryInfC{$ \Gamma_V \vdash x_1:Int $}  
+\BinaryInfC{$ \Gamma_V \vdash 2*x_1:Int $}
+\AxiomC{$ \Gamma_V \vdash 1:Int $} 
+\BinaryInfC{$ \Gamma_V \vdash 2*x_1+1:Int $}
+\UnaryInfC{$ \Gamma_V \vdash x_2:=2*x_1+1;x_3:=true \mid \Gamma_I[x_1 \rightarrow Int] $}
+\BinaryInfC{$ \Gamma_V \vdash x_1 := 3; x_2 := 2*x_1+1; x_3:=true \mid \Gamma_I[x_1 \rightarrow Int] $}
+\end{prooftree}
+We can conclude that collateral evaluation rejects this expression.
+\end{enumerate}
+
+\subsection{Exercise 17}
+\begin{enumerate}
+\item $ e:= true \mid false \mid n \mid x \mid e\ opa\ e \mid e\ oprel\ e \mid e\ opb\ e \mid e\ ?\ e : e $
+\item \ \\
+\begin{prooftree}
+\AxiomC{$ \Gamma \vdash e_1 : Bool $}
+\AxiomC{$ \Gamma \vdash e_2 : t $}
+\AxiomC{$ \Gamma \vdash e_3 : t $}
+\TrinaryInfC{$ \Gamma \vdash e_1\ ?\ e_2 : e_3 : t $}
+\end{prooftree}
+\end{enumerate}
+
+\subsection{Exercise 19}
+\begin{enumerate}
+\item \ \\
+\begin{prooftree}
+\AxiomC{$ \Gamma \vdash e_1 $}
+\AxiomC{$ \Gamma \vdash e_2 : Bool $}
+\BinaryInfC{$ \Gamma \vdash repeat\ e_1\ until\ e_2 $}
+\end{prooftree}
+
+\item
+\begin{itemize}
+\item \ \\
+\begin{prooftree}
+\AxiomC{$ \Gamma_V \vdash e_1 : Int $}
+\AxiomC{$ \Gamma_V \vdash e_2 : Int $}
+\AxiomC{$ \Gamma_V[x \rightarrow Int] \vdash e_3, x \notin dom(\Gamma_V) $}
+\TrinaryInfC{$ \Gamma_V \vdash for\ x\ from\ e_1\ to\ e_2\ do\ e_3 $}
+\end{prooftree}
+or
+\begin{prooftree}
+\AxiomC{$ \Gamma_V \vdash e_1 : Int $}
+\AxiomC{$ \Gamma_V \vdash e_2 : Int $}
+\AxiomC{$ \Gamma_V[x \rightarrow Int] \vdash e_3, x \in dom(\Gamma_V) \Rightarrow \Gamma_V(x)=Int $}
+\TrinaryInfC{$ \Gamma_V \vdash for\ x\ from\ e_1\ to\ e_2\ do\ e_3 $}
+\end{prooftree}
+\item \ \\
+\begin{prooftree}
+\AxiomC{$ \Gamma_V \vdash x : Int\ \ \Gamma_V \vdash e_1 : Int\ \ \Gamma_V \vdash e_2 : Int $}
+\AxiomC{$ \Gamma_V \vdash e_3 $}
+\BinaryInfC{$ \Gamma_V \vdash for\ x\ from\ e_1\ to\ e_2\ do\ e_3 $}
+\end{prooftree}
+\end{itemize}
+\end{enumerate}
+
+\subsection{Exercise 20}
+\begin{enumerate}
+\item \ \\
+\begin{prooftree}
+\AxiomC{$ \Gamma_V[x \rightarrow t] \vdash D_V \mid \Gamma'_V, x \notin DV(D_V) $}
+\UnaryInfC{$ \Gamma_V \vdash var\ x:t; D_V \mid \Gamma'_V[x \rightarrow t]$}
+\end{prooftree}
+\item Sequential:\\
+\begin{prooftree}
+\AxiomC{$ \Gamma_V \vdash e:t' $}
+\AxiomC{$ \Gamma_V[x \rightarrow t] \vdash D_V \mid \Gamma'_V, t=t', x \notin DV(D_V) $}
+\BinaryInfC{$ \Gamma_V \vdash var\ x:=e:t; D_V \mid \Gamma'_V[x \rightarrow t]$}
+\end{prooftree}
+Collateral:\\
+\begin{prooftree}
+\AxiomC{$ \Gamma_V \vdash e:t' $}
+\AxiomC{$ \Gamma_V \vdash D_V \mid \Gamma'_V, t=t', x \notin DV(D_V) $}
+\BinaryInfC{$ \Gamma_V \vdash var\ x:=e:t; D_V \mid \Gamma'_V[x \rightarrow t]$}
+\end{prooftree}
+\end{enumerate}
+
+\subsection{Exercise 21}
+\begin{align*}
+& D_{V_0} := \text{var x := 3}\\
+& D_{P_0} := \text{proc p is x := x + 1; proc q is call p}\\
+& S_{00} := \text{begin } D_{V_1} D_{P_1} S_1 \text{ end}\\
+& S_0 := S_{00} \text{; call p}\\
+& D_{V_1} := \epsilon\\
+& D_{P_1} := \text{proc p is x := x + 5}\\
+& S_1 := \text{call q; call p}\\
+\end{align*}
+\begin{scprooftree}{0.5}
+\AxiomC{$\Gamma_{V_0} \vdash 3 : Int$}
+\AxiomC{$\Gamma_{V_0}[x \mapsto Int] \vdash \epsilon \mid \Gamma_{V_1}$}
+\AxiomC{$x \notin DV(\epsilon)$}
+\TrinaryInfC{$\Gamma_{V_0} \vdash D_V \mid \Gamma_{V_1}$}
+\AxiomC{\ldots}
+\UnaryInfC{$(\Gamma_{V_1},\Gamma_{P_0}) \vdash \text{x := x + 1}$}
+\AxiomC{$\Gamma_{P_1}(p) = proc$}
+\UnaryInfC{$(\Gamma_{V_1}, \Gamma_{P_1}) \vdash \text{call p}$}
+\AxiomC{$(\Gamma_{V_1}, \Gamma_{P_2}) \vdash \epsilon$}
+\AxiomC{$ q \notin DP(\epsilon)$}
+\TrinaryInfC{$(\Gamma_{V_1},\Gamma_{P_1}) \vdash \text{proc q is call p}$}
+\AxiomC{$p \notin DP(\text{proc q is call p})$}
+\TrinaryInfC{$(\Gamma_{V_1}, \Gamma_{P_0}) \vdash D_{P_0}$}
+\AxiomC{$ T_1 $}
+\TrinaryInfC{$(\Gamma_{V_0}, \Gamma_{P_0}) \vdash \text{begin } D_{V_0}; D_{P_0}; S_{00} \text{ end}$}
+\AxiomC{$\Gamma_{P_0}(p) = proc$}
+\UnaryInfC{$(\Gamma_{V_1}, \Gamma'_{P_2}) \vdash \text{call p}$}
+\BinaryInfC{$(\Gamma_{V_0}, \Gamma_{P_0}) \vdash \text{begin } D_{V_0}; D_{P_0}; S_0 \text{ end}$}
+\end{scprooftree}
+$ T_1 $:\\
+\begin{scprooftree}{0.5}
+\AxiomC{$\Gamma_{V_1} \vdash D_{V_1}=\epsilon \mid \Gamma_{V_1}$}
+\AxiomC{$\Gamma_{V_1}(x) = Int \ldots$}
+\UnaryInfC{$(\Gamma_{V_1}, \Gamma'_{P_2}) \vdash \text{x := x + 5}$}
+\AxiomC{$(\Gamma_{V_1}, \Gamma_{P_3}) \vdash \epsilon$}
+\AxiomC{$p \notin DP(\epsilon)$}
+\TrinaryInfC{$(\Gamma_{V_1}, \Gamma'_{P_2}) \vdash D_{P_1}$}
+\AxiomC{$\Gamma'_{P_3}(q) = proc$}
+\UnaryInfC{$(\Gamma_{V_1}, \Gamma'_{P_3}) \vdash \text{call q}$}
+\AxiomC{$\Gamma'_{P_3}(p) = proc$}
+\UnaryInfC{$(\Gamma_{V_1}, \Gamma'_{P_3}) \vdash \text{call p}$}
+\BinaryInfC{$(\Gamma_{V_1}, \Gamma'_{P_3}) \vdash S_1$}
+\TrinaryInfC{$(\Gamma_{V_1}, \Gamma'_{P_2}) \vdash \text{begin } D_{V_1} D_{P_1} S_1 \text{ end}$}
+\end{scprooftree}
+With:
+\begin{align*}
+& \Gamma_{V_0} = []\\
+& \Gamma_{P_0} = []\\
+& \Gamma_{V_1} = \Gamma_{V_0}[x \mapsto Int] = [x \mapsto Int]\\
+& \Gamma_{P_1} = \Gamma_{P_0}[p \mapsto proc] = [p \mapsto proc]\\
+& \Gamma_{P_2} = \Gamma_{P_1}[q \mapsto proc] = [p \mapsto proc, q \mapsto proc]\\
+& \Gamma'_{P_2} = upd(\Gamma_{P_0}, proc p is \ldots; proc q is \ldots) = upd(\Gamma_{P_0}[p \mapsto proc], proc q is \ldots) =\\
+& = upd(\Gamma_{P_0}[p \mapsto proc][q \mapsto proc], \epsilon) = [p \mapsto proc][q \mapsto proc]\\
+& \Gamma_{P_3} = \Gamma'_{P_2}[p \mapsto proc] = [p \mapsto proc, q \mapsto proc]\\
+& \Gamma'_{P_3} = upd(\Gamma'_{P_2}, proc p is \ldots) = upd(\Gamma'_{P_2}[p \mapsto proc], \epsilon) = [p \mapsto proc][q \mapsto proc]\\
+\end{align*}
+
+\subsection{Exercise 22}
+\begin{enumerate}
+\item
+$ D_P1 = proc\ p1\ is\ call\ p2 $\\
+$ D_P2 = proc\ p2\ is\ call\ p1 $\\
+$ S = call\ p1; $\\
+Static binding:\\
+\begin{prooftree}
+\AxiomC{$ [] \vdash \epsilon \mid [] $}
+\AxiomC{$ {\xcancel{[](p2) = proc}} $}
+\UnaryInfC{$ ([], []) \vdash D_{P1} $}
+\AxiomC{$ ([], \ldots) \vdash \ldots $}
+\BinaryInfC{$ ([], []) \vdash D_{P1}; D_{P2}  $}
+\AxiomC{\ldots}
+\UnaryInfC{$ ([], \Gamma'_V) \vdash S $}
+\TrinaryInfC{$ ([], []) \vdash begin\ \epsilon; D_{P1}; D_{P2}; S\ end $}
+\end{prooftree}
+Dynamic binding:\\
+\begin{prooftree}
+\AxiomC{$ [] \vdash \epsilon \mid [] $}
+\AxiomC{\ldots (loops infinitely)}
+\UnaryInfC{$ ([], \Gamma'_P) \vdash call\ p1 $}
+\UnaryInfC{$ ([], \Gamma'_P) \vdash call\ p2 $}
+\UnaryInfC{$ ([], \Gamma'_P) \vdash call\ p1 $}
+\UnaryInfC{$ ([], \Gamma'_P) \vdash S $}
+\BinaryInfC{$ ([], []) \vdash begin\ \epsilon; D_{P1}; D_{P2}; S\ end $}
+\end{prooftree}
+with $ \Gamma'_P = [p1 \rightarrow call\ p2, p2 \rightarrow call\ p1] $
+
+\item
+Static binding: Update $ \Gamma_P $ to $ \Gamma'_P $ in second axiom to add the information of future procedure declarations\\
+\begin{prooftree}
+\AxiomC{$ \Gamma_V \vdash D_V \mid \Gamma_V' $}
+\AxiomC{$ (\Gamma'_V, \Gamma'_P) \vdash D_P  $}
+\AxiomC{$ (\Gamma_V, \Gamma'_P) \vdash S $}
+\TrinaryInfC{$ (\Gamma_V, \Gamma_P) \vdash begin\ D_V; D_P; S\ end $}
+\end{prooftree}
+Dynamic binding:
+\begin{prooftree}
+\AxiomC{$ \Gamma_V \vdash D_V \mid \Gamma_V' $}
+\AxiomC{$ (\Gamma'_V, \Gamma'_P) \vdash S  $}
+\BinaryInfC{$ (\Gamma_V, \Gamma_P) \vdash begin\ D_V; D_P; S\ end $}
+\end{prooftree}
+\end{enumerate}
+
+\subsection{Exercise 23}
+\begin{enumerate}
+\item \ \\
+\begin{prooftree}
+\AxiomC{}
+\UnaryInfC{$ V \vdash n$}
+\end{prooftree}
+\begin{prooftree}
+\AxiomC{}
+\UnaryInfC{$ V \vdash skip$}
+\end{prooftree}
+\begin{prooftree}
+\AxiomC{$x \in V$}
+\UnaryInfC{$ V \vdash x$}
+\end{prooftree}
+\begin{prooftree}
+\AxiomC{$ V \vdash e_1 $}
+\AxiomC{$ V \vdash e_2 $}
+\BinaryInfC{$ V \vdash e_1 \text{ opa/opb/oprel } e_2$}
+\end{prooftree}
+\begin{prooftree}
+\AxiomC{$ V \vdash e $}
+\UnaryInfC{$ V \vdash \text{var } x:=e \mid V \cup {x}$}
+\end{prooftree}
+\begin{prooftree}
+\AxiomC{$ V \vdash S_1 \mid V' $}
+\AxiomC{$ V' \vdash S_2 $}
+\BinaryInfC{$ V \vdash S_1; S_2$}
+\end{prooftree}
+\begin{prooftree}
+\AxiomC{$ V \vdash b $}
+\AxiomC{$ V \vdash S \mid V' $}
+\BinaryInfC{$ V \vdash \text{while } b \text{ do } S \text{ od} \mid V'$}
+\end{prooftree}
+\begin{prooftree}
+\AxiomC{$ V \vdash b $}
+\AxiomC{$ V \vdash S_1 \mid V_1 $}
+\AxiomC{$ V \vdash S_2 \mid V_2 $}
+\TrinaryInfC{$ V \vdash \text{if } b \text{ then } S_1 \text{ else } S_2 \text{ fi} \mid V_1 \cap V_2 $}
+\end{prooftree}
+\item
+\begin{enumerate}
+\item \ \\
+\begin{align*}
+& S_0 := \text{x:=1}\\
+& S_1 := \text{if x=0 then y:=x+1 else y:=x-1 fi}
+\end{align*}
+\begin{prooftree}
+\AxiomC{$\{\} \vdash 1$}
+\UnaryInfC{$\{\} \vdash \text{x:=1} \mid \{x\}$}
+\AxiomC{$ x \in \{x\} \ldots $}
+\UnaryInfC{$ \{x\} \vdash x=0 $}
+\AxiomC{$ x \in \{x\} \ldots $}
+\UnaryInfC{$ \{x\} \vdash \text{y:=x+1} \mid \{x,y\}$}
+\AxiomC{$ x \in \{x\} \ldots $}
+\UnaryInfC{$ \{x\} \vdash \text{y:=x-1} \mid \{x,y\}$}
+\TrinaryInfC{$ \{x\} \vdash \text{if x=0 then y:=x+1 else y:=x-1 fi} \mid \{x,y\} $}
+\BinaryInfC{$\{\} \vdash S_0; S_1$}
+\end{prooftree}
+\item \ \\
+\begin{align*}
+& S_0 := \text{x:=1}\\
+& S_1 := \text{if x=0 then x:=x+1 else y:=x-1 fi}
+\end{align*}
+\begin{prooftree}
+\AxiomC{$\{\} \vdash 1$}
+\UnaryInfC{$\{\} \vdash \text{x:=1} \mid \{x\}$}
+\AxiomC{$ x \in \{x\} \ldots $}
+\UnaryInfC{$ \{x\} \vdash x=0 $}
+\AxiomC{$ x \in \{x\} \ldots $}
+\UnaryInfC{$ \{x\} \vdash \text{x:=x+1} \mid \{x\}$}
+\AxiomC{$ x \in \{x\} \ldots $}
+\UnaryInfC{$ \{x\} \vdash \text{y:=x-1} \mid \{x,y\}$}
+\TrinaryInfC{$ \{x\} \vdash \text{if x=0 then x:=x+1 else y:=x-1 fi} \mid \{x\} $}
+\BinaryInfC{$\{\} \vdash S_0; S_1$}
+\end{prooftree}
+\item \ \\
+\begin{prooftree}
+\AxiomC{$\{\} \vdash 1$}
+\UnaryInfC{$\{\} \vdash \text{x:=1} \mid \{x\}$}
+\AxiomC{$ x \in \{x\} $}
+\UnaryInfC{$ \{x\} \vdash x $}
+\AxiomC{$ {\xcancel{y \in \{x\}}} $}
+\UnaryInfC{$ \{x\} \vdash y $}
+\BinaryInfC{$ \{x\} \vdash x+y $}
+\AxiomC{$ \{x\} \vdash \text{y:=x+y} \mid \{x,y\} $}
+\AxiomC{$ \{x\} \vdash \text{x:=x+1} $}
+\BinaryInfC{$ \{x\} \vdash \text{y:=x+y; x:=x+1} $}
+\BinaryInfC{$ \{x\} \vdash \text{while x<=10 do y:=x+y; x:=x+1 od} \mid \ldots$}
+\BinaryInfC{$ \{\} \vdash \text{x:=1; while x<=10 do y:=x+y; x:=x+1 od} \mid \ldots $}
+\end{prooftree}
+\end{enumerate}
+\item The following program is correct at run-time but will be rejected by the type-system:\\
+$ \text{if } true \text{ then } t:=2 \text{ else } skip \text{ fi}; x:=t+2$\\
+This is rejected because $ t $ is not declared in both paths of the if-then-else statement but at run-time, only the first path would be executed where $ t $ is declared, so the program would be correct at run-time.
+\end{enumerate}
+
+\section{Series 3}
+\subsection{Exercise 30}
+\begin{enumerate}
+\item $ FV(x+1) = \{x\} $
+\item $ FV(3*x+y) = \{x,y\} $
+\end{enumerate}
+
+\subsection{Exercise 31}
+\label{sec:ex31}
+\begin{enumerate}
+\item $ FV(n)=\emptyset; FV(x) = \{x\}; FV(a_1 + a_2) = FV(a_1) \cup FV(a_2); FV(a_1 - a_2) = FV(a_1) \cup FV(a_2); FV(a_1 * a_2) = FV(a_1) \cup FV(a_2) $
+\item Proof by induction that\\
+$ \forall a \in \textbf{Aexp}, \forall \sigma, \sigma' \in \textbf{State}, \forall x \in FV(a), \sigma(x)=\sigma'(x) \Rightarrow \mathcal{A}[a]\sigma = \mathcal{A}[a]\sigma' $\\
+\begin{enumerate}
+\item Base steps:
+\begin{itemize}
+\item $ a = n \rightarrow \mathcal{A}[a]\sigma = n = \mathcal{A}[a]\sigma' $ by definition of $ \mathcal{A} $
+\item $ a=x \rightarrow \mathcal{A}[a]\sigma = \sigma(x) = \sigma'(x) = \mathcal{A}[a]\sigma' $ by definition of $ \mathcal{A} $ and assumption that $ \forall x \in FV(a), \sigma(x) = \sigma'(x)$
+\end{itemize}
+\item Induction step:\\
+Let us consider $ a = a_1 + a_2 $.\\
+$ \mathcal{A}[a]\sigma = \mathcal{A}[a_1]\sigma +_I \mathcal{A}[a_2]\sigma $.\\
+According to the definition of $ FV : FV(a_1 + a_2) = FV(a_1) \cup FV(a_2) $.\\
+Thus, $ FV(a_1) \subseteq FV(a), FV(a_2) \subseteq FV(a) $.\\
+From $ \sigma(x)=\sigma'(x) $, we declare $ \sigma(x)=\sigma'(x) $ for any $ x \in FV(a_1) $ and $ x \in FV(a_2) $.\\
+With this, and with the induction hypothesis, we deduce that $ \mathcal{A}[a_1]\sigma = \mathcal{A}[a_1]\sigma' $ and same goes for $ a_2 $.\\
+Thus: $ \mathcal{A}[a]\sigma = \mathcal{A}[a_1]\sigma +_I \mathcal{A}[a_2]\sigma = \mathcal{A}[a_1]\sigma' +_I \mathcal{A}[a_2]\sigma' = \mathcal{A}[a]\sigma' $\\
+We can apply the same induction step to all other arithmetical operands.\\
+Hence, by induction, the statement above holds.
+\end{enumerate}
+\end{enumerate}
+
+\subsection{Exercise 32}
+This is very similar to \nameref{sec:ex31} (exercise was not finished entirely in class).
+% TODO possibly write this out
+
+\subsection{Exercise 33}
+$ \sigma = [x \mapsto 1, y \mapsto 2, z \mapsto 3] $
+\begin{enumerate}
+\item $ \sigma[x \mapsto y+z] = \sigma[x \mapsto \mathcal{A}[y+z]\sigma] = \sigma[x \mapsto 2+3] = [x \mapsto 5, y \mapsto 2, z \mapsto 3] $
+\item $ \sigma[x \mapsto 2*x+y, y \mapsto x] = \sigma[x \mapsto \mathcal{A}[2*x+y]\sigma, y \mapsto \mathcal{A}[x]\sigma] = \sigma[x \mapsto 2*1+2, y \mapsto 1] = [x \mapsto 4, y \mapsto 1, z \mapsto 3] $
+\end{enumerate}
+
+\subsection{Exercise 34}
+\begin{enumerate}
+\item Let us consider $ a' \in \textbf{Aexp}, x \in \textbf{Var} $
+\begin{itemize}
+\item $ n[a' \mid x] = n $
+\item $ y[a' \mid x] = \begin{cases} a' & \text{if } x=y\\ y & \text{otherwise} \end{cases} $
+\item $ (a_1 + a_2)[a' \mid x] = a_1[a' \mid x] + a_2[a' \mid x] $
+\end{itemize}
+\item Proof that $ \forall a, a' \in \textbf{Aexp}, \forall x \in \textbf{Var} \cap FV(a), \forall \sigma \in \textbf{State}, \mathcal{A}[a[a' \mid x]]\sigma = \mathcal{A}[a]\sigma[x \mapsto \mathcal{A}[a']\sigma] $\\
+Proof by induction:\\
+\begin{enumerate}
+\item Base steps:
+\begin{itemize}
+\item $ a = n \Rightarrow \mathcal{A}[n[a' \mid x]]\sigma = \mathcal{A}[n]\sigma = \mathcal{A}[n]\sigma[x \mapsto \mathcal{A}[a']\sigma] $
+\item $ a = x \Rightarrow \mathcal{A}[x[a' \mid x]]\sigma = \mathcal{A}[a']\sigma = \mathcal{A}[x]\sigma[x \mapsto \mathcal{A}[a']\sigma] $
+\end{itemize}
+\item Induction step:\\
+Let us consider $ a = a_1 + a_2 $.\\
+\begin{align*}
+\mathcal{A}[(a_1 + a_2)[a' \mid x]]\sigma & = \mathcal{A}[a_1[a' \mid x] + a_2[a' \mid x]]\sigma & \text{definition of substitution}\\
+& = \mathcal{A}[a_1[a' \mid x]]\sigma + \mathcal{A}[a_2[a'\mid x]]\sigma & \text{definition of } \mathcal{A}\\
+& = \mathcal{A}[a_1]\sigma[x \mapsto \mathcal{A}[a']\sigma +\\ & \mathcal{A}[a_2]\sigma[x \mapsto \mathcal{A}[a']\sigma & \text{by induction}\\
+& = \mathcal{A}[a_1+a_2]\sigma[x \mapsto \mathcal{A}[a']\sigma] & \text{definition of } \mathcal{A}
+\end{align*}
+We can apply the same induction step to all other arithmetical operands.\\
+Hence, by induction, the statement above holds.
+\end{enumerate}
+\end{enumerate}
+
+\section{Series 4}
+\subsection{Exercise 36}
+\begin{enumerate}
+\item
+\begin{enumerate}
+\item
+\begin{prooftree}
+\AxiomC{$ (S_{11}, \sigma) \rightarrow \sigma_0 $}
+\AxiomC{$ (S_{12}, \sigma_0) \rightarrow \sigma_1 $}
+\BinaryInfC{$ (S_{11}; S_{12}, \sigma) \rightarrow \sigma_1 $}
+\AxiomC{$ (S_2, \sigma_1) \rightarrow \sigma_2 $}
+\BinaryInfC{$ (S_1; S_2, \sigma) \rightarrow \sigma_2 $}
+\end{prooftree}
+With:\\
+$ S_{11} ::= x := y \mid S_{12} ::= x := z \mid S_2 ::= y := z $\\
+$ \sigma_0 = \sigma[x \mapsto \mathcal{A}[y]\sigma] = [x \mapsto 7, y \mapsto 7] $\\
+$ \sigma_1 = \sigma_0[x \mapsto \mathcal{A}[z]\sigma_0] = [x \mapsto 0, y \mapsto 7] $\\
+$ \sigma_2 = \sigma_1[y \mapsto \mathcal{A}[z]\sigma_1] = [x \mapsto 0, y \mapsto 0] $
+\item
+\begin{prooftree}
+\AxiomC{$ (S_{11}, \sigma) \rightarrow \sigma_0 $}
+\AxiomC{$ (S_{12}, \sigma_0) \rightarrow \sigma_1 $}
+\BinaryInfC{$ (S_{11}; S_{12}, \sigma) \rightarrow \sigma_1 $}
+\AxiomC{$ (S_2, \sigma_1) \rightarrow \sigma_2 $}
+\BinaryInfC{$ (S_1; S_2, \sigma) \rightarrow \sigma_2 $}
+\end{prooftree}
+With:\\
+$ S_{11} ::= z := x \mid S_{12} ::= x := y \mid S_2 ::= y := z $\\
+$ \sigma_0 = \sigma[z \mapsto \mathcal{A}[x]\sigma] = [x \mapsto 5, y \mapsto 7, z \mapsto 5] $\\
+$ \sigma_1 = \sigma_0[x \mapsto \mathcal{A}[y]\sigma_0] = [x \mapsto 7, y \mapsto 7, z \mapsto 5] $\\
+$ \sigma_2 = \sigma_1[y \mapsto \mathcal{A}[z]\sigma_1] = [x \mapsto 7, y \mapsto 5, z \mapsto 5] $
+\end{enumerate}
+\item
+\begin{enumerate}
+\item
+\begin{prooftree}
+\AxiomC{$ (S_{11}, \sigma) \rightarrow \sigma_1 $}
+\UnaryInfC{$ (if\ S_1\ then\ S_{11}\ else\ S_{12}, \sigma) \rightarrow \sigma_1 $}
+\end{prooftree}
+With:\\
+$ S_1 ::= x+y>=3 \mid S_{11} ::= y := x \mid S_{12} ::= x := y $\\
+$ \mathcal{B}[x+y>=3]\sigma = \mathcal{B}[\sigma[x] + \sigma[y] >= 3] = \mathcal{B}[5 + 7 \geq 3] = tt$\\
+$ \sigma_1 = \sigma[y \mapsto \mathcal{A}[x]\sigma] = [x \mapsto 5, y \mapsto 5] $
+\item
+\begin{prooftree}
+\AxiomC{$ (S_{11}, \sigma) \rightarrow \sigma_1 $}
+\UnaryInfC{$ (if\ S_1\ then\ S_{11}\ else\ S_{12}, \sigma) \rightarrow \sigma_1 $}
+\end{prooftree}
+With:\\
+$ S_1 ::= y>=x \mid S_{11} ::= y := x \mid S_{12} ::= x := y $\\
+$ \mathcal{B}[y>=x]\sigma = \mathcal{B}[\sigma[y] >= \sigma[x]] = \mathcal{B}[7 \geq 5] = tt$\\
+$ \sigma_1 = \sigma[y \mapsto \mathcal{A}[x]\sigma] = [x \mapsto 5, y \mapsto 5] $
+\end{enumerate}
+\end{enumerate}
+
+\subsection{Exercise 39}
+\begin{enumerate}
+\item Terminates in every state because the while loop iterates at most the number of times than the value of $ x $. If $ x < 1 $ at the beginning, then the while loop does not loop at all. Proof by building the derivation tree.
+\item Loops in every state because the condition of the while loop is always \textbf{true}. Proof by contradiction (assume that the statement terminates then proof by induction that the leaf of the derivation tree can still be augmented according to the rule of the while statement: contradiction).
+\item There are states from which the execution terminates: For example $ [x \mapsto 1] $ (the while loop does not loop at all).\\
+There are some states from which it doesn't terminate: for example $ [x \mapsto 0] $ (the while loop decrements $ x $ infinitely and $ \lnot(x = 1) $ will always be \textbf{true}. Proof by contradiction (we know that $ x < 1 $ and assume that the statement terminates then proof by induction that the leaf of the derivation tree can still be augmented and that $ x < 1 $ is still true according to the rule of the while statement: contradiction).
+\end{enumerate}
+
+\subsection{Exercise 41}
+\begin{enumerate}
+\item
+\begin{itemize}
+\item $ (n, \sigma) \rightarrow z = \mathcal{N}(n) $
+\item $ (x, \sigma) \rightarrow z = \sigma(x) $
+\item 
+\begin{prooftree}
+\AxiomC{$ (a_1, \sigma) \rightarrow v_1 $}
+\AxiomC{$ (a_2, \sigma) \rightarrow v_2 $}
+\BinaryInfC{$ (a_1 + a_2, \sigma) \rightarrow v_1 + v_2 $}
+\end{prooftree}
+\item
+$ \mathcal{A}'[a]\sigma = \begin{cases} v & \text{if } (a, \sigma) \rightarrow v\\ undef & \text{otherwise} \end{cases} $
+\item 
+\begin{prooftree}
+\AxiomC{$ (a_2, \sigma) \rightarrow v_2 $}
+\AxiomC{$ v_2 \not= 0 $}
+\AxiomC{$ (a_1, \sigma) \rightarrow v_1 $}
+\TrinaryInfC{$ (a_1 / a_2, \sigma) \rightarrow v_1 / v_2 $}
+\end{prooftree}
+\end{itemize}
+\item Proof by induction that $ \forall a \in \textbf{Aexp}, \forall \sigma \in \textbf{State}, \mathcal{A}[a]\sigma = \mathcal{A}'[a]\sigma $:
+\begin{enumerate}
+\item Base cases
+\begin{itemize}
+\item $ a = n \Rightarrow \mathcal{A}[n]\sigma = \mathcal{N}(n) = \mathcal{A}'[n]\sigma $
+\item $ a = x \Rightarrow \mathcal{A}[x]\sigma = \sigma(x) = \mathcal{A}'[n]\sigma $
+\end{itemize}
+\item Induction step: Use the semantics of $ \mathcal{A} $ and $ \mathcal{A}' $ to prove that $ \mathcal{A}[a_1 + a_2]\sigma = \mathcal{A}'[a_1 + a_2]\sigma $.
+\end{enumerate}
+\item TODO (exercise was not finished in class)
+\end{enumerate}
+
+\subsection{Exercise 42}
+\begin{enumerate}
+\item $ \forall S_1, S_2, S_3 \in \textbf{Stm} $:
+\begin{prooftree}
+\AxiomC{$ (S_1, \sigma_0) \rightarrow \sigma'_0 $}
+\AxiomC{$ (S_2, \sigma'_0) \rightarrow \sigma''_0 $}
+\AxiomC{$ (S_3, \sigma''_0) \rightarrow \sigma'''_0 $}
+\BinaryInfC{$ (S_2; S_3), \sigma'_0) \rightarrow \sigma'''_0 $}
+\BinaryInfC{$ (S_1; (S_2; S_3), \sigma) \rightarrow \sigma'''_0 $}
+\end{prooftree}
+\begin{prooftree}
+\AxiomC{$ (S_1, \sigma_1) \rightarrow \sigma'_1 $}
+\AxiomC{$ (S_2, \sigma'_1) \rightarrow \sigma''_1 $}
+\BinaryInfC{$ (S_1; S_2), \sigma_1) \rightarrow \sigma''_1 $}
+\AxiomC{$ (S_3, \sigma''_1) \rightarrow \sigma'''_1 $}
+\BinaryInfC{$ ((S_1; S_2); S_3), \sigma) \rightarrow \sigma'''_1 $}
+\end{prooftree}
+Using the determinism of operational semantics, we can deduce that:\\
+$ \sigma'_0 = \sigma'_1 \Rightarrow \sigma''_0 = \sigma''_1 \Rightarrow \sigma'''_0 = \sigma'''_1 $.\\
+Hence, $ (S_1; (S_2; S_3)) $ is semantically equivalent to $ ((S_1; S_2); S_3) $.
+\item For $ S_1 ::= x := x + 1 ; S_2 ::= x = 3; \sigma_0 = [x \mapsto 0] $:
+\begin{prooftree}
+\AxiomC{$ (S_1, \sigma_0) \rightarrow \sigma'_0 $}
+\AxiomC{$ (S_2, \sigma'_0) \rightarrow \sigma''_0 $}
+\BinaryInfC{$ (S_1; S_2) \sigma_0) \rightarrow \sigma''_0 $}
+\end{prooftree}
+With $ \sigma_0 = [x \mapsto 0] $\\
+$ \sigma'_0 = [x \mapsto 1]$\\
+$ \sigma''_0 = [x \mapsto 3] $
+\\\\
+\begin{prooftree}
+\AxiomC{$ (S_2, \sigma_0) \rightarrow \sigma'_1 $}
+\AxiomC{$ (S_1, \sigma'_1) \rightarrow \sigma''_1 $}
+\BinaryInfC{$ (S_2; S_1) \sigma_0) \rightarrow \sigma''_1 $}
+\end{prooftree}
+With $ \sigma_0 = [x \mapsto 0] $\\
+$ \sigma'_1 = [x \mapsto 3]$\\
+$ \sigma''_1 = [x \mapsto 4] $
+\end{enumerate}
+$ \sigma''_0 \not= \sigma''_1 \Rightarrow (S_1; S_2) $ is not semantically equivalent to $ (S_2; S_1) $.
+
+\subsection{Exercise 43}
+\begin{enumerate}
+\item All programs in this language always terminate.
+\item Proof by induction that $ \forall S \in \textbf{Stm}, \sigma \in \textbf{State}, S $ terminates:
+\begin{enumerate}
+\item Base steps:
+\begin{itemize}
+\item $ S ::= x := a $ terminates:
+\begin{prooftree}
+\AxiomC{}
+\UnaryInfC{$ (x := a, \sigma) \rightarrow \sigma[x \mapsto \mathcal{A}[a]\sigma] $}
+\end{prooftree}
+\item $ S ::= skip $ terminates:
+\begin{prooftree}
+\AxiomC{}
+\UnaryInfC{$ (skip, \sigma) \rightarrow \sigma $}
+\end{prooftree}
+\end{itemize}
+\item Induction on the semantics of $ S $:
+\begin{itemize}
+\item $ S ::= (S_1; S_2) $ terminates if $ S_1 $ and $ S_2 $ terminate:
+\begin{prooftree}
+\AxiomC{$ (S_1, \sigma) \rightarrow \sigma'$}
+\AxiomC{$ (S_2, \sigma') \rightarrow \sigma''$}
+\BinaryInfC{$ (S_1; S_2, \sigma) \rightarrow \sigma'' $}
+\end{prooftree}
+\item $ S ::= \text{if } b \text{ then } S_1 \text{ else } S_2 $ terminates if $ S_1 $ and $ S_2 $ terminate:\\
+If $ \mathcal{B}[b]\sigma = \textbf{tt} $:
+\begin{prooftree}
+\AxiomC{$ (S_1, \sigma) \rightarrow \sigma' $}
+\UnaryInfC{$ (\text{if } b \text{ then } S_1 \text{ else } S_2, \sigma) \rightarrow \sigma' $}
+\end{prooftree}
+If $ \mathcal{B}[b]\sigma = \textbf{ff} $:
+\begin{prooftree}
+\AxiomC{$ (S_2, \sigma) \rightarrow \sigma' $}
+\UnaryInfC{$ (\text{if } b \text{ then } S_1 \text{ else } S_2, \sigma) \rightarrow \sigma' $}
+\end{prooftree}
+\end{itemize}
+\end{enumerate}
+Hence, by induction, all programs in this language always terminate.
+\end{enumerate}
+
+\subsection{Exercise 45}
+\begin{enumerate}
+\item If $ \mathcal{B}[b]\sigma' = \textbf{tt} $:
+\begin{prooftree}
+\AxiomC{$ (S, \sigma) \rightarrow \sigma' $}
+\UnaryInfC{$ (\text{repeat } S \text{ until } b, \sigma) \rightarrow \sigma' $}
+\end{prooftree}
+If $ \mathcal{B}[b]\sigma' = \textbf{ff} $:
+\begin{prooftree}
+\AxiomC{$ (S, \sigma) \rightarrow \sigma' $}
+\AxiomC{$ (\text{repeat } S \text{ until } b, \sigma') \rightarrow \sigma'' $}
+\BinaryInfC{$ (\text{repeat } S \text{ until } b, \sigma) \rightarrow \sigma'' $}
+\end{prooftree}
+\item We construct the proof-tree for the second statement (and we compare it to the proof-tree for the first statement above):
+\begin{prooftree}
+\AxiomC{$ (S, \sigma_1) \rightarrow \sigma'_1 $}
+\AxiomC{$ T $}
+\BinaryInfC{$ (S; \text{if } b \text{ then } skip \text{ else } (\text{repeat } S \text{ until } b), \sigma_1) \rightarrow \sigma''_1 $}
+\end{prooftree}
+The part $ T $ has the following proof-tree:\\
+If $ \mathcal{B}[b]\sigma_1' = \textbf{tt} $:
+\begin{prooftree}
+\AxiomC{}
+\UnaryInfC{$ (skip, \sigma'_1) \rightarrow \sigma'_1 $}
+\end{prooftree}
+If $ \mathcal{B}[b]\sigma_1' = \textbf{ff} $:
+\begin{prooftree}
+\AxiomC{\ldots}
+\UnaryInfC{$ (\text{repeat } S \text{ until } b, \sigma'_1) \rightarrow \sigma''_1 $}
+\end{prooftree}
+From the semantic determinism, we know that if $\sigma=\sigma_1$, then $\sigma'=\sigma'_1$. This also implies $\mathcal{B}[b]\sigma' = \mathcal{B}[b]\sigma'_1$.\\
+At this point, there are two cases:
+\begin{itemize}
+\item $ \mathcal{B}[b]\sigma' = \mathcal{B}[b]\sigma'_1 = \textbf{tt}$: then the final state in the first proof-tree is $\sigma'$. For the second proof-tree, if $ \mathcal{B}[b]\sigma'_1 = \textbf{tt}$, then the final state is $\sigma'_1$. From what we noted above, the final states are equal.\\
+\item $ \mathcal{B}[b]\sigma' = \mathcal{B}[b]\sigma'_1 = \textbf{ff}$: then the final state in the first proof-tree is $\sigma''$. For the second proof-tree, the final state is $\sigma''_1$. Because the same statement is executed in the same state, from semantic determinism, we can conclude that $\sigma'' = \sigma''_1$. Hence, the final states are equal.
+\end{itemize}
+\item We give a function $ f : \textbf{Stm} \times \textbf{State} \rightarrow \textbf{Stm} $ that transforms any program containing the 'repeat' construct into a program containing only 'while' constructs:\\
+\begin{itemize}
+\item $f(\text{repeat } S \text{ until } b, \sigma) = \begin{cases}
+S & \text{if } \mathcal{B}[b]\sigma = \textbf{tt}\\
+S; \text{if } b \text{ then skip else } f(\text{repeat } S \text{ until } b) \text{ fi} & otherwise
+\end{cases}$
+\item $f(S, \sigma) = S$
+\end{itemize}
+This transformation is computable but only by simulating the program at run-time with the given initial state. The size of the resulting program is much bigger than the original program because we have to add the statement $S$ and the 'if-then-else' construct as often as the loop is being executed at run-time.
+\end{enumerate}
+
+\subsection{Exercise 46}
+TODO (This exercise was not solved in class and might not be exactly correct as presented here !)
+
+\begin{enumerate}
+\item See below
+\item There are a few ways to imagine keeping track of the fact that we are in a for-loop:
+\begin{enumerate}
+\item We assume that there is an undefined variable in every possible state $\sigma$ and we have a function $undef : \textbf{State} \rightarrow \textbf{Var} $ giving us an undefined variable $v$ in the given state $\sigma$ before entering the for-loop.\\
+If $\sigma(v) = undef$:
+\begin{prooftree}
+\AxiomC{$ (\text{for } x \text{ from } a_1 \text{ to } a_2 \text{ do } S, \sigma[x \mapsto \mathcal{A}[a_1]\sigma][v \mapsto 0]) \rightarrow \sigma'$}
+\UnaryInfC{$ (\text{for } x \text{ from } a_1 \text{ to } a_2 \text{ do } S, \sigma) \rightarrow \sigma' $}
+\end{prooftree}
+Else if $\sigma(x) > \mathcal{A}[a_2]\sigma$:
+\begin{prooftree}
+\AxiomC{}
+\UnaryInfC{$ (\text{for } x \text{ from } a_1 \text{ to } a_2 \text{ do } S, \sigma) \rightarrow \sigma[v \mapsto undef] $}
+\end{prooftree}
+Otherwise:
+\begin{prooftree}
+\AxiomC{$ (S, \sigma) \rightarrow \sigma' $}
+\AxiomC{$ (\text{for } x \text{ from } a_1 \text{ to } a_2 \text{ do } S, \sigma'[x \mapsto \sigma'(x) + 1]) \rightarrow \sigma'' $}
+\BinaryInfC{$ (\text{for } x \text{ from } a_1 \text{ to } a_2 \text{ do } S, \sigma) \rightarrow \sigma'' $}
+\end{prooftree}
+\item We assume that we can use intermediate syntactic structures to define the recursion on:\\
+We assume that we have an intermediate syntactic structure 'for $ x $ to $ a_2$ do $ S $' defined as below.\\
+\begin{prooftree}
+\AxiomC{$ (\text{for } x \text{ to } a_2 \text{ do } S, \sigma[x \mapsto \mathcal{A}[a_1]\sigma]) \rightarrow \sigma'$}
+\UnaryInfC{$ (\text{for } x \text{ from } a_1 \text{ to } a_2 \text{ do } S, \sigma) \rightarrow \sigma' $}
+\end{prooftree}
+If $\sigma(x) > \mathcal{A}[a_2]\sigma$:
+\begin{prooftree}
+\AxiomC{}
+\UnaryInfC{$ (\text{for } x \text{ to } a_2 \text{ do } S, \sigma) \rightarrow \sigma $}
+\end{prooftree}
+Otherwise:
+\begin{prooftree}
+\AxiomC{$ (S, \sigma) \rightarrow \sigma' $}
+\AxiomC{$ (\text{for } x \text{ to } a_2 \text{ do } S, \sigma'[x \mapsto \sigma'(x) + 1]) \rightarrow \sigma'' $}
+\BinaryInfC{$ (\text{for } x \text{ to } a_2 \text{ do } S, \sigma) \rightarrow \sigma'' $}
+\end{prooftree}
+\item We assume the function $\mathcal{N}^{-1}$ as suggested in the exercise:\\
+If $\mathcal{A}[a_1]\sigma > \mathcal{A}[a_2]\sigma$:
+\begin{prooftree}
+\AxiomC{}
+\UnaryInfC{$ (\text{for } x \text{ from } a_1 \text{ to } a_2 \text{ do } S, \sigma) \rightarrow \sigma[x \mapsto \mathcal{A}[a_1]\sigma] $}
+\end{prooftree}
+Otherwise:
+\begin{prooftree}
+\AxiomC{$ (S, \sigma[x \mapsto ]) \rightarrow \sigma' $}
+\AxiomC{$ (\text{for } x \text{ from } \mathcal{N}^{-1}(\mathcal{A}[a_1]\sigma + 1) \text{ to } a_2 \text{ do } S, \sigma') \rightarrow \sigma'' $}
+\BinaryInfC{$ (\text{for } x \text{ from } a_1 \text{ to } a_2 \text{ do } S, \sigma) \rightarrow \sigma'' $}
+\end{prooftree}
+\end{enumerate}
+
+\item 
+\begin{enumerate}
+\item Using the first mechanism as described above:\\
+$ \sigma_0 := [x \mapsto 5]$\\
+$ S_0 ::= y := 1 $\\
+$ S_1 ::= \text{for } z \text{ from } 1 \text{ to } x \text{ do } S_2 $\\
+$ S_2 ::= S_{20}; S_{21} $\\
+$ S_{20} ::= y := y + x $\\
+$ S_{21} ::= x := x - 1$
+\begin{prooftree}
+\AxiomC{$ (S_0, \sigma_0) \rightarrow \sigma_1 $}
+\AxiomC{$ (S_2, \sigma_2) \rightarrow \sigma_3 $}
+\AxiomC{$ (S_2, \sigma_4) \rightarrow \sigma_5 $}
+\AxiomC{$ (S_2, \sigma_6) \rightarrow \sigma_7 $}
+\AxiomC{}
+\UnaryInfC{$ (S_1, \sigma_8) \rightarrow \sigma_9 $}
+\BinaryInfC{$ (S_1, \sigma_6) \rightarrow \sigma_9 $}
+\BinaryInfC{$ (S_1, \sigma_4) \rightarrow \sigma_9 $}
+\BinaryInfC{$ (S_1, \sigma_2) \rightarrow \sigma_9 $}
+\UnaryInfC{$ (S_1, \sigma_1) \rightarrow \sigma_9 $}
+\BinaryInfC{$ (S_0; S_1, \sigma_0) \rightarrow \sigma_9 $}
+\end{prooftree}
+With:\\
+$ \sigma_1 = \sigma_0[y \mapsto 1] = [x \mapsto 5, y \mapsto 1] $\\
+$ \sigma_2 = \sigma_1[z \mapsto 1][v \mapsto 0] = [x \mapsto 5, y \mapsto 1, z \mapsto 1, v \mapsto 0] $\\
+$ \sigma_3 = \sigma_2[y \mapsto 1 + 5][x \mapsto 5 - 1] = [x \mapsto 4, y \mapsto 6, z \mapsto 1, v \mapsto 0] $\\
+$ \sigma_4 = \sigma_3[z \mapsto 1 + 1] = [x \mapsto 4, y \mapsto 6, z \mapsto 2, v \mapsto 0] $\\
+$ \sigma_5 = \sigma_4[y \mapsto 6 + 4][x \mapsto 4 - 1] = [x \mapsto 3, y \mapsto 10, z \mapsto 2, v \mapsto 0] $\\
+$ \sigma_6 = \sigma_5[z \mapsto 2 + 1] = [x \mapsto 3, y \mapsto 10, z \mapsto 3, v \mapsto 0] $\\
+$ \sigma_7 = \sigma_6[y \mapsto 10 + 3][x \mapsto 3 - 1] = [x \mapsto 2, y \mapsto 13, z \mapsto 3, v \mapsto 0] $\\
+$ \sigma_8 = \sigma_7[z \mapsto 3 + 1] = [x \mapsto 2, y \mapsto 13, z \mapsto 4, v \mapsto 0] $\\
+$ \sigma_9 = \sigma_8[v \mapsto undef] = [x \mapsto 2, y \mapsto 13, z \mapsto 4] $\\
+The $undef$ function in $\sigma_1$ gives $ v $ as an undefined variable.\\
+The for-loop continues with $ \sigma_2 $ because $ \sigma_2(z) = 1 \leq \mathcal{A}[x]\sigma_2 = 5 $.\\
+The for-loop continues with $ \sigma_4 $ because $ \sigma_4(z) = 2 \leq \mathcal{A}[x]\sigma_4 = 4 $.\\
+The for-loop continues with $ \sigma_6 $ because $ \sigma_6(z) = 3 \leq \mathcal{A}[x]\sigma_6 = 3 $.\\
+The for-loop stops with $ \sigma_8 $ because $ \sigma_8(z) = 4 > \mathcal{A}[x]\sigma_8 = 2 $.
+
+\item Using the last mechanism as described above:\\
+$ \sigma_0 := [x \mapsto 5]$\\
+$ S_0 ::= y := 1 $\\
+$ S_1 ::= \text{for } z \text{ from } 1 \text{ to } x \text{ do } S_2 $\\
+$ S_2 ::= S_{20}; S_{21} $\\
+$ S_{20} ::= y := y + x $\\
+$ S_{21} ::= x := x - 1$
+\begin{prooftree}
+\AxiomC{$ (S_0, \sigma_0) \rightarrow \sigma_1 $}
+\AxiomC{$ (S_2, \sigma_2) \rightarrow \sigma_3 $}
+\AxiomC{$ (S_2, \sigma_4) \rightarrow \sigma_5 $}
+\AxiomC{$ (S_2, \sigma_6) \rightarrow \sigma_7 $}
+\AxiomC{}
+\UnaryInfC{$ (S_{1_3}, \sigma_7) \rightarrow \sigma_8 $}
+\BinaryInfC{$ (S_{1_2}, \sigma_5) \rightarrow \sigma_8 $}
+\BinaryInfC{$ (S_{1_1}, \sigma_3) \rightarrow \sigma_8 $}
+\BinaryInfC{$ (S_1, \sigma_1) \rightarrow \sigma_8 $}
+\BinaryInfC{$ (S_0; S_1, \sigma_0) \rightarrow \sigma_8 $}
+\end{prooftree}
+With:\\
+$ \sigma_1 = \sigma_0[y \mapsto 1] = [x \mapsto 5, y \mapsto 1] $\\
+$ \sigma_2 = \sigma_1[z \mapsto 1] = [x \mapsto 5, y \mapsto 1, z \mapsto 1] $\\
+$ \sigma_3 = \sigma_2[y \mapsto 1 + 5][x \mapsto 5 - 1] = [x \mapsto 4, y \mapsto 6, z \mapsto 1] $\\
+$ S_{1_1} ::= \text{for } z \text{ from } \mathcal{N}^{-1}(\mathcal{A}[1]\sigma_1 + 1) \text{ to } x \text{ do } S_2 = \text{for } z \text{ from } 2 \text{ to } x \text{ do } S_2 $\\
+$ \sigma_4 = \sigma_3[z \mapsto 2] = [x \mapsto 4, y \mapsto 6, z \mapsto 2] $\\
+$ \sigma_5 = \sigma_4[y \mapsto 6 + 4][x \mapsto 4 - 1] = [x \mapsto 3, y \mapsto 10, z \mapsto 2] $\\
+$ S_{1_2} ::= \text{for } z \text{ from } \mathcal{N}^{-1}(\mathcal{A}[2]\sigma_3 + 1) \text{ to } x \text{ do } S_2 = \text{for } z \text{ from } 3 \text{ to } x \text{ do } S_2$\\
+$ \sigma_6 = \sigma_5[z \mapsto 3] = [x \mapsto 3, y \mapsto 10, z \mapsto 3] $\\
+$ \sigma_7 = \sigma_6[y \mapsto 10 + 3][x \mapsto 3 - 1] = [x \mapsto 2, y \mapsto 13, z \mapsto 3] $\\
+$ S_{1_3} ::= \text{for } z \text{ from } \mathcal{N}^{-1}(\mathcal{A}[3]\sigma_5 + 1) \text{ to } x \text{ do } S_2 = \text{for } z \text{ from } 4 \text{ to } x \text{ do } S_2 $\\
+$ \sigma_8 = \sigma_7[z \mapsto 4] = [x \mapsto 2, y \mapsto 13, z \mapsto 4] $\\
+With $ S_1; \sigma_1 $: $ \mathcal{A}[1]\sigma_1 = 1 \leq \mathcal{A}[x]\sigma_1 = 5 \Rightarrow $ continue.\\
+With $ S_{1_1}; \sigma_3 $: $ \mathcal{A}[2]\sigma_3 = 2 \leq \mathcal{A}[x]\sigma_3 = 4 \Rightarrow $ continue.\\
+With $  S_{1_2}; \sigma_5 $: $ \mathcal{A}[3]\sigma_5 = 3 \leq \mathcal{A}[x]\sigma_5 = 3 \Rightarrow $ continue.\\
+With $ S_{1_3}; \sigma_7 $: $ \mathcal{A}[4]\sigma_7 = 4 > \mathcal{A}[x]\sigma_7 = 2 \Rightarrow $ stop.\\
+\end{enumerate}
+\end{enumerate}
+
+\section{Series 5}
+\subsection{Exercise 47}
+Exercise was not done in class !
+\\\\
+$ \sigma_0 := [x \mapsto 0] \text{ this does not make sense, should be: } \hat{\rho_0} := [x \mapsto l_0]; \sigma_0 := [l_0 \mapsto 0]$\\
+$ D_{V_0} ::= \text{var } y := 1 $\\
+$ S_1 ::= (S_{10}; S_{11}; S_{12}) $\\
+$ S_{10} ::= x := 1 $\\
+$ S_{11} ::= \text{begin } D_{V_1}; S_{111} \text{ end} $\\
+$ D_{V_1} ::= \text{var } x := 2 $\\
+$ S_{111} ::= y := x+1$\\
+$ S_{12} ::= x := y + x$\\
+\\
+Block rule:
+\begin{prooftree}
+\AxiomC{$ (\epsilon, \hat{\rho_0}, \rho_1, \sigma_1) \rightarrow (\rho_1, \sigma_1)$}
+\UnaryInfC{$ (D_{V_0}, \hat{\rho_0}, \emptyset, \sigma_0) \rightarrow (\rho_1, \sigma_1) $}
+\AxiomC{$ (S_1, \hat{\rho_0} \oplus \rho_1, \sigma_1) \rightarrow \sigma_5 $}
+\BinaryInfC{$ (\text{begin } D_{V_0} S_1 \text{ end}, \hat{\rho_0}, \sigma_0) \rightarrow \sigma_5 $}
+\end{prooftree}
+Sequential composition:
+\begin{prooftree}
+\AxiomC{$ (S_{10}, \hat{\rho_0} \oplus \rho_1, \sigma_1) \rightarrow \sigma_2$}
+\AxiomC{$ (S_{11}, \hat{\rho_0} \oplus \rho_1, \sigma_2) \rightarrow \sigma_4$}
+\AxiomC{$ (S_{12}, \hat{\rho_0} \oplus \rho_1, \sigma_4) \rightarrow \sigma_5$}
+\BinaryInfC{$ (S_{11}; S_{12}, \hat{\rho_0} \oplus \rho_1, \sigma_2) \rightarrow \sigma_5 $}
+\BinaryInfC{$ (S_1, \hat{\rho_0} \oplus \rho_1, \sigma_1) \rightarrow \sigma_5 $}
+\end{prooftree}
+Inner block:
+\begin{prooftree}
+\AxiomC{$ (D_{V_1}, \hat{\rho_0} \oplus \rho_1, \emptyset, \sigma_2) \rightarrow (\rho_2, \sigma_3) $}
+\AxiomC{$ (S_{111}, \hat{\rho_0} \oplus \rho_1 \oplus \rho_2, \sigma_3) \rightarrow \sigma_4 $}
+\BinaryInfC{$ (\text{begin } D_{V_1}; S_{111} \text{ end}, \hat{\rho_0} \oplus \rho_1, \sigma_2) \rightarrow \sigma_4 $}
+\end{prooftree}
+
+With:\\
+$ \rho_1 = \emptyset[y \mapsto l_1] = [y \mapsto l_1] $\\
+$ \sigma_1 = \sigma_0[l_1 \mapsto 1] = [l_0 \mapsto 0, l_1 \mapsto 1] $\\
+$ \sigma_2 = \sigma_1[l_0 \mapsto 1] = [l_0 \mapsto 1, l_1 \mapsto 1] $\\
+$ \rho_2 = \emptyset[x \mapsto l_2] = [x \mapsto l_2] $\\
+$ \sigma_3 = \sigma_2[l_2 \mapsto 2] = [l_0 \mapsto 1, l_1 \mapsto 1, l_2 \mapsto 2] $\\
+$ \sigma_4 = \sigma_3[l_1 \mapsto 2 + 1] = [l_0 \mapsto 1, l_1 \mapsto 3, l_2 \mapsto 2] $\\
+$ \sigma_5 = \sigma_4[l_0 \mapsto 3 + 1] = [l_0 \mapsto 4, l_1 \mapsto 3, l_2 \mapsto 2] $\\
+
+\section{Series 9}
+\subsection{Exercise 86}
+\begin{enumerate}
+\item $ Def : \textbf{Stm} \cup \textbf{Aexp} \cup \textbf{Bexp} \rightarrow 2^{\textbf{Var}}; Use : \textbf{Stm} \cup \textbf{Aexp} \cup \textbf{Bexp} \rightarrow 2^{\textbf{Var}} $
+\item 
+\begin{align*}
+&Def(a) = \emptyset & \forall a \in \textbf{Aexp}\\
+&Def(b) = \emptyset & \forall b \in \textbf{Bexp}\\
+&Def(x := a) = \{x\}\\
+&Def(\text{skip}) = \emptyset\\
+&Def(S_1; S_2) = Def(S_1) \cup Def(S_2)\\
+&Def(\text{if } b\text{ then }S_1\text{ else }S_2) = Def(S_1) \cap Def(S_2)\\
+&Def(\text{while }b\text{ do } S_1) = \emptyset
+\end{align*}
+
+\begin{align*}
+&Use(n) = \emptyset\\
+&Use(x) = \{x\}\\
+&Use(a_1 + a_2) = Use(a_1) \cup Use(a_2)\\
+&Use(\text{true}) = \emptyset\\
+&Use(\text{false}) = \emptyset\\
+&Use(a_1 = a_2) = Use(a_1) \cup Use(a_2)\\
+&Use(a_1 \leq a_2) = Use(a_1) \cup Use(a_2)\\
+&Use(\lnot b) = Use(b)\\
+&Use(b_1 \land b_2) = Use(b_1) \cup Use(b_2)\\
+&Use(x := a) = Use(a)\\
+&Use(\text{skip}) = \emptyset\\
+&Use(S_1; S_2) = Use(S_1) \cup Use(S_2)\\
+&Use(\text{if } b\text{ then }S_1\text{ else }S_2) = Use(b) \cup Use(S_1) \cup Use(S_2)\\
+&Use(\text{while }b\text{ do } S_1) = Use(b) \cup Use(S_1)
+\end{align*}
+\end{enumerate}
+
+\subsection{Exercise 87}
+\begin{enumerate}
+\item 
+\begin{align*}
+&Def(\text{if }a<b\text{ then }c:=d-y\text{ else }y:=e-x) = Def(c:=d-y) \cap Def(y:=e-x)\\
+&= \{c\} \cap \{y\} = \emptyset
+\end{align*}
+\begin{align*}
+&Use(\text{if }a<b\text{ then }c:=d-y\text{ else }y:=e-x) = Use(c:=d-y) \cup Def(y:=e-x)\\
+&= Use(a < b) \cup Use(d-y) \cup Use(e-x)\\
+&= Use(a) \cup Use(b) \cup Use(d) \cup Use(y) \cup Use(e) \cup Use(x)\\
+&= \{a\} \cup \{b\} \cup \{d\} \cup \{y\} \cup \{e\} \cup \{x\}\\
+&= \{a, b, d, e, x, y\}
+\end{align*}
+\end{enumerate}
+
+\subsection{Exercise 88}
+Natural operational semantics for the parrallel operator $ S_1 \parallel S_2 $:
+Non-determinism between the following two statements
+\begin{prooftree}
+\AxiomC{$ (S_1, \sigma) \rightarrow \sigma_1$}
+\AxiomC{$ (S_2, \sigma_1) \rightarrow \sigma_2$}
+\BinaryInfC{$ (S_1 \parallel S_2, \sigma) \rightarrow \sigma_2$}
+\end{prooftree}
+and
+\begin{prooftree}
+\AxiomC{$ (S_2, \sigma) \rightarrow \sigma_1$}
+\AxiomC{$ (S_1, \sigma_1) \rightarrow \sigma_2$}
+\BinaryInfC{$ (S_1 \parallel S_2, \sigma) \rightarrow \sigma_2$}
+\end{prooftree}
+
+\subsection{Exercise 89}
+\begin{enumerate}
+\item 
+\begin{prooftree}
+\AxiomC{$ (x:=x+1, \sigma_0) \rightarrow \sigma_1$}
+\AxiomC{$ (y:=y+1, \sigma_1) \rightarrow \sigma_2$}
+\BinaryInfC{$ (x:=x+1 \parallel y:=y+1, \sigma_0) \rightarrow \sigma_2$}
+\end{prooftree}
+With $ \sigma_1 = \sigma_0[x \mapsto 1 + 1] = [x \mapsto 2, y \mapsto 1] $ and $ \sigma_2 = \sigma_1[y \mapsto 1 + 1] = [x \mapsto 2, y \mapsto 2] $.\\
+\textbf{or}
+\begin{prooftree}
+\AxiomC{$ (y:=y+1, \sigma) \rightarrow \sigma_1$}
+\AxiomC{$ (x:=x+1, \sigma_1) \rightarrow \sigma_2$}
+\BinaryInfC{$ (x:=x+1 \parallel y:=y+1, \sigma) \rightarrow \sigma_2$}
+\end{prooftree}
+With $ \sigma_1 = \sigma_0[y \mapsto 1 + 1] = [x \mapsto 1, y \mapsto 2] $ and $ \sigma_2 = \sigma_1[x \mapsto 1 + 1] = [x \mapsto 2, y \mapsto 2] $.\\
+
+\item
+\begin{prooftree}
+\AxiomC{$ (x:=y+1, \sigma_0) \rightarrow \sigma_1$}
+\AxiomC{$ (y:=x+2, \sigma_1) \rightarrow \sigma_2$}
+\BinaryInfC{$ (x:=y+1 \parallel y:=x+1, \sigma_0) \rightarrow \sigma_2$}
+\end{prooftree}
+With $ \sigma_1 = \sigma_0[x \mapsto 1 + 1] = [x \mapsto 2, y \mapsto 1] $ and $ \sigma_2 = \sigma_1[y \mapsto 2 + 2] = [x \mapsto 2, y \mapsto 4] $.\\
+\textbf{or}
+\begin{prooftree}
+\AxiomC{$ (y:=x+2, \sigma) \rightarrow \sigma_1$}
+\AxiomC{$ (x:=y+1, \sigma_1) \rightarrow \sigma_2$}
+\BinaryInfC{$ (x:=y+1 \parallel y:=x+2, \sigma) \rightarrow \sigma_2$}
+\end{prooftree}
+With $ \sigma_1 = \sigma_0[y \mapsto 1 + 2] = [x \mapsto 1, y \mapsto 3] $ and $ \sigma_2 = \sigma_1[x \mapsto 3 + 1] = [x \mapsto 4, y \mapsto 3] $.\\
+\end{enumerate}
+
+\subsection{Exercise 90}
+If $ Def(S_1) \cap Def(S_2) = \emptyset \land Use(S_1) \cap Def(S_2) = \emptyset \land Use(S_2) \cap Def(S_1) = \emptyset $, then we can be sure that the obtained state $ \sigma_2 $ from executing $ S_1 \parallel S_2 $ is independent of the order of execution of $ S_1 $ and $ S_2 $.
+
+\subsection{Exercise 91}
+If $ Def(S_1) \cap Def(S_2) = \emptyset \land Use(S_1) \cap Def(S_2) = \emptyset \land Use(S_2) \cap Def(S_1) = \emptyset $:
+\begin{prooftree}
+\AxiomC{$ (S_1, \sigma) \rightarrow \sigma_1$}
+\AxiomC{$ (S_2, \sigma) \rightarrow \sigma_2$}
+\BinaryInfC{$ (S_1 \parallel S_2, \sigma) \rightarrow \sigma_3$}
+\end{prooftree}
+With $ \sigma_3(x) = 
+\begin{cases}
+\sigma_1(x) & if x \in Def(S_1)\\
+\sigma_2(x) & if x \in Def(S_2)\\
+\sigma(x) & otherwise
+\end{cases} $.
+
+\subsection{Exercise 92}
+\begin{enumerate}
+\item 
+\begin{prooftree}
+\AxiomC{$ (x:=x+1, \sigma_0) \rightarrow \sigma_1$}
+\AxiomC{$ (y:=y+1, \sigma_0) \rightarrow \sigma_2$}
+\BinaryInfC{$ (x:=x+1 \parallel y:=y+1, \sigma_0) \rightarrow \sigma_3$}
+\end{prooftree}
+With:
+\begin{align*}
+\sigma_1 = \sigma_0[x \mapsto 1 + 1] = [x \mapsto 2, y \mapsto 1]\\
+\sigma_2 = \sigma_0[y \mapsto 1 + 1] = [x \mapsto 1, y \mapsto 2]\\
+\sigma_3 = \begin{cases}
+\sigma_1(x) & if x \in Def(S_1)=\{x\}\\
+\sigma_2(x) & if x \in Def(S_2)=\{y\}\\
+\sigma_0(x) & otherwise
+\end{cases}
+\Rightarrow
+\sigma_3 = [x \mapsto 2, y \mapsto 2]
+\end{align*}
+
+\item Cannot construct the derivation tree because $ Use(x:=y+1) \cap Def(y:=x+2) = \{y\} \not= \emptyset$.
+\end{enumerate}
+
+\section{Series 10}
+\subsection{Exercise 96}
+
+\begin{tikzpicture}[
+  ->,
+  shorten >=2pt,
+  >=stealth,
+  node distance=1cm,
+  noname/.style={
+    rectangle,
+    minimum width=5em,
+    text width=6em,
+    minimum height=3em,
+    draw
+  }
+]
+
+  \node[noname] (1) [label=B1]                                  {1. a := 1\\2. b := 2};
+  \node[noname] (2) [below=of 1, label={left:B2}]                      {3. e := a+b\\4. d := c-a\\5. if a+b>0};
+  \node[noname] (3) [node distance=1cm and 3mm,below left=of 2, label=B3] {6. d := b*d\\8. d := a+b\\9. e := e+1};
+  \node[noname] (4) [right=of 3, label={left:B4}]                      {11. b := a+b\\12. e := c-a\\13. if c > 3};
+  \node[noname] (5) [node distance=2cm,below=of 4, label={left:B5}]    {14. c := a+b\\15. b := a-d};
+
+  \path (1) edge                   node {} (2)
+        (2) edge                   node {} (4)
+        (2) edge                   node {} (3)
+        (4) edge                   node {} (5);
+  \draw[out=-45, in=45, looseness=1.5] (4) to node[below]{} (2);
+  \draw[out=-135, in=135, looseness=2] (3) to node[below]{} (2);
+\end{tikzpicture}
+
+\subsection{Exercise 97}
+\begin{enumerate}
+\item $ In(B) = 
+\begin{cases} 
+\emptyset & \text{if } B=B1 \text{ in first step}\\
+\Sigma & \text{if } B\not= B1 \text{ in first step}\\
+\bigcap_{B' \in pred(B)} Out(B') & \text{with } Out(B') \text{ from last step}
+\end{cases}$\\
+$Out(B) = (In(B) \setminus Kill(B)) \cup Gen(B)$\\
+$\Sigma = \{\overbrace{a+b}^{e_1}, \overbrace{c-a}^{e_2}, \overbrace{b*d}^{e_3}, \overbrace{e+1}^{e_4}, \overbrace{a-d}^{e_5}\}$
+\item 
+\begin{tabularx}{\textwidth}{| l | X | X | X || X | X || X | X ||}
+\hline
+B & $Pred(B) $ & $Gen(B)$ & $Kill(B)$ & $In(B)$ & $Out(B)$ & $In(B)$ & $Out(B)$\\
+\hline
+B1 & $\emptyset$ & $\emptyset$ & $e_1, e_2, e_3, e_5$ & $\emptyset$ & $\emptyset$ & $\emptyset$ & $\emptyset$ \\
+\hline
+B2 & B1, B3, B4 & $e_1, e_2$ & $e_3, e_4, e_5$ & $\Sigma$ & $e_1, e_2$ & $\emptyset$ & $e_1, e_2$\\
+\hline
+B3 & B2 & $e_1$ & $e_3, e_4, e_5$ & $\Sigma$ & $e_1, e_2$ & $e_1, e_2$ & $e_1, e_2$\\
+\hline
+B4 & B2 & $e_2$ & $e_1, e_3, e_4$ & $\Sigma$ & $e_2, e_5$ & $e_1, e_2$ & $e_2$\\
+\hline
+B5 & B4 & $e_5$ & $e_1, e_2, e_3$ & $\Sigma$ & $e_4, e_5$ & $e_2, e_5$ & $e_5$\\
+\hline
+\end{tabularx}
+\begin{tabularx}{\textwidth}{| l || X | X ||}
+\hline
+B & $In(B)$ & $Out(B)$\\
+\hline
+B1 & $\emptyset$ & $\emptyset$\\
+\hline
+B2 & $\emptyset$ & $e_1, e_2$\\
+\hline
+B3 & $e_1, e_2$ & $e_1, e_2$\\
+\hline
+B4 & $e_1, e_2$ & $e_2$\\
+\hline
+B5 & $e_2$ & $e_5$\\
+\hline
+\end{tabularx}
+\\\\
+From this table, we can see the fix point for $In(B)$ as follows:\\
+$In(B1) = \emptyset$\\
+$In(B2) = \emptyset$\\
+$In(B3) = \{e_1, e_2\}$\\
+$In(B4) = \{e_1, e_2\}$\\
+$In(B5) = \{e_2\}$
+
+\item 
+\begin{itemize}
+\item Traverse all blocks of the CFG starting from the block with no predecessor and going in a breadth-first way.
+\item Check if any of the available expressions from the fix-point are used before their variables are assigned in that block. If this is the case, the expression can be replaced by a new variable.
+\item This variable is assigned by backtracking to the last use of the expression, then replacing the expression by the new variable both when it is first computed and in the block. If the last use of the expression has already been replaced by a new variable, then this variable can simply be used to replace the expression again in the block.
+\end{itemize}
+Here, for B1 and B2, we don't have any available expressions in the fix-point.\\
+For B3: $e_1$ is used and a and b are not assigned before the use of $e_1$. So we can replace this occurence of $e_1$ by a new variable $v_1$, which is assigned before statement 3. We also need to update the use of $e_1$ in statement 3.\\In B3, $e_2$ is not used.\\
+For B4: $e_1$ is used before a and b are assigned, so this can be replaced by the same variable $v_1$ than above.\\
+$e_2$ is used before c and a are assigned so we can replace $e_2$ by a new variable $v_2$, which is assigned before statement 4. The uses in statement 4. and 12. are then replaced by that variable.\\
+For B5: $e_2$ is not used.
+\\\\
+This gives the following new CFG:\\
+\begin{tikzpicture}[
+  ->,
+  shorten >=2pt,
+  >=stealth,
+  node distance=1cm,
+  noname/.style={
+    rectangle,
+    minimum width=5em,
+    text width=7em,
+    minimum height=3em,
+    draw
+  }
+]
+
+  \node[noname] (1) [label=B1]                                  {1. a := 1\\2. b := 2};
+  \node[noname] (2) [below=of 1, label={left:B2}]                      {3n. v1 := a+b\\3. e := v1\\4n. v2 := c-a\\4. d := v2\\5. if a+b>0};
+  \node[noname] (3) [node distance=1cm and 3mm,below left=of 2, label=B3] {6. d := b*d\\8. d := v1\\9. e := e+1};
+  \node[noname] (4) [right=of 3, label={left:B4}]                      {11. b := v1\\12. e := v2\\13. if c > 3};
+  \node[noname] (5) [node distance=2cm,below=of 4, label={left:B5}]    {14. c := a+b\\15. b := a-d};
+
+  \path (1) edge                   node {} (2)
+        (2) edge                   node {} (4)
+        (2) edge                   node {} (3)
+        (4) edge                   node {} (5);
+  \draw[out=-45, in=45, looseness=1.5] (4) to node[below]{} (2);
+  \draw[out=-135, in=135, looseness=2] (3) to node[below]{} (2);
+\end{tikzpicture}
+\end{enumerate}
+
+\subsection{Exercise 98}
+\subsubsection{Left CFG}
+\begin{enumerate}
+\item $ In(B) = 
+\begin{cases} 
+\emptyset & \text{if } B=B1 \text{ in first step}\\
+\Sigma & \text{if } B\not= B1 \text{ in first step}\\
+\bigcap_{B' \in pred(B)} Out(B') & \text{with } Out(B') \text{ from last step}
+\end{cases}$\\
+$Out(B) = (In(B) \setminus Kill(B)) \cup Gen(B)$\\
+$\Sigma = \{e_1, e_2, e_3, e_5, e_6, e_7\}$
+\item 
+\begin{tabularx}{\textwidth}{| l | X | X | X || X | X || X | X ||}
+\hline
+B & $Pred(B) $ & $Gen(B)$ & $Kill(B)$ & $In(B)$ & $Out(B)$ & $In(B)$ & $Out(B)$\\
+\hline
+B1 & $\emptyset$ & $e_1, e_2, e_5$ & $e_3, e_6, e_7$ & $\emptyset$ & $e_1, e_2, e_5$ & $\emptyset$ & $e_1, e_2, e_5$ \\
+\hline
+B2 & B1, B3 & $e_3, e_5$ & $e_6, e_7$ & $\Sigma$ & $e_1, e_2, e_3, e_5$ & $e_1, e_5$ & $e_1, e_3, e_5$\\
+\hline
+B3 & B2 & $e_5$ & $e_2, e_3$ & $\Sigma$ & $e_1, e_5, e_6, e_7$ & $e_1, e_2, e_3, e_5$ & $e_1, e_5$\\
+\hline
+B4 & B2 & $e_1, e_3$ & $e_5, e_6$ & $\Sigma$ & $e_1, e_2, e_3, e_7$ & $e_1, e_2, e_3, e_5$ & $e_1, e_2, e_3$\\
+\hline
+\end{tabularx}
+\begin{tabularx}{\textwidth}{| l || X | X || X | X ||}
+\hline
+B & $In(B)$ & $Out(B)$ & $In(B)$ & $Out(B)$\\
+\hline
+B1 & $\emptyset$ & $e_1, e_2, e_5$ & $\emptyset$ &\\
+\hline
+B2 & $e_1, e_5$ & $e_1, e_3, e_5$ & $e_1, e_5$ &\\
+\hline
+B3 & $e_1, e_3, e_5$ & $e_1, e_5$ & $e_1, e_3, e_5$ &\\
+\hline
+B4 & $e_1, e_3, e_5$ & $e_1, e_3$ & $e_1, e_3, e_5$ &\\
+\hline
+\end{tabularx}
+\\\\
+From this table, we can see the fix point for $In(B)$ as follows:\\
+$In(B1) = \emptyset$\\
+$In(B2) = \{e_1, e_5\}$\\
+$In(B3) = \{e_1, e_3, e_5\}$\\
+$In(B4) = \{e_1, e_3, e_5\}$
+\item Using the algorithm to replace available expressions, we get:\\
+For B1: No expressions can be replaced because none are available from the fix-point.\\
+For B2: $e_5$ can be replaced by a new variable $v_5$ (because c is not assigned before use of $e_5$).\\
+For B3: $e_5$ can be replaced by the variable $v_5$ (because c is not assigned before use of $e_5$ and last use of $e_5$ was replaced by $v_5$).\\
+For B4: $e_1$ can be replaced by a new variable $v_1$ (because m is not assigned before use of $e_1$).\\
+For B4: $e_3$ can be replaced by a new variable $v_3$ (because a is not assigned before use of $e_3$).\\
+For B4: $e_5$ can be replaced by $v_5$ (because c is not assigned before use of $e_5$ and last use of $e_5$ was replaced by $v_5$).
+\\\\
+This gives the following new CFG:\\
+\begin{tikzpicture}[
+  ->,
+  shorten >=2pt,
+  >=stealth,
+  node distance=1cm,
+  noname/.style={
+    rectangle,
+    minimum width=5em,
+    text width=7em,
+    minimum height=3em,
+    draw
+  }
+]
+
+  \node[noname] (1) [label=B1]                                  {v1 := m - 1;\\t1 := v1;\\t2 := m + n;\\k := a + 1;\\a := u1;\\v5 := 2 * c;\\e := v5;};
+  \node[noname] (2) [below=of 1, label={left:B2}]                      {b := v5;\\t1 := t1 + 1;\\t2 := t2 - 1;\\v3 := a + 1;\\d >= v3};
+  \node[noname] (3) [node distance=1cm and 3mm,below left=of 2, label=B3] {a := u2;\\d := v5;\\n := n + m;};
+  \node[noname] (4) [right=of 3, label={left:B4}]                      {t1 := v1;\\b := v5;\\c := v3;};
+  
+  \path (1) edge                   node {} (2)
+        (2) edge                   node {} (4)
+        (2) edge                   node {} (3);
+  \draw[out=-165, in=165, looseness=1.5] (3) to node[below]{} (2);
+\end{tikzpicture}
+\end{enumerate}
+\subsubsection{Right CFG}
+This part of the exercise was not done in class !
+\begin{enumerate}
+\item $ In(B) = 
+\begin{cases} 
+\emptyset & \text{if } B=B1 \text{ in first step}\\
+\Sigma & \text{if } B\not= B1 \text{ in first step}\\
+\bigcap_{B' \in pred(B)} Out(B') & \text{with } Out(B') \text{ from last step}
+\end{cases}$\\
+$Out(B) = (In(B) \setminus Kill(B)) \cup Gen(B)$\\
+$\Sigma = \{\overbrace{m-1}^{e_1}, \overbrace{4*n}^{e_2}, \overbrace{a[t1]}^{e_3}, \overbrace{i+1}^{e_4}, \overbrace{4*i}^{e_5}, \overbrace{a[t2]}^{e_6}, \overbrace{j-1}^{e_7}, \overbrace{a[t4]}^{e_8}\}$
+\item 
+\begin{tabularx}{\textwidth}{| l | X | X | X || X | X || X | X ||}
+\hline
+B & $Pred(B) $ & $Gen(B)$ & $Kill(B)$ & $In(B)$ & $Out(B)$ & $In(B)$ & $Out(B)$\\
+\hline
+B1 & $\emptyset$ & $e_1, e_2, e_3$ & $e_3, e_4, e_5, e_7$ & $\emptyset$ & $e_1, e_2, e_3$ & $\emptyset$ & $e_1, e_2, e_3$ \\
+\hline
+B2 & B1, B3, B4 & $e_3, e_5, e_6$ & $e_4, e_5, e_6$ & $\Sigma$ & $\Sigma \setminus \{e_4\}$ & $e_1, e_2, e_3$ & $e_1, e_2, e_3, e_5, e_6$ \\
+\hline
+B3 & B2 & $e_1, e_7$ & $e_7$ & $\Sigma$ & $\Sigma$ & $\Sigma \setminus \{e_4\}$ & $\Sigma \setminus \{e_4\}$ \\
+\hline
+B4 & B3 & $e_1, e_3, e_5$ & $\emptyset$ & $\Sigma$ & $\Sigma$ & $\Sigma$ & $\Sigma$ \\
+\hline
+B5 & B3 & $e_5, e_8$ & $\emptyset$ & $\Sigma$ & $\Sigma$ & $\Sigma$ & $\Sigma$ \\
+\hline
+\end{tabularx}
+\begin{tabularx}{\textwidth}{| l || X | X || X | X || X |}
+\hline
+B & $In(B)$ & $Out(B)$ & $In(B)$ & $Out(B)$ & $In(B)$\\
+\hline
+B1 & $\emptyset$ & $e_1, e_2, e_3$ & $\emptyset$ & $e_1, e_2, e_3$ & $\emptyset$\\
+\hline
+B2 & $e_1, e_2, e_3$ & $e_1, e_2, e_3, e_5, e_6$ & $e_1, e_2, e_3$ & $e_1, e_2, e_3, e_5, e_6$ & $e_1, e_2, e_3$\\
+\hline
+B3 & $e_1, e_2, e_3, e_5, e_6$ & $\Sigma \setminus \{e_4, e_8\}$ & $e_1, e_2, e_3, e_5, e_6$ & $\Sigma \setminus \{e_4, e_8\}$ & $e_1, e_2, e_3, e_5, e_6$\\
+\hline
+B4 & $\Sigma \setminus \{e_4\}$ & $\Sigma \setminus \{e_4\}$ & $\Sigma \setminus \{e_4, e_8\}$ & $\Sigma \setminus \{e_4, e_8\}$ & $\Sigma \setminus \{e_4, e_8\}$\\
+\hline
+B5 & $\Sigma \setminus \{e_4\}$ & $\Sigma \setminus \{e_4\}$ & $\Sigma \setminus \{e_4, e_8\}$ & $\Sigma \setminus \{e_4\}$ & $\Sigma \setminus \{e_4, e_8\}$\\
+\hline
+\end{tabularx}
+\\\\
+From this table, we can see the fix point for $In(B)$ as follows:\\
+$In(B1) = \emptyset$\\
+$In(B2) = \{e_1, e_2, e_3\}$\\
+$In(B3) = \{e_1, e_2, e_3, e_5, e_6\}$\\
+$In(B4) = \{e_1, e_2, e_3, e_5, e_6, e_7\}$\\
+$In(B5) = \{e_1, e_2, e_3, e_5, e_6, e_7\}$
+\item Using the algorithm to replace available expressions, we get:\\
+For B1: No expressions can be replaced.\\
+For B2: $e_3$ can be replaced by a new variable $v_3$ (because t1 is not assigned before use of $e_3$).\\
+For B3: $e_1$ can be replaced by a new variable $v_1$ (because m is not assigned before use of $e_1$).\\
+For B4: $e_1$ can be replaced by the variable $v_1$ (because m is not assigned before use of $e_1$ and last use of $e_1$ was replaced by $v_1$).\\
+For B4: $e_3$ can be replaced by the variable $v_3$ (because t1 is not assigned before use of $e_3$ and last use of $e_3$ was replaced by $v_3$).\\
+For B4: $e_5$ can be replaced by a new variable $v_5$ (because i is not assigned before use of $e_5$).\\
+For B5: $e_5$ can be replaced by the variable $v_5$ (because i is not assigned before use of $e_5$ and last use of $e_5$ was replaced by $v_5$).\\\\
+We note that $e_6$=a[t2] is available in B3, which could be used in the assignment 'a[t2] = m - 1' (where a[t2] first has to be calculated before making the assignment) but we did not see how to replace array locations in the lecture. The basic idea would be to replace a[t2] by l6 and then use this location in the assignment instead of a[t2]. I did not add this here.
+\\\\
+This gives the following new CFG:\\
+\scalebox{0.9}{\begin{tikzpicture}[
+  ->,
+  shorten >=2pt,
+  >=stealth,
+  node distance=1cm,
+  noname/.style={
+    rectangle,
+    minimum width=5em,
+    text width=7em,
+    minimum height=3em,
+    draw
+  }
+]
+
+  \node[noname] (1) [label=B1]                      {v1 := m - 1;\\i := v1;\\j := n;\\t1 := 4 * n;\\v3 := a[t1];\\v := v3;};
+  \node[noname] (2) [below=of 1, label={right:B2}]  {i := i + 1;\\v5 := 4 * i;\\t2 := v5;\\t3 := a[t2];\\t3 >= v3};
+  \node[noname] (3) [below=of 2, label={right:B3}]  {j := j - 1;\\a[t2] := v1;\\i < j - 1};
+  \node[noname] (4) [below=of 3, label={left:B4}]     {t7 := v3;\\t8 := v1;\\t9 := v5;};
+  \node[noname] (5) [right=of 4, label=B5]          {t10 := v5;\\t11 := a[t4];};
+  
+  \path (1) edge                   node {} (2)
+        (2) edge                   node {} (3)
+        (3) edge                   node {} (4)
+        (3) edge                   node {} (5);
+  \draw[out=-165, in=165, looseness=1.5] (3) to node[below]{} (2);
+  \draw[out=-165, in=165, looseness=1.5] (4) to node[below]{} (2);
+\end{tikzpicture}}
+\end{enumerate}
+
+\subsection{Exercise 100}
+\begin{enumerate}
+\item\ \\
+1. if d $\leq$ 0 goto 12\\
+2. a := b+c\\
+3. d := d-b\\
+4. e := a+f\\
+5. if e > 0 goto 8\\
+6. e := a-c\\
+7. goto 10\\
+8. f := a-d\\
+9. b := d+f\\
+10. b:= a+c\\
+11. goto 1\\
+12. end\\
+\item From the 3-address code above, we generate the following CFG:\\
+\scalebox{0.9}{\begin{tikzpicture}[
+  ->,
+  shorten >=2pt,
+  >=stealth,
+  node distance=1cm,
+  noname/.style={
+    rectangle,
+    minimum width=5em,
+    text width=6em,
+    minimum height=3em,
+    draw
+  }
+]
+
+  \node[noname] (1) [label=B1]                     {1. if d $\leq$ 0};
+  \node[noname] (2) [below=of 1, label={left:B2}]    {2. a := b+c\\3. d := d-b\\4. e := a+f\\5. if e > 0};
+  \node[noname] (3) [below left=of 2, label=B3]    {6. e := a-c};
+  \node[noname] (4) [below right=of 2, label=B4]         {8. f := a-d\\9. b := d+f};
+  \node[noname] (5) [below=of 3, label={right:B5}]         {10. b:= a+c};
+  \node[noname] (6) [below right=of 1, label={right:B6}]         {12. end};
+
+  \path (1) edge                   node {} (2)
+        (1) edge                   node {} (6)
+        (2) edge                   node {} (3)
+        (2) edge                   node {} (4)
+        (3) edge                   node {} (5)
+        (4) edge                   node {} (5);
+  \draw[out=-165, in=165] (5) to node[below]{} (1);
+\end{tikzpicture}}
+\item $ \Sigma=\{a,b,c,d,e,f\} $\\
+$ In(B) = (Out(B) \setminus Kill(B)) \cup Gen(B)$\\
+$ Out(B) = 
+\begin{cases}
+\emptyset & \text{in first step}\\
+\bigcup_{B' \in Succ(B)} In(B') & \text{with } In(B') \text{ from last step}
+\end{cases}
+$
+\item
+\begin{tabularx}{\textwidth}{| l | X | X | X || X | X || X | X ||}
+\hline
+B & $Succ(B) $ & $Gen(B)$ & $Kill(B)$ & $Out(B)$ & $In(B)$ & $Out(B)$ & $In(B)$\\
+\hline
+B1 & B2, B6 & d & $\emptyset$ & $\emptyset$ & d & b,c,d,f & b,c,d,f \\
+\hline
+B2 & B3, B4 & b,c,d,f & a,d,e & $\emptyset$ & b,c,d,f & a,c,d & b,c,d,f \\
+\hline
+B3 & B5 & a,c & e & $\emptyset$ & a,c & a,c & a,c \\
+\hline
+B4 & B5 & a,d & b,f & $\emptyset$ & a,d & a,c & a,c,d \\
+\hline
+B5 & B1 & a,c & b & $\emptyset$ & a,c & d & a,c,d\\
+\hline
+B6 & $\emptyset$ & $\emptyset$ & $\emptyset$ & $\emptyset$ & $\emptyset$ & $\emptyset$ & $\emptyset$ \\
+\hline
+\end{tabularx}
+\begin{tabularx}{\textwidth}{| l || X | X || X | X || X | X || X |}
+\hline
+B & $Out(B)$ & $In(B)$ & $Out(B)$ & $In(B)$ & $Out(B)$ & $In(B)$ & $Out(B)$\\
+\hline
+B1 & b,c,d,f & b,c,d,f & b,c,d,f & b,c,d,f & b,c,d,f & b,c,d,f & b,c,d,f\\
+\hline
+B2 & a,c,d & b,c,d,f & a,c,d & b,c,d,f & a,c,d,f & b,c,d,f & a,c,d,f\\
+\hline
+B3 & a,c,d & a,c,d & a,c,d,f & a,c,d,f & a,c,d,f & a,c,d,f & a,c,d,f\\
+\hline
+B4 & a,c,d & a,c,d & a,c,d,f & a,c,d & a,c,d,f & a,c,d & a,c,d,f\\
+\hline
+B5 & b,c,d,f & a,c,d,f & b,c,d,f & a,c,d,f & b,c,d,f & a,c,d,f & b,c,d,f\\
+\hline
+B6 & $\emptyset$ & $\emptyset$ & $\emptyset$ & $\emptyset$ & $\emptyset$ & $\emptyset$ & $\emptyset$\\
+\hline
+\end{tabularx}
+\\\\
+From this table, we can see the fix point for $Out(B)$ as follows:\\
+$Out(B1) = \{b, c, d, f\}$\\
+$Out(B2) = \{a, c, d, f\}$\\
+$Out(B3) = \{a, c, d, f\}$\\
+$Out(B4) = \{a, c, d, f\}$\\
+$Out(B5) = \{b, c, d, f\}$\\
+$Out(B6) = \emptyset$
+
+\item The algorithm goes as follows:
+\begin{itemize}
+\item Start with the end of a block and its corresponding out-set of active variables $Out(B)$.
+\item Go through each statement of the block from last to first (and keep track of the set of active variables for each statement).
+\item For each statement, if an assigned variable is not active, suppress the statement. Then, remove the assigned variables and afterwards add all used variables to the set of active variables.
+\end{itemize}
+For B1 and B6, nothing is assigned so nothing can be suppressed.
+\\\\
+For B2:\\
+\begin{tabularx}{\textwidth}{X X X X}
+Statement $S$ & $Out(S)$ & $Out_{new}(S)$ & Remove?\\
+5. if e > 0 & $Out(B2)$ & a,c,d,e,f & No because nothing is assigned\\
+4. e := a+f & a,c,d,e,f & a,c,d,f & No because e is active\\
+3. d := d-b & a,c,d,f & a,b,c,d,f & No because d is active\\
+2. a := b+c & a,b,c,d,f & b,c,d,f & No because a is active\\
+\end{tabularx}
+\\\\
+For B3:\\
+\begin{tabularx}{\textwidth}{X X X X}
+Statement $S$ & $Out(S)$ & $Out_{new}(S)$ & Remove?\\
+6. e := a-c & $Out(B3)$ & a,c,d,f & Yes (e is not active after this)\\
+\end{tabularx}
+\\\\
+For B4:\\
+\begin{tabularx}{\textwidth}{X X X X}
+Statement $S$ & $Out(S)$ & $Out_{new}(S)$ & Remove?\\
+9. b := d+f & $Out(B4)$ & a,c,d,f & Yes (b is not active after this)\\
+8. f := a-d & a,c,d,f & a,c,d & No because f is active\\
+\end{tabularx}
+For B5:\\
+\begin{tabularx}{\textwidth}{X X X X}
+Statement $S$ & $Out(S)$ & $Out_{new}(S)$ & Remove?\\
+10. b := a+c & $Out(B5)$ & a,c,d,f & No, because b is active\\
+\end{tabularx}
+\\\\
+Suppressing the statements updates the CFG as follows:\\
+\scalebox{0.9}{\begin{tikzpicture}[
+  ->,
+  shorten >=2pt,
+  >=stealth,
+  node distance=1cm,
+  noname/.style={
+    rectangle,
+    minimum width=5em,
+    text width=6em,
+    minimum height=3em,
+    draw
+  }
+]
+
+  \node[noname] (1) [label=B1]                     {1. if d $\leq$ 0};
+  \node[noname] (2) [below=of 1, label={left:B2}]    {2. a := b+c\\3. d := d-b\\4. e := a+f\\5. if e > 0};
+  \node[noname] (3) [below left=of 2, label=B3]    {\sout{6. e := a-c}};
+  \node[noname] (4) [below right=of 2, label=B4]         {8. f := a-d\\\sout{9. b := d+f}};
+  \node[noname] (5) [below=of 3, label={right:B5}]         {10. b:= a+c};
+  \node[noname] (6) [below right=of 1, label={right:B6}]         {12. end};
+
+  \path (1) edge                   node {} (2)
+        (1) edge                   node {} (6)
+        (2) edge                   node {} (3)
+        (2) edge                   node {} (4)
+        (3) edge                   node {} (5)
+        (4) edge                   node {} (5);
+  \draw[out=-165, in=165] (5) to node[below]{} (1);
+\end{tikzpicture}}
+\\This modifies the CFG into the following new CFG:\\
+\scalebox{0.9}{\begin{tikzpicture}[
+  ->,
+  shorten >=2pt,
+  >=stealth,
+  node distance=1cm,
+  noname/.style={
+    rectangle,
+    minimum width=5em,
+    text width=6em,
+    minimum height=3em,
+    draw
+  }
+]
+
+  \node[noname] (1) [label=B1]                     {1. if d $\leq$ 0};
+  \node[noname] (2) [below=of 1, label={left:B2}]    {2. a := b+c\\3. d := d-b\\4. e := a+f\\5. if e > 0};
+  \node[noname] (4) [below right=of 2, label=B4]         {8. f := a-d};
+  \node[noname] (5) [below left=of 4, label={right:B5}]         {10. b:= a+c};
+  \node[noname] (6) [below right=of 1, label={right:B6}]         {12. end};
+
+  \path (1) edge                   node {} (2)
+        (1) edge                   node {} (6)
+        (2) edge                   node {} (5)
+        (2) edge                   node {} (4)
+        (4) edge                   node {} (5);
+  \draw[out=-165, in=165] (5) to node[below]{} (1);
+\end{tikzpicture}}
+\end{enumerate}
+
+\subsection{Exercise 101}
+\subsubsection{Left CFG}
+\begin{enumerate}
+\item See Exercise 100 above
+\item 
+\begin{tabularx}{\textwidth}{| l | X | X | X || X | X || X | X ||}
+\hline
+B & $Succ(B) $ & $Gen(B)$ & $Kill(B)$ & $Out(B)$ & $In(B)$ & $Out(B)$ & $In(B)$\\
+\hline
+B1 & B2 & u1, m, n & a, j, i & $\emptyset$ & u1, m, n & j, i & u1, m, n \\
+\hline
+B2 & B3, B4 & j, i & j, i & $\emptyset$ & j, i & u2, u3 & u2, u3, j, i \\
+\hline
+B3 & B2 & u2 & a & $\emptyset$ & u2 & j, i & j, i, u2 \\
+\hline
+B4 & B2 & u3 & i & $\emptyset$ & u3 & j, i & j, u3 \\
+\hline
+\end{tabularx}
+\begin{tabularx}{\textwidth}{| l || X | X || X |}
+\hline
+B & $Out(B)$ & $In(B)$ & $Out(B)$\\
+\hline
+B1 & u2, u3, j, i & u1, u2, u3, m, n & u2, u3, j, i\\
+\hline
+B2 & j, i, u2, u3 & u2, u3, j, i & u2, u3, j, i\\
+\hline
+B3 & u2, u3, j, i & u2, u3, j, i & u2, u3, j, i\\
+\hline
+B4 & u2, u3, j, i & u2, u3, j & u2, u3, j, i\\
+\hline
+\end{tabularx}
+\\\\
+From this table, we can see the fix point for $Out(B)$ as follows:\\
+$Out(B1) = \{u2, u3, j, i\}$\\
+$Out(B2) = \{u2, u3, j, i\}$\\
+$Out(B3) = \{u2, u3, j, i\}$\\
+$Out(B4) = \{u2, u3, j, i\}$\\
+\item 
+For B2:\\
+\begin{tabularx}{\textwidth}{X X X X}
+Statement $S$ & $Out(S)$ & $Out_{new}(S)$ & Remove?\\
+j := j-1 & $Out(B2)$ & $Out(B2)$ & No because j is active\\
+i := i+1 & $Out(B2)$ & $Out(B2)$ & No because i is active\\
+\end{tabularx}
+\\\\
+For B3:\\
+\begin{tabularx}{\textwidth}{X X X X}
+Statement $S$ & $Out(S)$ & $Out_{new}(S)$ & Remove?\\
+a := u2 & $Out(B3)$ & $Out(B3)$ & Yes (a is not active after this)\\
+\end{tabularx}
+\\\\
+For B4:\\
+\begin{tabularx}{\textwidth}{X X X X}
+Statement $S$ & $Out(S)$ & $Out_{new}(S)$ & Remove?\\
+i := u3 & $Out(B4)$ & u2, u3, j & No, because i is active\\
+\end{tabularx}
+\\\\
+For B1:\\
+\begin{tabularx}{\textwidth}{X X X X}
+Statement $S$ & $Out(S)$ & $Out_{new}(S)$ & Remove?\\
+a := u1 & $Out(B1)$ & u1, u2, u3, j, i & Yes (a is not active after this)\\
+j := n & u1, u2, u3, j, i & u1, u2, u3, i, n & No, because j is active\\
+i := m-1 & u1, u2, u3, i, n & u1, u2, u3, n, m & No, because i is active
+\end{tabularx}
+\begin{tikzpicture}[
+  ->,
+  shorten >=2pt,
+  >=stealth,
+  node distance=1cm,
+  noname/.style={
+    rectangle,
+    minimum width=5em,
+    text width=6em,
+    minimum height=3em,
+    draw
+  }
+]
+
+  \node[noname] (1) [label=B1]                     {i := m-1;\\j := n;\\\sout{a := u1;}};
+  \node[noname] (2) [below=of 1, label={left:B2}]    {i := i+1;\\j := j-1;};
+  \node[noname] (3) [below left=of 2, label=B3]         {\sout{a := u2;}};
+  \node[noname] (4) [below right=of 2, label=B4]         {i := u3;};
+
+  \path (1) edge                   node {} (2)
+        (2) edge                   node {} (3)
+        (2) edge                   node {} (4);
+  \draw[out=-165, in=165, looseness=1.5] (3) to node[below]{} (2);
+  \draw[out=-15, in=15, looseness=1.5] (4) to node[below]{} (2);
+\end{tikzpicture}
+\\This modifies the CFG into the following new CFG:\\
+\begin{tikzpicture}[
+  ->,
+  shorten >=2pt,
+  >=stealth,
+  node distance=1cm,
+  noname/.style={
+    rectangle,
+    minimum width=5em,
+    text width=6em,
+    minimum height=3em,
+    draw
+  }
+]
+
+  \node[noname] (1) [label=B1]                     {i := m-1;\\j := n;};
+  \node[noname] (2) [below=of 1, label={left:B2}]    {i := i+1;\\j := j-1;};
+  \node[noname] (4) [below right=of 2, label=B4]         {i := u3;};
+
+  \path (1) edge                   node {} (2)
+        (2) edge                   node {} (4);
+  \draw[out=-15, in=15, looseness=1.5] (4) to node[below]{} (2);
+\end{tikzpicture}
+\end{enumerate}
+
+\subsubsection{Middle CFG}
+\begin{enumerate}
+\item See Exercise 100 above
+\item 
+\begin{tabularx}{\textwidth}{| l | X | X | X || X | X || X | X ||}
+\hline
+B & $Succ(B) $ & $Gen(B)$ & $Kill(B)$ & $Out(B)$ & $In(B)$ & $Out(B)$ & $In(B)$\\
+\hline
+B1 & B2 & $\emptyset$ & a & $\emptyset$ & $\emptyset$ & c, a & c \\
+\hline
+B2 & B3 & c, a & a, c, b & $\emptyset$ & c, a & a & c, a \\
+\hline
+B3 & B2, B4 & a & $\emptyset$ & $\emptyset$ & a & c, a, b & c, a, b\\
+\hline
+B4 & $\emptyset$ & b & $\emptyset$ & $\emptyset$ & b & $\emptyset$ & b \\
+\hline
+\end{tabularx}
+\begin{tabularx}{\textwidth}{| l || X | X || X |}
+\hline
+B & $Out(B)$ & $In(B)$ & $Out(B)$\\
+\hline
+B1 & c, a & c & c, a\\
+\hline
+B2 & c, a, b & c, a & c, a, b\\
+\hline
+B3 & c, a, b & c, a, b & c, a, b\\
+\hline
+B4 & $\emptyset$ & b & $\emptyset$\\
+\hline
+\end{tabularx}
+\\\\
+From this table, we can see the fix point for $Out(B)$ as follows:\\
+$Out(B1) = \{c, a\}$\\
+$Out(B2) = \{c, a, b\}$\\
+$Out(B3) = \{c, a, b\}$\\
+$Out(B4) = \emptyset$\\
+\item 
+For B3 and B4, nothing is assigned so nothing can be suppressed.\\
+For B2:\\
+\begin{tabularx}{\textwidth}{X X X X}
+Statement $S$ & $Out(S)$ & $Out_{new}(S)$ & Remove?\\
+a := b*2 & $Out(B2)$ & c, b & No because a is active\\
+c := c+b & c, b & c, b & No because c is active\\
+b := a+1 & c, b & c, a & No because b is active
+\end{tabularx}
+\\\\
+For B1:\\
+\begin{tabularx}{\textwidth}{X X X X}
+Statement $S$ & $Out(S)$ & $Out_{new}(S)$ & Remove?\\
+a := 0 & $Out(B1)$ & c & No, because a is active\\
+\end{tabularx}
+\\\\
+Thus, the CFG remains exactly the same, nothing is suppressed.
+\end{enumerate}
+
+\subsection{Exercise 102}
+\subsubsection{Left CFG}
+$ \textbf{Var} = \{x, y, z, t\} $\\
+There is no cycle, so the $In(B)$ and $Out(B)$ sets can be computed directly:\\
+$ In(B1) = \lambda x . \bot$\\
+$ Out(B1) = [x \mapsto 5, y \mapsto 0, z \mapsto \bot, t \mapsto \bot]$\\
+$ In(B2) = Out(B1)$\\
+$ Out(B2) = [z \mapsto 5, x \mapsto 5, y \mapsto 0, t \mapsto \bot]$\\
+$ In(B3) = Out(B1)$\\
+$ Out(B3) = [z \mapsto 5, x \mapsto 5, y \mapsto 0]$\\
+$ In(B4) = Out(B2) \sqcup Out(B3) = [z \mapsto 5, x \mapsto 5, y \mapsto 0, t \mapsto \bot]$\\
+$ Out(B4) = [z \mapsto 5, x \mapsto 5, y \mapsto 0, t \mapsto 10] $\\
+\begin{tikzpicture}[
+  ->,
+  shorten >=2pt,
+  >=stealth,
+  node distance=1cm,
+  noname/.style={
+    rectangle,
+    minimum width=5em,
+    text width=6em,
+    minimum height=3em,
+    draw
+  }
+]
+
+  \node[noname] (1) [label=B1]                     {x := 5;\\y := 0;};
+  \node[noname] (2) [below left=of 1, label={B2}]    {z := x+y;\\x := z;};
+  \node[noname] (3) [below right=of 1, label={B3}]    {z := x-y;\\x := z;};
+  \node[noname] (4) [below right=of 2, label=B4]         {t := z+x;};
+
+  \path (1) edge                   node {} (2)
+        (1) edge                   node {} (3)
+        (2) edge                   node {} (4)
+        (3) edge                   node {} (4);
+\end{tikzpicture}
+
+\subsubsection{Right CFG}
+$ \textbf{Var} = \{x, y, z, t\} $\\
+There is no cycle, so the $In(B)$ and $Out(B)$ sets can be computed directly:\\
+$ In(B1) = \lambda x . \bot$\\
+$ Out(B1) = [x \mapsto 5, y \mapsto 1, z \mapsto \bot, t \mapsto \bot]$\\
+$ In(B2) = Out(B1)$\\
+$ Out(B2) = [z \mapsto 4, x \mapsto 4, y \mapsto 1, t \mapsto \bot]$\\
+$ In(B3) = Out(B1)$\\
+$ Out(B3) = [z \mapsto 6, x \mapsto 6, y \mapsto 1]$\\
+$ In(B4) = Out(B2) \sqcup Out(B3) = [z \mapsto \top, x \mapsto \top, y \mapsto 1, t \mapsto \bot]$\\
+$ Out(B4) = [z \mapsto \top, x \mapsto \top, y \mapsto 1, t \mapsto \top] $\\
+\begin{tikzpicture}[
+  ->,
+  shorten >=2pt,
+  >=stealth,
+  node distance=1cm,
+  noname/.style={
+    rectangle,
+    minimum width=5em,
+    text width=6em,
+    minimum height=3em,
+    draw
+  }
+]
+
+  \node[noname] (1) [label=B1]                     {x := 5;\\y := 1;};
+  \node[noname] (2) [below left=of 1, label={B2}]    {z := x-y;\\x := z;};
+  \node[noname] (3) [below right=of 1, label={B3}]    {z := x+y;\\x := z;};
+  \node[noname] (4) [below right=of 2, label=B4]         {t := z+x;};
+
+  \path (1) edge                   node {} (2)
+        (1) edge                   node {} (3)
+        (2) edge                   node {} (4)
+        (3) edge                   node {} (4);
+\end{tikzpicture}
+
+\subsection{Exercise 103}
+\subsubsection{Left CFG}
+$ \textbf{Var} = \{x, y, i, z, t\}$\\
+$ In(B) = \begin{cases}
+\lambda x.\bot & \text{in the first step}\\
+\bigsqcup_{B' \in Pred(B)} Out(B') & \text{otherwise}
+\end{cases} $\\
+$ Out(B) = F_{B}(In(B)) $ where $ F_{B} $ is the transfer function of constant propagation.\\
+\begin{tabularx}{\textwidth}{| l | X || X | X || X | X ||}
+\hline
+B & $Pred(B) $ & $In(B)$ & $Out(B)$ & $In(B)$ & $Out(B)$\\
+\hline
+B1 & $\emptyset$ & $\lambda x . \bot$ & $x~\mapsto~4$, $y~\mapsto~0$, $i~\mapsto~0$ & $\lambda x . \bot$ & $x~\mapsto~4$, $y~\mapsto~0$, $i~\mapsto~0$ \\
+\hline
+B2 & B1, B2 & $\lambda x . \bot$ & $i~\mapsto~1$ & $x~\mapsto~4$, $y~\mapsto~0$, $i~\mapsto~\top$ & $z~\mapsto~4$, $t~\mapsto~4$, $i~\mapsto~\top$, $x~\mapsto~4$, $y~\mapsto~0$\\
+\hline
+\end{tabularx}
+\begin{tabularx}{\textwidth}{| l || X | X || X |}
+\hline
+B & $In(B)$ & $Out(B)$ & $In(B)$\\
+\hline
+B1 & $\lambda x . \bot$ & $x~\mapsto~4$, $y~\mapsto~0$, $i~\mapsto~0$ & $\lambda x . \bot$\\
+\hline
+B2 & $x~\mapsto~4$, $y~\mapsto~0$, $i~\mapsto~\top$, $z~\mapsto~4$, $t~\mapsto~4$ & $x~\mapsto~4$, $y~\mapsto~0$, $i~\mapsto~\top$, $z~\mapsto~4$, $t~\mapsto~4$ & $x~\mapsto~4$, $y~\mapsto~0$, $i~\mapsto~\top$, $z~\mapsto~4$, $t~\mapsto~4$\\
+\hline
+\end{tabularx}
+
+\subsubsection{Right CFG}
+
+\section{Series 11}
+\subsection{Exercise 104}
+\begin{enumerate}
+\item 
+\begin{tabularx}{\textwidth}{| l | X |}
+\hline
+Procedure & Shifting\\
+\hline
+main & $x \rightarrow 4$ \newline $y \rightarrow 8$ \newline $z \rightarrow 12$\\
+\hline
+\end{tabularx}
+\item 
+\begin{algorithmic}
+\State ADD SP, SP, \#-4
+\State ST FP, [SP]
+\State ADD FP, SP, \#0
+\State ADD SP, SP, \#-12
+\State 
+\State ADD $R_1, R_0$, \#5
+\State ST $R_1$, [FP - 4]
+\State ADD $R_1, R_0$, \#1
+\State ST $R_1$, [FP - 8]
+\State LD $R_1$, [FP - 4]
+\State LD $R_2$, [FP - 8]
+\State ADD $R_3, R_1, R_2$
+\State ST $R_3$, [FP - 12]
+\State 
+\State ADD SP, FP, \#0
+\State LD FP, [SP]
+\State ADD SP, SP, \#4
+\end{algorithmic}
+\end{enumerate}
+
+\subsection{Exercise 105}
+\begin{algorithmic}
+\State prologue(8)
+\State lb:
+\State LD $R_1$, [FP - 4]
+\State LD $R_2$, [FP - 8]
+\State CMP $R_1, R_2$
+\State BEQ ltrue
+\State BA lfalse
+\State lfalse:
+\State LD $R_1$, [FP - 4]
+\State LD $R_2$, [FP - 8]
+\State CMP $R_1, R_2$
+\State BGT ltrue2
+\State BA lfalse2
+\State ltrue2:
+\State LD $R_1$, [FP - 4]
+\State LD $R_2$, [FP - 8]
+\State SUB $R_3, R_1, R_2$
+\State ST $R_3$, [FP - 4]
+\State BA lnext
+\State lfalse2:
+\State LD $R_1$, [FP - 8]
+\State LD $R_2$, [FP - 4]
+\State SUB $R_3, R_1, R_2$
+\State ST $R_3$, [FP - 8]
+\State lnext:
+\State BA lb
+\State ltrue:
+\State epilogue
+\end{algorithmic}
+
+\subsection{Exercise 106}
+\begin{enumerate}
+\item
+\begin{tabularx}{\textwidth}{| X l X |}
+\hline
+GCStm(for (var = lbound;\newline var < ubound; step)\newline \{S(var)\}) & = Let & lb=newLabel(),\newline
+ltrue = newLabel(),\newline
+lfalse = newLabel()\\
+& in & GCStm(var := lbound)||\newline
+lb:||\newline
+GCBExp(var < ubound, ltrue, lfalse)||\newline
+ltrue:||\newline
+GCStm(S(var))||\newline
+GCStm(var := var + step)||\newline
+BA lb||\newline
+lfalse:
+\\
+\hline
+\end{tabularx}
+\begin{tabularx}{\textwidth}{| X l X |}
+\hline
+GCStm(for (var = lbound;\newline var < ubound; step)\newline \{S(var)\}) & = Let & (Cstep,istep)=GCAexp(step)\newline
+(Clbound, ilbound) = GCAexp(lbound)\newline
+(Cubound,iubound) = GCAexp(ubound)\newline
+i = AllocRegister()\\
+& in & Clbound||\newline
+ADD $R_i$, $R_{ilbound}$||\newline
+lfor:||\newline
+Cubound||\newline
+CMP $R_i$, $R_{iubound}$||\newline
+BGT lend||\newline
+GCStm(S(var), i)||\newline
+Cstep||\newline
+Add $R_i$, $R_i$, $R_{istep}$||\newline
+BA lfor||\newline
+lend:
+\\
+\hline
+\end{tabularx}
+\item
+\begin{algorithmic}
+\State prologue(44)
+\State ADD $R_1, R_0$, \#0
+\State ST $R_1$, [FP - 40]
+\State lb:
+\State LD $R_1$, [FP - 40]
+\State ADD $R_2, R_0$, \#10
+\State CMP $R_1, R_2$
+\State BLE ltrue
+\State BA lfalse
+\State ltrue:
+\State ADD $R_1, R_0$, \#0
+\State LD $R_2$, [FP - 40]
+\State ADD $R_3, R_2$, FP
+\State ST $R_1$, [$R_3$]
+\State LD $R_1$, [FP - 40]
+\State ADD $R_2, R_1$, \#1
+\State ST $R_2$, [FP - 40]
+\State BA lb
+\State lfalse:
+\State epilogue
+\end{algorithmic}
+
+\item
+\begin{algorithmic}
+\State prologue(408)
+\State TODO (similar to 2) 
+\State epilogue
+\State RET
+\end{algorithmic}
+
+\end{enumerate}
+
+\subsection{Exercise 107}
+For a (possibly better) solution of this exercise, see the lecture slides.
+\begin{enumerate}
+\item 
+\begin{tabularx}{\textwidth}{| X l X |}
+\hline
+GCStm(repeat S until b) & = Let & lb=newLabel(),\newline
+ltrue = newLabel()\\
+& in & 
+lb:||\newline
+GCStm(S)||\newline
+GCBExp(b, ltrue, lb)||\newline
+ltrue:
+\\
+\hline
+\end{tabularx}
+\item 
+\begin{tabularx}{\textwidth}{| X l X |}
+\hline
+GCBExp(b1 xor b2,ltrue,lfalse) & = Let & l2false=newLabel(),\newline
+l2true = newLabel()\\
+& in & 
+GCBExp(b1, l2false, l2true)||\newline
+l2false:||\newline
+GCBExp(b2, lfalse, ltrue)||\newline
+l2true:||\newline
+GCBExp(b2, ltrue, lfalse)
+\\
+\hline
+\end{tabularx}
+\item 
+\begin{tabularx}{\textwidth}{| X l X |}
+\hline
+GCAexp(b ? e1 : e2) & = Let & ltrue=newLabel(),\newline
+lfalse = newLabel()\\
+& in & 
+GCBExp(b, ltrue, lfalse)||\newline
+ltrue:||\newline
+GCAExp(e1)||\newline
+lfalse:||\newline
+GCAExp(e2)
+\\
+\hline
+\end{tabularx}
+\end{enumerate}
+
+\subsection{Exercise 108}
+\begin{algorithmic}
+\State prologue(8)
+\State ADD $R_1, R_0$, \#1
+\State ST $R_1$, [FP - 4]
+\State \Comment{SL(p) = DL(main) / push static link of main on stack}
+\State push(FP)
+\State call main.p
+\State ADD SP, SP, \#4
+\State epilogue
+\end{algorithmic}
+\ \\
+\begin{algorithmic}
+\State main.p:
+\State prologue(0)
+\State \Comment{get static link to previous environment}
+\State LD $R_1$, [FP + 8]
+\State LD $R_2, [R_1 - 4]$
+\State ST $R_2, [R_1 - 8]$
+\State epilogue
+\State RET
+\end{algorithmic}
+
+\subsection{Exercise 109}
+In the original code from the exercise sheet, after the first 'end' statement, another 'end' statement is missing which should terminate procedure p at this point.
+\begin{algorithmic}
+\State main:
+\State prologue(12)
+\State ADD $R_1, R_0$, \#5
+\State ST $R_1$, [FP - 4]
+\State \Comment{SL(p) = DL(main) / push static link of main on stack}
+\State push(FP)
+\State call main.p
+\State ADD SP, SP, \#4
+\State epilogue
+\end{algorithmic}
+\ \\
+\begin{algorithmic}
+\State main.p:
+\State prologue(8)
+\State \Comment{x := 4}
+\State ADD $R_1, R_0$, \#4
+\State ST $R_1$, [FP - 4]
+\State \Comment{y := 5}
+\State ADD $R_1, R_0$, \#5
+\State \Comment{get static link to previous environment}
+\State LD $R_2$, [FP + 8]
+\State ST $R_1$, [$R_2 - 8$]
+\State \Comment{z := x + y}
+\State LD $R_1$, [FP - 4]
+\State LD $R_3$, [$R_2 - 8$] \Comment{{\small optimized: load y again from address $R_2$}}
+\State ADD $R_4, R_1, R_3$
+\State LD $R_5$, [FP + 8]
+\State ST $R_4$, [$R_5 - 12$]
+\State epilogue
+\State RET
+\end{algorithmic}
+
+\subsection{Exercise 112}
+\begin{enumerate}
+\item We assume that return addresses are stored between the static link to the caller and the first parameter. Thus, last parameter is at +12 if procedure does not return anything / +16 if procedure returns something to leave space for return value. For a procedure parameter, first the address of the procedure is pushed then its static link, thus the address always has a higher offset than the SL.\\\\
+\begin{tabularx}{\textwidth}{| l || l | X | l |}
+\hline
+Procedure & Label & Type & Offset\\
+\hline
+main & x1 & int & -4\\
+& P1 & (void) $\rightarrow$ void & X\\
+\hline
+main.P1 & x2 & int & -4\\
+& y2 & int & -8\\
+& z2 & int & -12\\
+& Y & (int) $\rightarrow$ int & X\\
+& R2 & (int, (int) $\rightarrow$ int) $\rightarrow$ void & X\\
+& P2 & (int, (int) $\rightarrow$ int) $\rightarrow$ void & X\\
+& X & (int) $\rightarrow$ int & X\\
+& Q & (void) $\rightarrow$ void & X\\
+\hline
+main.P1.Y & x & int & 16 (param)\\
+\hline
+main.P1.R2 & y3 & int & -4\\
+& b3 & int & 20 (param)\\
+& p & (int) $\rightarrow$ int & 12, 16 (proc param)\\
+& R3 & ((int) $\rightarrow$ int) $\rightarrow$ void & X\\
+\hline
+main.P1.R2.R3 & p & (int) $\rightarrow$ int & 12, 16 (proc param)\\
+\hline
+main.P1.P2 & x3 & int &-4\\
+& a & int & 20 (param)\\
+& p & (int) $\rightarrow$ int & 12, 16 (proc param)\\
+& P3 & ((int) $\rightarrow$ int) $\rightarrow$ void & X\\
+\hline
+main.P1.P2.P3 & p & (int) $\rightarrow$ int & 12, 16 (proc param)\\
+\hline
+main.P1.X & x & int & 16 (param)\\
+\hline
+main.P1.Q & z3 & int & -4\\
+\hline
+\end{tabularx}
+\item
+\Tree 
+[.{main} 
+  [.{main.P1} 
+     [.{main.P1.Q} 
+       [.{main.P1.P2} 
+         [.{main.P1.P2.P3} 
+           [{main.P1.X} 
+            [.{main.P1.R2} 
+              [.{main.P1.R2.R3} 
+                [.{main.P1.Y} ]
+              ]
+            ]
+           ]
+         ]
+       ]
+     ]
+  ] 
+]
+\item
+\begin{algorithmic}
+\State main:
+\State prologue(4)
+\State \Comment{{\small P1()}}
+\State push(FP) \Comment{{\small push static link}}
+\State call main.P1
+\State ADD SP, SP, \#4 \Comment{{\small remove static link}}
+\State epilogue
+\State RET
+\end{algorithmic}
+\ \\
+\begin{algorithmic}
+\State main.P1:
+\State prologue(12)
+\State \Comment{{\small x1:=11}}
+\State ADD R1, R0, \#11
+\State LD R2, [FP + 8] \Comment{{\small load static link}}
+\State ST R1, [R2 - 4]
+\State \Comment{{\small Q()}}
+\State push(FP) \Comment{{\small push static link}}
+\State call main.P1.Q
+\State ADD SP, SP, \#4 \Comment{{\small remove static link}}
+\State epilogue
+\State RET
+\end{algorithmic}
+\ \\
+\begin{algorithmic}
+\State main.P1.Q:
+\State prologue(4)
+\State \Comment{{\small y2 = 2}}
+\State LD R1, [FP + 8]
+\State ADD R2, R0, \#2
+\State ST R2, [R1 - 8]
+\State \Comment{{\small z2 = 3}}
+\State LD R1, [FP + 8]
+\State ADD R2, R0, \#3
+\State ST R2, [R1 - 12]
+\State \Comment{{\small z3 = x2 + y2}}
+\State LD R1, [FP + 8]
+\State LD R2, [R1 - 4]
+\State LD R3, [R1 - 8]
+\State ADD R3, R3, R2
+\State ST R3, [FP - 4]
+\State \Comment{{\small P2(z3, X)}}
+\State LD R1, [FP - 4]
+\State push(R1) \Comment{{\small push 1st parameter for P2}}
+\State SET R2, main.P1.X
+\State push(R2) \Comment{{\small push @ of X as parameter for P2}}
+\State LD R1, [FP + 8]
+\State push(R1) \Comment{{\small push static link of X as param for P2}}
+\State push(R1) \Comment{{\small push static link of P2 (same as static link of X)}}
+\State call main.P1.P2
+\State ADD SP, SP, \#16 \Comment{{\small remove SL, 3 parameters}}
+\State epilogue
+\State RET
+\end{algorithmic}
+\ \\
+\begin{algorithmic}
+\State main.P1.P2:
+\State prologue(4)
+\State \Comment{{\small x2 = 1+a}}
+\State LD R1, [FP + 20]
+\State ADD R1, R1, \#1
+\State LD R2, [FP + 8]
+\State ST R1, [R2 - 4]
+\State \Comment{{\small P3(p)}}
+\State LD R1, [FP + 16]
+\State push(R1) \Comment{{\small push @ of function p as parameter of P3}}
+\State LD R2, [FP + 12]
+\State push(R2) \Comment{{\small push SL of p as parameter of P3}}
+\State push(FP) \Comment{{\small push static link}}
+\State call main.P1.P2.P3
+\State ADD SP, SP, \#12 \Comment{{\small remove SL, 2 parameters}}
+\State epilogue
+\State RET
+\end{algorithmic}
+\ \\
+\begin{algorithmic}
+\State main.P1.P2.P3:
+\State prologue(0)
+\State \Comment{{\small x3 = p(x1)}}
+\State LD R1, [FP + 8]
+\State LD R1, [R1 + 8]
+\State LD R1, [R1 + 8]
+\State LD R2, [R1 - 4]
+\State push(R2) \Comment{{\small parameter for p}}
+\State LD R2, [FP + 12]
+\State push(R2) \Comment{{\small SL of p}}
+\State LD R1, [FP + 16]
+\State call R1
+\State LD R2, [SP + 4] \Comment{{\small get return}}
+\State LD R1, [FP + 8]
+\State ST R2, [R1 - 4]
+\State ADD SP, SP, \#12 \Comment{{\small remove SL, parameters}}
+\State \Comment{{\small R2(x3,Y)}}
+\State push(R2) \Comment{{\small contains value of x3}}
+\State SET R1, main.P1.Y
+\State push(R1) \Comment{{\small push @ of Y as parameter for R2}}
+\State LD R1, [FP + 8]
+\State LD R1, [R1 + 8]
+\State push(R1) \Comment{{\small push static link of Y as parameter}}
+\State push(R1) \Comment{{\small push static link of R2 (same level as SL of Y)}}
+\State call main.P1.R2
+\State ADD SP, SP, \#16 \Comment{{\small remove SL, 3 parameters}}
+\State epilogue
+\State RET
+\end{algorithmic}
+\ \\
+\begin{algorithmic}
+\State main.P1.R2:
+\State prologue(4)
+\State \Comment{{\small R3(p)}}
+\State LD R1, [FP + 16]
+\State push(R1) \Comment{{\small push @ of p as parameter for R3}}
+\State LD R2, [FP + 12]
+\State push(R2) \Comment{{\small push SL of p as parameter for R3}}
+\State push(FP) \Comment{{\small push static link}}
+\State call main.P1.R2.R3
+\State ADD SP, SP, \#12 \Comment{{\small remove SL, 2 parameters}}
+\State epilogue
+\State RET
+\end{algorithmic}
+\ \\
+\begin{algorithmic}
+\State main.P1.R2.R3:
+\State prologue(0)
+\State \Comment{{\small y2 = 2}}
+\State ADD R1, R0, \#2
+\State LD R2, [FP + 8]
+\State LD R2, [R2 + 8]
+\State ST R1, [R2 - 8]
+\State \Comment{{\small x2 = y2+x1+b3}}
+\State LD R2, [FP + 8]
+\State LD R2, [R2 + 8]
+\State LD R2, [R2 + 8]
+\State LD R3, [R2 - 4]
+\State ADD R1, R1, R3
+\State LD R2, [FP + 8]
+\State LD R3, [R2 + 20]
+\State ADD R1, R1, R3
+\State LD R2, [FP + 8]
+\State LD R2, [R2 + 8]
+\State ST R1, [R2 - 4]
+\State \Comment{{\small y3 = 1+x2}}
+\State ADD R1, R1, \#1
+\State LD R2, [FP + 8]
+\State ST R1, [R2 - 4]
+\State \Comment{{\small b3 = p(x1)}}
+\State LD R2, [FP + 8]
+\State LD R2, [R2 + 8]
+\State LD R2, [R2 + 8]
+\State LD R3, [R2 - 4]
+\State push(R3) \Comment{{\small push parameter for p}}
+\State LD R4, [FP + 12]
+\State push(R4) \Comment{{\small push static link of p}}
+\State push(R0) \Comment{{\small create return addr}}
+\State LD R5, [FP + 16] \Comment{{\small get @ of p}}
+\State call R5
+\State LD R4, [SP + 4] \Comment{{\small get return and store in b3}}
+\State LD R2, [FP + 8]
+\State ST R4, [R2 + 20]
+\State ADD SP, SP, \#12 \Comment{{\small remove return addr, SL, 1 parameter}}
+\State epilogue
+\State RET
+\end{algorithmic}
+\ \\
+\begin{algorithmic}
+\State main.P1.Y:
+\State prologue(0)
+\State \Comment{{\small x+1}}
+\State LD R1, [FP + 16]
+\State ADD R1, R1, \#1
+\State \Comment{{\small call printf}}
+\State push(R2) \Comment{{\small push 1st parameter for printf, assumes it is in R2}}
+\State push(R1) \Comment{{\small push 2nd parameter for printf}}
+\State push(FP) \Comment{{\small push static link}}
+\State call printf
+\State ADD SP, SP, \#12 \Comment{{\small remove static link, 2 parameters}}
+\State \Comment{{\small return x+1}}
+\State ST R1, [FP + 12] \Comment{{\small store value of x+1 in return address}}
+\State epilogue
+\State RET
+\end{algorithmic}
+
+\end{enumerate}
+
+\subsection{Exercise 113}
+\begin{enumerate}
+\item
+\Tree 
+[.{main} 
+  [.{main.f1} 
+     [.{main.f1.h2} 
+       [.{main.f1.f2} 
+         [.{main.f1.f2.f3} 
+           [.{main.f1.g2} 
+            [.{main.f1.g2.g3} 
+              [.{main.f1.g2} ]
+            ]
+           ]
+         ]
+       ]
+     ]
+  ] 
+]
+\item 
+\begin{algorithmic}
+\State \Comment{{\small y = h2(32)}}
+\State ADD R1, R0, \#32
+\State push(R1)
+\State push(R0) \Comment{{\small create return address}}
+\State push(FP)
+\State call main.f1.h2
+\State LD R1, [SP + 4]
+\State ST R1, [FP - 8]
+\State ADD SP, SP, \#12
+\end{algorithmic}
+\item 
+\begin{algorithmic}
+\State \Comment{{\small return y}}
+\State LD R1, [FP - 8]
+\State ST R1, [FP + 12]
+\State epilogue
+\State RET
+\end{algorithmic}
+\item 
+\begin{algorithmic}
+\State \Comment{{\small x = 11}}
+\State ADD R1, R0, \#11
+\State LD R2, [FP + 8]
+\State ST R1, [R2 - 4]
+\end{algorithmic}
+\item 
+\begin{algorithmic}
+\State \Comment{{\small y = y + f3(p)}}
+\State LD R2, [FP + 20]
+\State push(R2) \Comment{{\small push @ of p as param for f3}}
+\State LD R1, [FP + 16]
+\State push(R1) \Comment{{\small push SL of p as param for f3}}
+\State push(R0) \Comment{{\small create return}}
+\State call main.f1.f2.f3
+\State LD R1, [SP + 4]
+\State LD R2, [FP + 8]
+\State LD R3, [R2 - 4]
+\State ADD R1, R3, R1
+\State ST R1, [R2 - 4]
+\State ADD SP, SP, \#12
+\end{algorithmic}
+\item 
+\begin{algorithmic}
+\State prologue(0)
+\State \Comment{{\small return p(y+x)}}
+\State LD R1, [FP + 8]
+\State LD R1, [R1 + 8]
+\State LD R2, [R1 - 8]
+\State LD R3, [R1 - 4]
+\State ADD R2, R3, R2
+\State push(R2)
+\State LD R1, [FP + 16]
+\State push(R1)
+\State LD R1, [FP + 20]
+\State call R1
+\State LD R2, [SP + 4]
+\State ST R2, [FP + 12]
+\State ADD SP, SP, \#8
+\State epilogue
+\State RET
+\end{algorithmic}
+\item
+\begin{algorithmic}
+\State prologue(0)
+\State \Comment{{\small return p}}
+\State LD R1, [FP + 20]
+\State LD R2, [FP + 24]
+\State ST R1, [FP + 12]
+\State ST R2, [FP + 16]
+\State epilogue
+\State RET
+\end{algorithmic}
+\item
+\begin{algorithmic}
+\State \Comment{{\small z = x + y}}
+\State LD R1, [FP + 8]
+\State LD R2, [R1 - 4]
+\State LD R3, [R1 - 8]
+\State ADD R2, R3, R2
+\State ST R2, [FP - 4]
+\end{algorithmic}
+\item
+\begin{algorithmic}
+\State \Comment{{\small return ((g3(g2))(x-1)}}
+\State SET R1, main.f1.g2
+\State push(R1)
+\State LD R1, [FP + 8]
+\State push(R1)
+\State push(R0)
+\State push(R0) \Comment{{\small create return addresses}}
+\State push(R1)
+\State call main.f1.g2.g3
+\State LD R1, [SP + 4]
+\State LD R2, [SP + 8]
+\State ADD SP, SP, \#16
+\State LD R3, [FP + 8]
+\State LD R4, [R3 - 4]
+\State ADD, R4, R4, \#-1
+\State push(R4)
+\State push(R1)
+\State call R2
+\State LD R1, [SP + 4]
+\State ST R1, [FP + 12]
+\State ADD SP, SP, \#8
+\State epilogue
+\State RET
+\end{algorithmic}
+\end{enumerate}
+
+\section{Series 7}
+\subsection{Exercise 61}
+\begin{enumerate}
+\item \ \\
+\begin{prooftree}
+\AxiomC{$\{x+1=1\}x:=x+1\{x=1\}$}
+\UnaryInfC{$\{x=0\}x:=x+1\{x=1\}$}
+\AxiomC{$\{x+1=2\}x:=x+1\{x=2\}$}
+\UnaryInfC{$\{x=1\}x:=x+1\{x=2\}$}
+\BinaryInfC{$\{x = 0\} x:=x+1;x:=x+1 \{x=2\}$}
+\end{prooftree}
+\item \ \\
+\begin{prooftree}
+\AxiomC{$\{x=x*1\}y:=1\{x=x*y\}$}
+\UnaryInfC{$\{x > 0\}\ y:=1\ \{x=x*y\}$}
+\end{prooftree}
+using consequence rule $x>0 \Rightarrow x=x*1$
+\item \ \\
+\begin{prooftree}
+\AxiomC{$\{x+1>a+1\}x:=x+1\{x>a+1\}$}
+\UnaryInfC{$\{x > a\}\ x:=x+1\ \{x>a+1\}$}
+\end{prooftree}
+\item \ \\
+\begin{prooftree}
+\AxiomC{$\{x=2*(a+2)-4\}a:=a+2\{x=2*a-4\}$}
+\UnaryInfC{$\{x = 2*a\}\ a:=a+2\ \{x=2*a-4\}$}
+\end{prooftree}
+\item \ \\
+\begin{prooftree}
+\AxiomC{$\{x+1>a+1\}x:=x+1\{x>a+1\}$}
+\UnaryInfC{$\{x>a\}x:=x+1\{x>a+1\}$}
+\AxiomC{$\{x+x>2*a+2\}x:=x+x\{x>2*a+2\}$}
+\UnaryInfC{$\{x>a+1\}x:=x+x\{x>2*a+2\}$}
+\BinaryInfC{$\{x >a\}x:=x+1;x:=x+x\{x>2*a+2\}$}
+\end{prooftree}
+\item \ \\
+\begin{prooftree}
+\AxiomC{$\{8=8\}y:=8\{y:=8\}$}
+\UnaryInfC{$\{x\geq 0 \land x \geq 0\}y:=8\{y:=8\}$}
+\AxiomC{$\{False\}y:=9\{y:=8\}$}
+\UnaryInfC{$\{x < 0 \land x \geq 0\}y:=9\{y:=8\}$}
+\BinaryInfC{$\{x \geq 0\}\text{if }x\geq 0 \text{ then } y:=8 \text{ else } y:=9\{y:=8\}$}
+\end{prooftree}
+\item
+$S_1::= x:=y$\\
+$S_2::=z:=1$\\
+$S_{12}::=S_1;S_2$\\
+$S_3::=\text{while }b\text{ do }S_4$\\
+$b::= 1<x$\\
+$S_4::=S_{41};S_{42}$\\
+$S_{41}::=z:=z*x$\\
+$S_{42}::=x:=x-1$\\
+\begin{scprooftree}{0.8}
+\AxiomC{}
+\UnaryInfC{$\{y \geq 0\}S_1\{x\geq 0 \land x=y\}$}
+\AxiomC{}
+\UnaryInfC{$\{x\geq 0 \land x=y\}S_2\{x \geq 0 \land x=y \land z=1\}$}
+\BinaryInfC{$\{y\geq 0\}S_{12}\{x \geq 0 \land x=y \land z=1\}$}
+\AxiomC{$T_1$}
+\UnaryInfC{$\{x \geq 0 \land x=y \land z=1\}S_3\{z=y!\}$}
+\BinaryInfC{$\{y \geq 0\}S\{z=y!\}$}
+\end{scprooftree}
+with $T_1$:
+\begin{prooftree}
+\AxiomC{}
+\UnaryInfC{$\{1 < x \land Inv\}S_{41}\{x \geq 0 \land z*(x-1)!=y!\}$}
+\AxiomC{}
+\UnaryInfC{$\{x \geq 0 \land z*(x-1)!=y!\}S_{42}\{Inv\}$}
+\BinaryInfC{$\{1 < x \land Inv\}S_4\{Inv\}$}
+\UnaryInfC{$\{Inv\}$while $b$ do $S_4\{x \leq 1 \land x\geq 0 \land z*x!=y!\}$}
+\UnaryInfC{$\{Inv\}$while $b$ do $S_4\{z=y!\}$}
+\end{prooftree}
+with $Inv \equiv x \geq 0 \land z*x!=y!$, because $y \geq 0 \land x=y \land z=1 \Rightarrow Inv$ and $(z*x)*(x-1)!=y! \iff z*x!=y!$ and $x \leq 1 \land x \geq 0 \land z*x!=y! \Rightarrow x!=1 \land z*x!=y! \Rightarrow z=y!$
+
+\item $S_1 ::= \text{if } pair(x) \text{ then }b:=0\text{ else }b:=1$\\
+\begin{scprooftree}{0.8}
+\AxiomC{}
+\UnaryInfC{$\{x\geq 0\}a:=x\ div\ 2\{x\geq 0 \land C\}$}
+\AxiomC{$\{a=x/2\}b:=0\{x=2a+b\}$}
+\UnaryInfC{$\{pair(x) \land C\}b:=0\{x=2a+b\}$}
+\AxiomC{$\{a=(x-1)/2\}b:=1\{x=2a+b\}$}
+\UnaryInfC{$\{\lnot pair(x) \land C\}b:=1\{x=2a+b\}$}
+\BinaryInfC{$\{x < 0 \land C\}S_1\{x=2a+b\}$}
+\BinaryInfC{$\{x \geq 0\}S\{x=2a+b\}$}
+\end{scprooftree}
+with $C \equiv (a=x/2 \land pair(x)) \lor (a=(x-1)/2 \land \lnot pair(x))$\\
+$pair(x)\land C \Rightarrow a=x/2$ and $\lnot pair(x) \land C \Rightarrow a=(x-1)/2$
+
+
+
+\end{enumerate}
+
+\end{document}
